@@ -1,5 +1,11 @@
 # PLAN — 4-week launch
 
+## STATUS (update at the end of every session — this is the handoff for a new chat)
+- Last session: 2026-09-18. Scaffolded Next.js app, installed supabase/zod/stripe, wrote CLAUDE.md + PLAN.md, 2 commits.
+- Next item: Week 1 -> "Supabase project, schema v0".
+- Blocked on: Ilyas creating Supabase project, Stripe test account, Anthropic key, Adzuna key -> .env.local. GitHub repo not yet pushed (no gh on device).
+- Decisions made: codename Rail; wedge = NOVA all majors; Pro $14.99/mo or $39/quarter; Gmail OAuth deferred (use inbound email alias); 3 ATS adapters in month one (Greenhouse, Lever, Workday).
+
 Target: public launch to NOVA in 4 weeks. 500 signups, 50 paid, 2,000 tracked applications by day 45.
 Cut from month one: referral finder, iCIMS/Taleo adapters, autonomous agent, employer dashboard, mobile, Gmail OAuth.
 
