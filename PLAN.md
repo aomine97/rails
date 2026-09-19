@@ -1,9 +1,15 @@
 # PLAN — Rails, 4-week launch
 
 ## STATUS (update at the end of every session — this is the handoff for a new chat)
-- Last session: 2026-09-19. Decision made: option A, reshaped. Product is Rails: tech jobs for students at non-target schools, starting NOVA / Mason / DC contractors. 17 screens mocked on the Design canvas (claude.ai/artifact/HhFu37rm9qU3itRdaRvfuC). Pricing set. This plan is LIVE.
-- Next item: Week 1, first unchecked box.
-- Blocked on: Supabase / Stripe / Anthropic keys not created; repo not pushed to GitHub; Chrome developer account ($5) not created.
+- Last session: 2026-09-19. Week 1 backend written and unit-tested (15 tests pass, tsc + eslint clean): schema, companies seed (690), ATS adapters (Greenhouse/Lever/Ashby/SmartRecruiters/Workday/USAJobs), poller/verifier/tagger cron routes, canonical profile schema, scoring engine, geo-gate, shell extension.
+- Next item: Ilyas does the account steps below, then me: "Auth: email + Google" (Week 1) and the Feed UI.
+- Blocked on (Ilyas, ~45 min total):
+  1. Supabase project -> paste URL/anon/service keys into .env.local -> run supabase/migrations/0001_init.sql in the SQL editor -> `npm run seed:db`
+  2. Anthropic API key -> .env.local (tagger)
+  3. Chrome dev account ($5) -> upload extension-shell zip (see extension-shell/README.md), visibility Unlisted
+  4. On your Mac with normal internet: `npx tsx scripts/check-feeds.mjs 3` — this is the first time the adapters touch real feeds. Paste the output into the next chat. Expect Workday to need fixes.
+  5. Push repo to GitHub (private); Vercel project so the crons in vercel.json run (set CRON_SECRET)
+- Known gaps: `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Adapters are written from vendor docs, not live responses. Tagger prompt untested against the model.
 - Decisions made: name Rails; tech-only (software, data, cloud, IT, cyber); pricing below; human clicks Submit always; career centers are the B2B channel; no LinkedIn/Indeed scraping; geo-gate CA and NY at signup.
 
 ## Pricing (final)
@@ -19,16 +25,16 @@
 
 ## Week 1 — jobs flowing + profile + feed
 - [ ] Push repo to GitHub (private). Create Supabase, Stripe (test), Anthropic keys -> .env.local
-- [ ] Chrome Web Store developer account; submit a shell extension (name, icon, "coming soon" panel) so review runs in parallel
-- [ ] Schema v0: users, profiles, resumes, companies, jobs, job_skills, matches, applications, fill_events, subscriptions
-- [ ] Auth: email + Google, RLS on every table. Geo-gate CA/NY at signup (state field + IP check, show "not yet available")
-- [ ] companies seed: parse SimplifyJobs/Summer2027-Internships + vanshb03/New-Grad-2027 READMEs -> company, ATS, slug. Add DC list by hand (Capital One, Booz Allen, Leidos, SAIC, CACI, Peraton, MITRE, Northrop, GDIT, Amazon, Microsoft, Deloitte, Accenture Federal, Freddie Mac, Fannie Mae, Navy Federal, Appian, Cvent). Target 300+
-- [ ] Poller (Supabase cron, hourly): adapters for Greenhouse, Lever, Ashby, SmartRecruiters, Workday (/wday/cxs/{tenant}/{site}/jobs). Upsert jobs. One adapter = one file in src/lib/ats/
-- [ ] Verifier (daily): re-fetch every open job, mark closed on 404 / missing from feed. last_verified_at shown in UI
-- [ ] Normalizer + tagger: map every ATS shape to jobs schema; cheap LLM pass tags level (intern / new grad / entry), clearance required, sponsorship, remote, skills[]
-- [ ] USAJobs API adapter (Pathways IT internships)
+- [~] Shell extension built in /extension-shell (zip + upload = Ilyas, needs the $5 dev account)
+- [x] Schema v0 written: supabase/migrations/0001_init.sql (RLS, signup trigger, user_funnel + campus_funnel views). NOT YET APPLIED (no Supabase project)
+- [ ] Auth: email + Google, RLS on every table. Geo-gate CA/NY at signup (state field + IP check, show "not yet available") — src/lib/geo.ts + supabase clients written, no auth UI yet
+- [x] companies seed: scripts/seed-companies.mjs -> data/companies.json (690 companies, 508 with resolvable slugs: 241 Workday, 116 Greenhouse, 86 Ashby, 21 SmartRecruiters, 18 Lever). scripts/seed-db.mjs loads it
+- [x] Adapters written + unit-tested on documented shapes: src/lib/ats/*. Poller: src/app/api/cron/poll (Vercel cron hourly). LIVE FEEDS NOT YET HIT (sandbox blocks the ATS hosts): run `npx tsx scripts/check-feeds.mjs` on your Mac first
+- [x] Verifier: src/app/api/cron/verify (daily 03:30). Feed-sourced jobs also close when they vanish from the feed
+- [x] Normalizer (src/lib/jobs/ingest.ts) + tagger (src/lib/jobs/tagger.ts, Haiku, Zod-validated JobTags, cron every 10 min). Untested against the real model until ANTHROPIC_API_KEY exists
+- [x] USAJobs adapter (needs USAJOBS_API_KEY + USAJOBS_USER_AGENT)
 - [ ] Resume upload (PDF/DOCX) -> text -> canonical profile (Zod schema in src/lib/schemas) -> Onboarding "confirm your facts" screen (screen 2)
-- [ ] Feed (screen 3): hard filters + scoring. Fit = weighted sub-scores (Experience / Skills / Field), color bands green >=85 / amber 70-84 / red <70. "N new since yesterday". Empty and loading states (screen 14)
+- [ ] Feed (screen 3): hard filters + scoring — scoring engine done and tested (src/lib/match/score.ts), no UI yet. Fit = weighted sub-scores (Experience / Skills / Field), color bands green >=85 / amber 70-84 / red <70. "N new since yesterday". Empty and loading states (screen 14)
 - [ ] Off-board paste: paste any posting URL -> fetch, tag, score, add to feed as External
 
 ## Week 2 — apply: detail, tailor, score, letter, tracker, paywall

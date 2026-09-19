@@ -1,0 +1,11 @@
+:root{--ink:#0B1B3A;--text:#33415C;--muted:#5B6B85;--ground:#F4F6FA;--surface:#fff;--orange:#FF7A2E;--border:#DFE6F2}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--ground);color:var(--ink);min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--ink);color:#fff}
+.wordmark{font-weight:800;letter-spacing:-.5px;font-size:18px}
+.pill{font-size:11px;font-weight:700;background:var(--orange);color:var(--ink);padding:4px 9px;border-radius:999px}
+main{padding:20px 16px;display:flex;flex-direction:column;gap:14px}
+h1{margin:0;font-size:22px;letter-spacing:-.02em;line-height:1.15}
+p{margin:0;font-size:14px;line-height:1.55;color:var(--text)}
+.cta{display:block;text-align:center;background:var(--orange);color:var(--ink);font-weight:800;text-decoration:none;padding:13px;border-radius:10px;font-size:15px;min-height:44px}
+.fine{font-size:12px;color:var(--muted);border-top:1px solid var(--border);padding-top:12px}
