@@ -1,13 +1,10 @@
 # PLAN — 4-week launch
 
 ## STATUS (update at the end of every session — this is the handoff for a new chat)
-- Last session: 2026-09-18. Scaffolded Next.js app, installed supabase/zod/stripe, wrote CLAUDE.md + PLAN.md, 2 commits.
-- Next item: Week 1 -> "Supabase project, schema v0".
-- Blocked on: Ilyas creating Supabase project, Stripe test account, Anthropic key, Adzuna key -> .env.local. GitHub repo not yet pushed (no gh on device).
-- Decisions made: codename Rail; wedge = NOVA all majors; Pro $14.99/mo or $39/quarter; Gmail OAuth deferred (use inbound email alias); 3 ATS adapters in month one (Greenhouse, Lever, Workday).
-
-Target: public launch to NOVA in 4 weeks. 500 signups, 50 paid, 2,000 tracked applications by day 45.
-Cut from month one: referral finder, iCIMS/Taleo adapters, autonomous agent, employer dashboard, mobile, Gmail OAuth.
+- Last session: 2026-09-18. Ran a 5-stream pre-mortem -> RESEARCH.md. Verdict: original scope fails on 4 grounds (Handshake at NOVA Fall 2026, LinkedIn/Indeed autofill, wrong pain for non-tech CC segment, Chrome review 3-6 wks). PLAN BELOW IS ON HOLD.
+- Next item: Ilyas decides — (A) reshape per RESEARCH.md "PLAN CHANGES" and re-plan, (B) pivot to employer-side/cleared-federal, (C) stop. Then rewrite the weekly plan.
+- Blocked on: that decision. Still also: Supabase/Stripe/Anthropic keys not created; repo not pushed to GitHub.
+- Decisions made: codename Rail; scaffold + deps done. Previous decisions (NOVA all majors, $14.99/mo, 3 adapters in month one) are superseded by RESEARCH.md if option A is chosen.
 
 ## Week 1 — foundation + profile + jobs
 - [x] Scaffold Next.js app
