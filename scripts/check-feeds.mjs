@@ -7,11 +7,13 @@ console.log("checking feeds (max %s postings per company)...", process.env.RAILS
 const { fetchCompanyJobs } = await import("../src/lib/ats/index.ts");
 const companies = JSON.parse(readFileSync("data/companies.json", "utf8"));
 const perAts = Number(process.argv[2] ?? 2);
-const ORDER = ["greenhouse", "lever", "ashby", "smartrecruiters", "workday"];
+const ORDER = ["greenhouse", "lever", "ashby", "smartrecruiters", "workday", "workable", "jobvite", "icims", "oracle"];
+const ONLY = process.argv[3] ? process.argv[3].split(",") : null; // e.g. npx tsx scripts/check-feeds.mjs 3 workable,jobvite,icims,oracle
 const seen = {};
 const withTimeout = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(`company timeout after ${ms / 1000}s`)), ms))]);
 for (const c of [...companies].sort((a, b) => ORDER.indexOf(a.ats) - ORDER.indexOf(b.ats))) {
-  if (!c.slug || (seen[c.ats] ?? 0) >= perAts) continue;
+  if (ONLY && !ONLY.includes(c.ats)) continue;
+  if (!ORDER.includes(c.ats) || (!c.slug && !(c.ats === "oracle" && c.careersUrl)) || (seen[c.ats] ?? 0) >= perAts) continue;
   seen[c.ats] = (seen[c.ats] ?? 0) + 1;
   const t = Date.now();
   process.stdout.write(`${c.ats.padEnd(15)} ${c.name.padEnd(28)} ...`);

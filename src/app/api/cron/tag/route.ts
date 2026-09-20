@@ -27,16 +27,16 @@ export async function GET(req: Request) {
     if (t) { await db.from("jobs").update({ tags: t, tagged_at: new Date().toISOString() }).eq("id", j.id); pretagged++; }
   }
   // (a) enrich jobs with no description yet (Workday / SmartRecruiters list-only rows)
-  const { data: bare } = await db.from("jobs").select("id,ats,external_id,title,location,url,apply_url,companies(name,ats,slug,tenant,wdn)")
+  const { data: bare } = await db.from("jobs").select("id,ats,external_id,title,location,url,apply_url,companies(name,ats,slug,tenant,wdn,careers_url)")
     .is("description_text", null).is("closed_at", null).order("first_seen_at", { ascending: false }).limit(enrichN);
   let enrichedCount = 0;
   for (const j of bare ?? []) {
     if (Date.now() - started > budgetMs / 2) break;
-    const co = (j as unknown as { companies: { name: string; ats: RawJob["ats"]; slug: string | null; tenant: string | null; wdn: number | null } | null }).companies;
+    const co = (j as unknown as { companies: { name: string; ats: RawJob["ats"]; slug: string | null; tenant: string | null; wdn: number | null; careers_url: string | null } | null }).companies;
     const fn = co ? adapters[co.ats]?.enrich : undefined;
     if (!co || !fn) { await db.from("jobs").update({ description_text: "" }).eq("id", j.id); continue; } // nothing to fetch; stop retrying
     try {
-      const e = await fn({ name: co.name, ats: co.ats, slug: co.slug, tenant: co.tenant, wdn: co.wdn },
+      const e = await fn({ name: co.name, ats: co.ats, slug: co.slug, tenant: co.tenant, wdn: co.wdn, careersUrl: co.careers_url },
         { ats: co.ats, companySlug: co.slug ?? "", externalId: j.external_id, title: j.title, location: j.location, remote: null, employmentType: null, department: null, descriptionHtml: null, descriptionText: null, url: j.url, applyUrl: j.apply_url, postedAt: null, pay: null });
       await db.from("jobs").update({ description_html: e.descriptionHtml, description_text: e.descriptionText ?? "", title: e.title, location: e.location, employment_type: e.employmentType, apply_url: e.applyUrl }).eq("id", j.id);
       enrichedCount++;

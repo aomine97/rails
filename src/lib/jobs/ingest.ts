@@ -19,7 +19,7 @@ const LIST_CAP = 600, ENRICH_CAP = 40;
 /** Poll one company. Returns counts. */
 export async function pollCompany(db: SupabaseClient, c: CompanyRow, fetchImpl?: typeof fetch) {
   const now = new Date().toISOString();
-  const ref: CompanyRef = { name: c.name, ats: c.ats, slug: c.slug, tenant: c.tenant, wdn: c.wdn };
+  const ref: CompanyRef = { name: c.name, ats: c.ats, slug: c.slug, tenant: c.tenant, wdn: c.wdn, careersUrl: c.careers_url };
   let jobs: RawJob[];
   try {
     jobs = await fetchCompanyJobs(ref, fetchImpl, { listOnly: true, maxJobs: LIST_CAP });
@@ -72,7 +72,9 @@ export async function pollCompany(db: SupabaseClient, c: CompanyRow, fetchImpl?:
 export async function dueCompanies(db: SupabaseClient, minutes = 60, limit = 50): Promise<CompanyRow[]> {
   const cutoff = new Date(Date.now() - minutes * 60_000).toISOString();
   const { data, error } = await db.from("companies").select("id,name,ats,slug,tenant,wdn,careers_url")
-    .eq("active", true).not("slug", "is", null).in("ats", ["greenhouse", "lever", "ashby", "smartrecruiters", "workday", "usajobs"])
+    .eq("active", true).in("ats", Object.keys(adapters))
+    // every adapter needs a slug except Oracle, which is keyed by careers_url (site number defaults to CX_1)
+    .or("slug.not.is.null,and(ats.eq.oracle,careers_url.not.is.null)")
     .or(`last_polled_at.is.null,last_polled_at.lt.${cutoff}`)
     .order("last_polled_at", { ascending: true, nullsFirst: true }).limit(limit);
   if (error) throw error;

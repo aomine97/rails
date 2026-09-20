@@ -1,5 +1,9 @@
 import { ashby } from "./ashby";
 import { greenhouse } from "./greenhouse";
+import { icims } from "./icims";
+import { jobvite } from "./jobvite";
+import { oracle } from "./oracle";
+import { workable } from "./workable";
 import { lever } from "./lever";
 import { smartrecruiters } from "./smartrecruiters";
 import type { Adapter, AtsKind, CompanyRef, FetchLike, FetchOpts, RawJob } from "./types";
@@ -8,7 +12,7 @@ import { workday } from "./workday";
 
 export * from "./types";
 
-export const adapters: Partial<Record<AtsKind, Adapter>> = { greenhouse, lever, ashby, smartrecruiters, workday, usajobs };
+export const adapters: Partial<Record<AtsKind, Adapter>> = { greenhouse, lever, ashby, smartrecruiters, workday, usajobs, workable, jobvite, icims, oracle };
 
 /** Fetch one company's postings, or [] when we have no adapter for its ATS yet. */
 export async function fetchCompanyJobs(c: CompanyRef, fetchImpl?: FetchLike, opts?: FetchOpts): Promise<RawJob[]> {
