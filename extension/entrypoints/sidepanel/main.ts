@@ -1,8 +1,8 @@
 import { api, getToken, setToken, SITE, type JobInfo, type Me } from "../../lib/api";
+import { ring, meter, logo, bandLabel, BAND, bandOf } from "../../lib/ui";
 
 const app = document.getElementById("app")!;
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
-const bandColor = (fit: number | null) => (fit == null ? "var(--muted)" : fit >= 85 ? "var(--green)" : fit >= 70 ? "var(--amber)" : "var(--red)");
 const b64 = (buf: ArrayBuffer) => { let s = ""; const b = new Uint8Array(buf); for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode(...b.subarray(i, i + 0x8000)); return btoa(s); };
 
 type FileInfo = { kind: "resume" | "letter"; name: string; type: string; origin: string; bytes: ArrayBuffer } | null;
@@ -18,10 +18,18 @@ function completeness(me: Me): { pct: number; missing: string[] } {
   return { pct: Math.round(100 * (want.length - missing.length) / want.length), missing };
 }
 
+/** Tell the on-page badge the fit for this tab and cache it per URL so the badge shows it before the panel opens. */
+async function pushBadge() {
+  const fit = state.job?.fit ?? null;
+  try { await chrome.runtime.sendMessage({ type: "rails:badge", fit }); } catch { /* no badge on this page */ }
+  if (state.tabUrl && fit != null) { try { const r = await chrome.storage.local.get("rails_fit_cache"); const c = (r.rails_fit_cache ?? {}) as Record<string, number>; c[state.tabUrl.split("#")[0]!] = fit; const keys = Object.keys(c); if (keys.length > 300) for (const k of keys.slice(0, keys.length - 300)) delete c[k]; await chrome.storage.local.set({ rails_fit_cache: c }); } catch { /* ignore */ } }
+}
+
 function render() {
   const { me, job } = state;
+  void pushBadge();
   if (!me) {
-    app.innerHTML = `<div class="card"><div class="brand">Rails <small>not connected</small></div>
+    app.innerHTML = `<div class="card"><div class="brand"><span class="row" style="gap:6px">${logo(22)} Rails</span> <small>not connected</small></div>
       <p>Connect once and the panel shows your fit for the job on this tab and fills applications from your profile.</p>
       <button class="btn" id="connect">Connect to Rails</button>
       <p class="note" style="margin-top:8px">Opens rails-psi.vercel.app in a tab. Sign in there if asked, then come back.</p>
@@ -36,15 +44,17 @@ function render() {
   const fields: [string, unknown][] = [["Name", f.fullName], ["Preferred", f.preferredName], ["Email", f.email], ["Phone", f.phone], ["LinkedIn", f.linkedin], ["GitHub", f.github], ["Portfolio", f.portfolio], ["Street", f.street], ["City", f.city], ["State", f.state], ["ZIP", f.zip], ["School", f.school], ["Degree", f.degree], ["Major", f.major], ["Start year", f.startYear], ["Grad year", f.gradYear], ["GPA", f.gpa]];
 
   app.innerHTML = `
-    <div class="brand" style="padding:2px 2px 0">Rails <small>${esc(me.name ?? me.email)} · ${me.plan === "free" ? `${me.credits} credits` : esc(String(me.plan).toUpperCase())}</small></div>
+    <div class="brand" style="padding:2px 2px 0"><span class="row" style="gap:6px">${logo(22)} Rails</span> <small>${esc(me.name ?? me.email)} · ${me.plan === "free" ? `${me.credits} credits` : esc(String(me.plan).toUpperCase())}</small></div>
 
     ${job ? `<div class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
         <div class="row" style="gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">${esc(initials)}</div><div><div class="ink">${esc(job.company)}</div><div class="muted">${esc(job.location ?? "")}${job.level ? ` · ${esc(job.level.replace("_", " "))}` : ""}</div></div></div>
-        <div style="text-align:right"><div class="fit" style="color:${bandColor(job.fit)}">${job.fit ?? "—"}</div><div class="muted" style="font-size:10px;font-weight:800;letter-spacing:.06em">FIT</div></div>
       </div>
       <div style="font-weight:800;font-size:15px;color:var(--ink);margin-top:8px;line-height:1.3">${esc(job.title)}</div>
-      ${job.sub ? `<div class="muted" style="font-size:11px;margin-top:4px">skills ${job.sub.skills} · experience ${job.sub.experience} · field ${job.sub.field}</div>` : ""}
+      <div class="row" style="gap:12px;margin-top:10px;align-items:center;background:var(--light);border:1px solid var(--line);border-radius:10px;padding:8px 10px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px">${ring(job.fit, 68, { label: "Fit" })}<span style="font-size:9px;font-weight:800;letter-spacing:.1em;color:${BAND[bandOf(job.fit)]}">${job.fit == null ? "NOT SCORED" : bandLabel(job.fit)}</span></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px">${job.sub ? [meter("Skills", job.sub.skills), meter("Experience", job.sub.experience), meter("Field", job.sub.field)].join("") : `<span class="note">Score arrives when the tagger finishes.</span>`}</div>
+      </div>
       ${job.hardBlocks.length ? `<div style="margin-top:6px">${job.hardBlocks.map((b) => `<span class="chip" style="background:var(--red-bg);color:var(--red)">✗ ${esc(b)}</span>`).join(" ")}</div>` : ""}
       ${(job.softNotes ?? []).length ? `<div style="margin-top:6px">${job.softNotes!.map((b) => `<span class="chip" style="background:var(--amber-bg);color:var(--amber)">! ${esc(b)}</span>`).join(" ")}</div>` : ""}
       <div class="row" style="margin-top:8px"><a class="muted" style="font-size:11px" href="${esc(job.detailUrl)}" target="_blank">Open in Rails ↗</a></div>
@@ -56,7 +66,7 @@ function render() {
     ${state.status ? `<p class="note" style="margin:-4px 2px 0">${esc(state.status)}</p>` : ""}
 
     <div class="card" style="padding:0">
-      <div class="row" style="justify-content:space-between;padding:10px 12px;cursor:pointer" id="row-info"><span class="ink">Your autofill information</span><span class="row" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${comp.pct === 100 ? "var(--green)" : comp.pct >= 70 ? "var(--amber)" : "var(--red)"}"></span><span class="muted">${comp.pct}%</span><span class="muted">${state.show.fields ? "▾" : "▸"}</span></span></div>
+      <div class="row" style="justify-content:space-between;padding:10px 12px;cursor:pointer" id="row-info"><span class="ink">Your autofill information</span><span class="row" style="gap:6px">${ring(comp.pct, 30, { suffix: "", label: "Complete", stroke: 4, color: comp.pct === 100 ? "var(--green)" : comp.pct >= 70 ? "var(--amber)" : "var(--red)" })}<span class="muted">${state.show.fields ? "▾" : "▸"}</span></span></div>
       ${state.show.fields ? `<div style="padding:0 12px 10px">${comp.missing.length ? `<p class="note" style="margin:0 0 6px">Missing: ${esc(comp.missing.join(", "))}. <a href="${SITE}/onboarding/confirm" target="_blank">Edit profile ↗</a></p>` : ""}<ul>${fields.filter(([, v]) => v).map(([k, v]) => `<li class="field"><div><div class="k">${esc(k)}</div><div class="v" title="${esc(v)}">${esc(v)}</div></div><button class="copy" data-v="${esc(v)}">Copy</button></li>`).join("")}</ul></div>` : ""}
 
       <div style="border-top:1px solid var(--line);padding:10px 12px">
