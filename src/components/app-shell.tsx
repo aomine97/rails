@@ -5,7 +5,7 @@ import { PlanChip } from "./plan-chip";
 const NAV: { href: string; label: string; badge?: string; soon?: boolean; icon: string }[] = [
   { href: "/app", label: "Jobs", icon: "M4 6h16M4 12h16M4 18h10" },
   { href: "/app/tracker", label: "Tracker", icon: "M5 4h14v16H5zM8 9h8M8 13h6" },
-  { href: "/app/autopilot", label: "Autopilot", soon: true, icon: "M13 2L3 14h7l-1 8 10-12h-7l1-8z" },
+  { href: "/app/autopilot", label: "Autopilot", icon: "M13 2L3 14h7l-1 8 10-12h-7l1-8z" },
   { href: "/app/resume", label: "Resume", icon: "M7 3h7l5 5v13H7zM14 3v5h5" },
   { href: "/app/coach", label: "Coach", soon: true, icon: "M4 5h16v10H8l-4 4z" },
   { href: "/app/interview", label: "Interview", soon: true, badge: "NEW", icon: "M12 3v10M8 7a4 4 0 008 0M6 21h12" },
