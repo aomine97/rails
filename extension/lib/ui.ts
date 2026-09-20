@@ -21,7 +21,12 @@ export function meter(label: string, value: number): string {
   return `<div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#6B7A93"><span style="width:64px">${label}</span><span style="flex:1;height:6px;border-radius:999px;background:#E3E8F0;overflow:hidden"><span style="display:block;height:6px;border-radius:999px;width:${Math.max(0, Math.min(100, value))}%;background:${c};transition:width .6s ease"></span></span><span style="width:26px;text-align:right;font-weight:800;color:${c}">${value}</span></div>`;
 }
 
-/** Rails mark: orange rounded square with an ink "R" and a rail line. Inline so it needs no web-accessible resource. */
+/** Rails mark: the extension icon itself (ink square, white R, orange rail). */
 export function logo(size = 20): string {
-  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#FF8A3D"/><path d="M7 18V6h5.2c2.4 0 3.9 1.3 3.9 3.4 0 1.5-.8 2.6-2.2 3.1L17 18h-2.7l-2.7-5H9.4v5H7zm2.4-7h2.6c1.2 0 1.8-.6 1.8-1.6S13.2 8 12 8H9.4v3z" fill="#0B1B3A"/></svg>`;
+  const src = chrome.runtime.getURL("icons/48.png");
+  return `<img src="${src}" width="${size}" height="${size}" alt="Rails" style="border-radius:${Math.round(size / 4)}px;display:block">`;
 }
+
+export const LEVEL_LABEL: Record<string, string> = { internship: "Internship", new_grad: "New Grad", entry: "Entry Level", mid: "Mid-Level", senior: "Senior", part_time: "Part-Time", contract: "Contract" };
+export const levelLabel = (l: string | null | undefined) => (l ? LEVEL_LABEL[l] ?? l.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "");
+export const logoUrl = (domain: string | null | undefined, size = 64) => (domain ? `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=${size}` : null);

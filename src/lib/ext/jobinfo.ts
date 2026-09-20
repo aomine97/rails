@@ -11,7 +11,7 @@ export const normUrl = (u: string) => { try { const x = new URL(u); x.hash = "";
 export async function findJobByUrl(db: SupabaseClient, raw: string) {
   const url = normUrl(raw);
   const idGuess = url.match(/\/(?:jobs?|posting|postings|req|requisition|opportunities|careers)\/([A-Za-z0-9_-]{4,})/)?.[1] ?? url.match(/[?&]gh_jid=(\d+)/)?.[1] ?? url.match(/\/([A-Za-z0-9_-]{6,})\/?$/)?.[1] ?? null;
-  const sel = "id,title,location,url,apply_url,tags,external_id,companies(name)";
+  const sel = "id,title,location,url,apply_url,tags,external_id,companies(name,domain,logo_url)";
   const { data: exact } = await db.from("jobs").select(sel).is("closed_at", null).or(`url.eq.${url},apply_url.eq.${url},url.eq.${url}/,apply_url.eq.${url}/`).limit(1);
   if (exact?.[0]) return exact[0];
   if (idGuess) {
@@ -42,7 +42,7 @@ export async function jobInfo(db: SupabaseClient, userId: string, job: NonNullab
   return {
     keywords, titleMatch, yourTitle: me.success ? (me.data.targetRoles[0] ?? me.data.headline ?? me.data.experience[0]?.title ?? null) : null,
     level: tags.success ? tags.data.level : null, field: tags.success ? tags.data.field : null, sub: score?.sub ?? null,
-    id: job.id, title: job.title, company: (job.companies as unknown as { name: string } | null)?.name ?? "", location: job.location, fit: score?.fit ?? null, band: score?.band ?? null,
+    id: job.id, title: job.title, company: (job.companies as unknown as { name: string } | null)?.name ?? "", companyDomain: (job.companies as unknown as { domain?: string | null } | null)?.domain ?? null, companyLogo: (job.companies as unknown as { logo_url?: string | null } | null)?.logo_url ?? null, location: job.location, fit: score?.fit ?? null, band: score?.band ?? null,
     requirements: score?.requirements ?? [], hardBlocks: score?.hardBlocks ?? [], softNotes: score?.softNotes ?? [], tagged: tags.success && !!job.tags,
     resume: resume?.text_content ?? null, resumeScore: resume?.score ?? null, coverLetter: app?.cover_letter ?? null, stage: app?.stage ?? null,
     detailUrl: `${SITE()}/app/jobs/${job.id}`,

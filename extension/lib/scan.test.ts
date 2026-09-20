@@ -33,6 +33,11 @@ describe("scanFields", () => {
     expect(by(/Resume/).kind).toBe("file"); expect(by(/Resume/).required).toBe(true);
     expect(f.some((x) => /token/.test(x.label))).toBe(false);
   });
+  it("does not repeat a label that the page states twice (label[for] + aria-label)", () => {
+    document.body.innerHTML = `<label for="fn">First Name*</label><input id="fn" aria-label="First Name" value="Pranav">`;
+    const f = scanFields(document);
+    expect(f[0]!.label).toBe("First Name"); expect(f[0]!.value).toBe("Pranav");
+  });
   it("ids are stable across scans", () => {
     document.body.innerHTML = FORM;
     const a = scanFields(document); const b = scanFields(document);

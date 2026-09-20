@@ -32,7 +32,7 @@ function control(r: Row): string {
     const multi = f.kind === "checkboxes";
     return `<select class="pick" data-id="${id}" ${multi ? "multiple size=4" : ""}><option value="">${multi ? "Pick one or more…" : "Pick an answer…"}</option>${opts.map((o) => `<option value="${esc(o)}" ${r.value && r.value.split(", ").includes(o) ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>${multi ? `<button class="btn ghost act-multi" data-id="${id}" style="padding:4px 10px;font-size:11px">Fill</button>` : ""}`;
   }
-  if (f.kind === "combobox") return `<div class="row" style="gap:4px"><input class="txt" data-id="${id}" placeholder="${f.searchable ? "Type to search the list…" : "Answer…"}" value="${esc(r.value ?? "")}"><button class="btn ghost act-txt" data-id="${id}" style="padding:4px 10px;font-size:11px">Fill</button>${f.searchable ? "" : `<button class="btn ghost list" data-id="${id}" style="padding:4px 8px;font-size:11px" title="Read the options from the page">List</button>`}</div>`;
+  if (f.kind === "combobox") return `<div class="row" style="gap:4px"><input class="txt" data-id="${id}" placeholder="${f.searchable ? "Type to search the list, then Enter" : "Type the option, then Enter"}" value="${esc(r.value ?? "")}"><button class="btn ghost act-txt" data-id="${id}" style="padding:4px 10px;font-size:11px">Fill</button></div>`;
   const tall = f.kind === "textarea";
   return `<div class="row" style="gap:4px;align-items:flex-start">${tall ? `<textarea class="txt" data-id="${id}" rows="3" placeholder="Your answer…">${esc(r.value ?? "")}</textarea>` : `<input class="txt" data-id="${id}" placeholder="Your answer…" value="${esc(r.value ?? "")}">`}<button class="btn ghost act-txt" data-id="${id}" style="padding:4px 10px;font-size:11px">Fill</button></div>`;
 }
@@ -48,7 +48,7 @@ function row(r: Row, open: boolean): string {
 export function renderForm(fs: FormState, expanded: boolean): string {
   const s = summary(fs);
   const required = fs.rows.filter((r) => r.f.required); const optional = fs.rows.filter((r) => !r.f.required);
-  const bar = `<div class="bar"><span style="width:${s.pct}%"></span></div>`;
+  const bar = `<div class="bar"><span id="bar-fill" data-w="${s.pct}"></span></div>`;
   const head = fs.running ? `<span class="ink">${esc(fs.step)}</span><span class="ink">${s.pct}%</span>` : `<span class="ink">${s.done}/${s.req} required filled</span><span class="ink">${s.pct}%</span>`;
   return `<div class="card" style="padding:0">
     <div class="row" style="justify-content:space-between;padding:10px 12px 6px;cursor:pointer" id="form-head">${head}</div>

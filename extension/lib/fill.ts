@@ -92,7 +92,10 @@ export function labelTextFor(el: Element, root: Document | ShadowRoot): string {
     const lab = block?.querySelector("label, legend, [class*='label' i], [id$='-label']");
     if (lab) parts.push(lab.textContent ?? "");
   }
-  return clean(parts.join(" "));
+  // the same text often arrives twice (label[for] + aria-label): keep each distinct piece once
+  const seen = new Set<string>(); const uniq: string[] = [];
+  for (const x of parts.map((t) => clean(t)).filter(Boolean)) { const k = x.toLowerCase(); if (!seen.has(k) && !uniq.some((u) => u.toLowerCase().includes(k))) { seen.add(k); uniq.push(x); } }
+  return clean(uniq.join(" "));
 }
 
 /** Set a value the way a user would, so React/Vue/Angular controlled inputs notice. */
@@ -122,16 +125,22 @@ export function setValue(el: El, value: string | boolean): boolean {
 
 export const mouse = (type: string, t: Element) => t.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, button: 0 }));
 export const clickLike = (t: Element) => { mouse("mousedown", t); mouse("mouseup", t); mouse("click", t); };
-export const controlOf = (input: HTMLInputElement): Element => input.closest(".select__control, [class*='control' i], [class*='select' i]") ?? input.parentElement ?? input;
+export const controlOf = (input: HTMLInputElement): Element => input.closest(".select__control, [class*='__control' i], [class*='-control' i]") ?? input.closest("[class*='select' i]:not([class*='input' i])") ?? input.parentElement ?? input;
+/** The container that holds both the control and the menu: react-select's outer div. */
+export const containerOf = (input: HTMLInputElement): Element => input.closest(".select__container, [class*='__container' i]:not([class*='input' i]):not([class*='value' i])") ?? controlOf(input).parentElement ?? controlOf(input);
 export function listboxFor(input: HTMLInputElement, root: Document | ShadowRoot): HTMLElement[] {
   const id = input.getAttribute("aria-controls") ?? input.getAttribute("aria-owns");
   const lb = id ? (root as Document).getElementById?.(id) ?? document.getElementById(id) : null;
   if (lb) return [...lb.querySelectorAll<HTMLElement>('[role="option"]')];
-  const menu = controlOf(input).parentElement?.querySelector(".select__menu, [class*='menu' i]");
+  const menu = containerOf(input).querySelector(".select__menu, [class*='menu' i]");
   if (menu) return [...menu.querySelectorAll<HTMLElement>('[role="option"], .select__option')];
   return [...root.querySelectorAll<HTMLElement>('[role="option"]')].filter((o) => !/iti__/.test(o.className)); // never the phone flag list
 }
-const shownValue = (input: HTMLInputElement) => clean(controlOf(input).querySelector(".select__single-value, .select__multi-value, [class*='single-value' i]")?.textContent);
+export const shownValue = (input: HTMLInputElement): string => {
+  let el: Element | null = input.parentElement; const sel = ".select__single-value, .select__multi-value, [class*='single-value' i], [class*='multi-value' i]";
+  for (let i = 0; el && i < 6; i++, el = el.parentElement) { const v = el.querySelector(sel); if (v) return clean(v.textContent); }
+  return "";
+};
 export function bestOption(options: HTMLElement[], want: string): HTMLElement | null {
   const w = want.toLowerCase().trim(); const texts = options.map((o) => clean(o.textContent).toLowerCase());
   let idx = texts.findIndex((t) => t === w);
@@ -158,7 +167,7 @@ export async function pickCombobox(input: HTMLInputElement, want: string, root: 
       await sleep(250);
       options = listboxFor(input, root).filter((o) => !/^(loading|no options)/i.test(clean(o.textContent)));
       if (options.length) { hit = bestOption(options, want); if (hit) break; }
-      const menuText = clean(ctl.parentElement?.querySelector(".select__menu")?.textContent);
+      const menuText = clean(containerOf(input).querySelector(".select__menu")?.textContent);
       if (/no options/i.test(menuText)) break;
     }
   }
@@ -166,7 +175,7 @@ export async function pickCombobox(input: HTMLInputElement, want: string, root: 
   clickLike(hit);
   await sleep(120);
   const shown = shownValue(input);
-  return !!shown || input.getAttribute("aria-expanded") === "false";
+  return !!shown || input.getAttribute("aria-expanded") === "false" || !listboxFor(input, root).length; // menu closed after the click = the pick registered
 }
 
 /** Checkbox groups (Greenhouse multi-select questions): tick the boxes whose label matches each wanted value. */

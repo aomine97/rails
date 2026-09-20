@@ -1,4 +1,4 @@
-import { clean, isCombobox, isFillable, controlOf, clickLike, mouse, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
+import { clean, isCombobox, isFillable, controlOf, shownValue, clickLike, mouse, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
 
 /** Everything the form asks, as the panel's checklist sees it. Built once per page; ids are stable data attributes. */
 export type Kind = "text" | "textarea" | "number" | "date" | "select" | "combobox" | "radio" | "checkbox" | "checkboxes" | "file";
@@ -76,7 +76,7 @@ export function scanFields(root: Document | ShadowRoot): ScannedField[] {
       const cur = el.selectedIndex >= 0 ? el.options[el.selectedIndex]!.text.trim() : "";
       out.push({ ...base, kind: "select", options: opts, filled: !!el.value && !PLACEHOLDER.test(cur), value: cur });
     } else if (isCombobox(el)) {
-      const shown = clean(controlOf(el as HTMLInputElement).querySelector(".select__single-value, .select__multi-value, [class*='single-value' i], [class*='multi-value' i]")?.textContent);
+      const shown = shownValue(el as HTMLInputElement);
       out.push({ ...base, kind: "combobox", filled: !!shown || !!(el as HTMLInputElement).value, value: shown || (el as HTMLInputElement).value });
     } else {
       const v = (el as HTMLInputElement).value ?? "";

@@ -1,5 +1,5 @@
 import { api, getToken, setToken, SITE, type JobInfo, type Me } from "../../lib/api";
-import { ring, meter, logo, bandLabel, BAND, bandOf } from "../../lib/ui";
+import { ring, meter, logo, bandLabel, BAND, bandOf, levelLabel, logoUrl } from "../../lib/ui";
 import { renderForm, answerKey, summary, type FormState, type Row } from "./form";
 import type { ScannedField } from "../../lib/scan";
 
@@ -27,6 +27,24 @@ async function pushBadge() {
   if (state.tabUrl && fit != null) { try { const r = await chrome.storage.local.get("rails_fit_cache"); const c = (r.rails_fit_cache ?? {}) as Record<string, number>; c[state.tabUrl.split("#")[0]!] = fit; const keys = Object.keys(c); if (keys.length > 300) for (const k of keys.slice(0, keys.length - 300)) delete c[k]; await chrome.storage.local.set({ rails_fit_cache: c }); } catch { /* ignore */ } }
 }
 
+/** Company mark: its logo when Rails knows the domain, initials otherwise; a broken image falls back to initials. */
+function companyLogo(job: JobInfo, initials: string): string {
+  const src = job.companyLogo ?? logoUrl(job.companyDomain);
+  const fallback = `<div class="clogo" style="background:var(--ink);color:#fff;font-weight:800">${esc(initials)}</div>`;
+  if (!src) return fallback;
+  return `<div class="clogo" style="background:#fff;border:1px solid var(--line)"><img src="${esc(src)}" width="28" height="28" alt="" style="object-fit:contain" data-fallback="${esc(initials)}"></div>`;
+}
+
+let lastBar = 0;
+/** Re-rendering swaps the DOM, which kills CSS transitions; start the new bar at the old width and let it glide. */
+function animateBar() {
+  const fill = document.getElementById("bar-fill"); if (!fill) return;
+  const target = parseFloat(fill.dataset.w ?? "0");
+  fill.style.transition = "none"; fill.style.width = `${lastBar}%`; void fill.offsetWidth;
+  fill.style.transition = "width .5s cubic-bezier(.2,.8,.2,1)"; fill.style.width = `${target}%`;
+  lastBar = target;
+}
+
 function render() {
   const { me, job } = state;
   void pushBadge();
@@ -50,7 +68,7 @@ function render() {
 
     ${job ? `<div class="card">
       <div class="row" style="justify-content:space-between;align-items:flex-start">
-        <div class="row" style="gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">${esc(initials)}</div><div><div class="ink">${esc(job.company)}</div><div class="muted">${esc(job.location ?? "")}${job.level ? ` · ${esc(job.level.replace("_", " "))}` : ""}</div></div></div>
+        <div class="row" style="gap:10px">${companyLogo(job, initials)}<div><div class="ink">${esc(job.company)}</div><div class="muted">${esc(job.location ?? "")}${job.level ? `${job.location ? " · " : ""}${esc(levelLabel(job.level))}` : ""}</div></div></div>
       </div>
       <div style="font-weight:800;font-size:15px;color:var(--ink);margin-top:8px;line-height:1.3">${esc(job.title)}</div>
       <div class="row" style="gap:12px;margin-top:10px;align-items:center;background:var(--light);border:1px solid var(--line);border-radius:10px;padding:8px 10px">
@@ -118,6 +136,8 @@ function render() {
   for (const t of app.querySelectorAll<HTMLInputElement>("input.txt")) t.onkeydown = (e) => { if (e.key === "Enter" && t.value.trim()) void fillOne(t.dataset.id!, t.value.trim()); };
   for (const b of app.querySelectorAll<HTMLButtonElement>(".list")) b.onclick = () => void listOptions(b.dataset.id!);
   for (const c of app.querySelectorAll<HTMLInputElement>(".rem")) c.onchange = () => { const r = rowOf(c.dataset.id!); if (r) r.remember = c.checked; };
+  animateBar();
+  for (const img of app.querySelectorAll<HTMLImageElement>(".clogo img")) img.onerror = () => { const d = img.parentElement!; d.style.background = "var(--ink)"; d.style.color = "#fff"; d.style.fontWeight = "800"; d.textContent = img.dataset.fallback ?? "•"; };
   document.getElementById("score")?.addEventListener("click", doScore);
   document.getElementById("tailor")?.addEventListener("click", doTailor);
   document.getElementById("letter")?.addEventListener("click", doLetter);
@@ -153,7 +173,8 @@ async function fillOne(id: string, v: string | string[] | boolean) {
   const r = rowOf(id); if (!r) return;
   setRow(id, "filling");
   const res = await relay<{ results?: { id: string; ok: boolean }[] }>({ type: "rails:apply", answers: [{ field: r.f, value: v }] });
-  const ok = !!res?.ok && !!res.results?.[0]?.ok;
+  let ok = !!res?.ok && !!res.results?.[0]?.ok;
+  if (!ok) { await refreshRows(); ok = rowOf(id)?.s === "done"; } // the page may show it even when the widget gave no signal
   setRow(id, ok ? "done" : "failed", { value: ok ? valueText(v) : r.value, why: ok ? undefined : "The page did not take that. Try another option or set it on the page." });
   if (ok && r.remember) await remember(r.f.label, v);
   if (ok) await refreshRows(); render();
@@ -214,8 +235,11 @@ async function doFill() {
       }
     } catch (e) { for (const r of ask) if (r.s === "todo") { r.s = "left"; r.why = "Answer service unavailable"; } state.status = `Could not answer questions: ${String((e as Error).message)}`; }
   }
-  for (const r of state.form.rows) if (r.s === "todo") r.s = r.f.kind === "file" ? "left" : "left";
+  for (const r of state.form.rows) if (r.s === "todo") r.s = "left";
   await refreshRows();
+  // dropdowns we could not list during the scan: read their options now so the row shows a picker, not a text box
+  const unlisted = state.form.rows.filter((r) => (r.s === "left" || r.s === "failed") && r.f.kind === "combobox" && !r.f.options?.length && !r.f.searchable).slice(0, 12);
+  if (unlisted.length) { state.form.step = "Reading the remaining dropdowns…"; render(); for (const r of unlisted) { const o = await relay<{ options?: string[]; searchable?: boolean }>({ type: "rails:options", field: r.f }); if (o?.ok) { r.f.options = o.options ?? []; if (o.searchable) r.f.searchable = true; } } }
   state.form.running = false; state.form.step = ""; state.busy = null;
   const sm = summary(state.form); state.lastFill = { filled: sm.done, attempted: sm.req, left: state.form.rows.filter((r) => r.s === "left").map((r) => r.f.label) };
   render();

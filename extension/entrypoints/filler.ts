@@ -23,7 +23,7 @@ export default defineUnlistedScript(() => {
         const fields: ScannedField[] = [];
         for (const r of allRoots()) fields.push(...scanFields(r));
         if (msg.readOptions) {
-          let budget = 8; // open at most this many dropdowns per scan; the rest list on demand
+          let budget = 14; // open at most this many dropdowns per scan; the rest list on demand
           for (const f of fields) if (f.kind === "combobox" && !f.filled && budget > 0) { budget--; const r = allRoots().find((x) => x.querySelector(`[data-rails-f="${f.id}"]`)) ?? document; f.options = await readComboOptions(r, f); }
         }
         send({ ok: true, fields, url: location.href });

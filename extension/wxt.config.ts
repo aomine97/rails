@@ -13,5 +13,6 @@ export default defineConfig({
     action: { default_title: "Open Rails" },
     side_panel: { default_path: "sidepanel.html" },
     icons: { 16: "icons/16.png", 32: "icons/32.png", 48: "icons/48.png", 128: "icons/128.png" },
+    web_accessible_resources: [{ resources: ["icons/*"], matches: ["<all_urls>"] }],
   },
 });
