@@ -10,6 +10,7 @@ import { explainScore } from "@/lib/match/explain";
 import { ageLabel, buildFeed, payLabel, type FeedJobRow } from "@/lib/match/feed";
 import { addSkillToProfile, hideJob, likeJob } from "../../actions";
 import { SplitApplyButton } from "./apply/split";
+import { CompanyLogo } from "@/components/company-logo";
 
 export default async function JobDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -18,7 +19,7 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
   if (!user) redirect(`/login?next=/app/jobs/${id}`);
   const [{ data: profile }, { data: job }, { data: mark }, { data: app }, { data: credits }] = await Promise.all([
     supabase.from("profiles").select("full_name,canonical,onboarding_done").eq("id", user.id).single(),
-    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,employment_type,companies(id,name,ats,careers_url)").eq("id", id).maybeSingle(),
+    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,employment_type,companies(id,name,ats,careers_url,domain,logo_url,size,industry,hq)").eq("id", id).maybeSingle(),
     supabase.from("matches").select("liked,hidden").eq("user_id", user.id).eq("job_id", id).maybeSingle(),
     supabase.from("applications").select("stage").eq("user_id", user.id).eq("job_id", id).maybeSingle(),
     supabase.from("credits").select("balance").eq("user_id", user.id).maybeSingle(),
@@ -27,7 +28,7 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
   const me = CanonicalProfile.safeParse(profile.canonical); if (!me.success) redirect("/onboarding");
   if (!job) notFound();
   const tags = JobTags.safeParse(job.tags);
-  const company = (job.companies as unknown as { id: string; name: string; ats: string; careers_url: string | null } | null);
+  const company = (job.companies as unknown as { id: string; name: string; ats: string; careers_url: string | null; domain: string | null; logo_url: string | null; size: string | null; industry: string | null; hq: string | null } | null);
   const score = tags.success ? scoreJob(me.data, tags.data, { title: job.title, location: job.location }) : null;
   const why = tags.success && score ? explainScore(me.data, tags.data, score) : null;
   const pay = tags.success ? payLabel(tags.data, job as unknown as FeedJobRow) : null;
@@ -66,8 +67,14 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
               {tags.success && tags.data.relocationOffered && <span className="rounded bg-green-chip px-1.5 py-0.5 text-green-chip-text">relocation offered</span>}
               <span className="text-muted">{ageLabel(posted)}</span>
             </div>
-            <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight">{job.title}</h1>
-            <div className="text-[15px] text-text">{company?.name}{job.location ? ` · ${job.location}` : ""}{pay ? ` · ${pay}` : ""}{job.employment_type ? ` · ${job.employment_type}` : ""}</div>
+            <div className="flex items-start gap-3">
+              <CompanyLogo name={company?.name ?? ""} domain={company?.domain} logo={company?.logo_url} size={48} />
+              <div className="min-w-0">
+                <h1 className="font-display text-2xl font-extrabold leading-tight tracking-tight">{job.title}</h1>
+                <div className="text-[15px] text-text">{company?.name}{job.location ? ` · ${job.location}` : ""}{pay ? ` · ${pay}` : ""}{job.employment_type ? ` · ${job.employment_type}` : ""}</div>
+                {(company?.industry || company?.size || company?.hq) && <div className="mt-0.5 text-[12px] text-muted">{[company?.industry, company?.size ? `${company.size} employees` : null, company?.hq ? `HQ ${company.hq}` : null].filter(Boolean).join(" · ")}</div>}
+              </div>
+            </div>
             {tags.success && tags.data.summary && <p className="text-[14px] leading-relaxed text-text">{tags.data.summary}</p>}
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <SplitApplyButton jobId={job.id} url={job.apply_url} applied={!!app && app.stage !== "saved" && app.stage !== "prepared"} />

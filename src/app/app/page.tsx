@@ -7,6 +7,7 @@ import { CanonicalProfile } from "@/lib/schemas/profile";
 import { ageLabel, buildFeed, payLabel, type FeedJobRow } from "@/lib/match/feed";
 import { addSkillToProfile, hideJob, likeJob } from "./actions";
 import { ApplyButton } from "./apply-button";
+import { CompanyLogo } from "@/components/company-logo";
 import { upNext, type TrackedApp } from "@/lib/tracker/stages";
 
 const PAGE = 25;
@@ -31,7 +32,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   const me = parsed.data;
 
   const [{ data: rows }, { data: marks }, { data: apps }] = await Promise.all([
-    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats)")
+    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats,domain,logo_url)")
       .is("closed_at", null).not("tagged_at", "is", null).order("first_seen_at", { ascending: false }).limit(3000),
     supabase.from("matches").select("job_id,liked,hidden").eq("user_id", user.id),
     supabase.from("applications").select("id,job_id,title,company_name,url,stage,applied_at,last_activity_at,next_action,next_action_at,notes,created_at").eq("user_id", user.id).order("last_activity_at", { ascending: false }),
@@ -106,7 +107,6 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
             {pageItems.map(({ job, tags, score, isNew, ageDays, otherLocations }) => {
               const pay = payLabel(tags, job);
               const company = job.companies?.name ?? "";
-              const initials = company.split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? "").join("");
               const summary = tags.summary || (job.description_text ? job.description_text.replace(/\s+/g, " ").slice(0, 220).replace(/\s\S*$/, "") + "…" : "");
               const reqLines = tags.requirements.filter((r) => r.required).slice(0, 2);
               const gaps = [...score.missingRequired, ...score.missingPreferred].slice(0, 4);
@@ -122,7 +122,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
                       <span className="text-muted">{ageLabel(ageDays)}</span>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ink font-display text-sm font-extrabold text-white">{initials || "•"}</div>
+                      <CompanyLogo name={company} domain={job.companies?.domain} logo={job.companies?.logo_url} />
                       <div className="min-w-0">
                         <Link href={`/app/jobs/${job.id}`} className="font-display text-[17px] font-extrabold leading-tight tracking-tight text-ink hover:text-blue">{job.title}</Link>
                         <div className="text-sm text-text">{company}{job.location ? ` · ${job.location}` : ""}{otherLocations.length ? ` · +${otherLocations.length} more ${otherLocations.length === 1 ? "city" : "cities"}` : ""}{pay ? ` · ${pay}` : ""}{tags.relocationOffered ? " · relocation offered" : ""}</div>

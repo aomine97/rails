@@ -8,7 +8,7 @@ export interface FeedJobRow {
   posted_at: string | null; first_seen_at: string; tags: unknown; pay_min: number | null; pay_max: number | null; pay_period: string | null;
   description_text?: string | null;
   source?: string;
-  companies: { name: string; ats: string } | null;
+  companies: { name: string; ats: string; domain?: string | null; logo_url?: string | null } | null;
 }
 
 export interface FeedFilters {
