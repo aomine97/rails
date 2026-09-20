@@ -16,7 +16,7 @@ async function upsertMatch(jobId: string, patch: { liked?: boolean; hidden?: boo
   if (!user) return;
   const { data: prof } = await supabase.from("profiles").select("canonical_version").eq("id", user.id).single();
   await supabase.from("matches").upsert({ user_id: user.id, job_id: jobId, fit, band, sub: {}, canonical_version: prof?.canonical_version ?? 0, ...patch }, { onConflict: "user_id,job_id" });
-  revalidatePath("/app");
+  revalidatePath("/app"); revalidatePath("/app/jobs/[id]", "page");
 }
 
 export async function likeJob(form: FormData) {
@@ -40,7 +40,7 @@ export async function addSkillToProfile(form: FormData) {
   if (p.skills.some((s) => s.key === key)) return;
   p.skills.push({ name, key, level: "working", evidence: "Added by you from a job card", source: "user" });
   await admin.from("profiles").update({ canonical: p, canonical_version: (prof?.canonical_version ?? 0) + 1 }).eq("id", user.id);
-  revalidatePath("/app");
+  revalidatePath("/app"); revalidatePath("/app/jobs/[id]", "page");
 }
 
 /** After "Apply now" opens the posting, the card asks "Did you apply?". Yes -> application row, stage applied. */
@@ -53,5 +53,5 @@ export async function markApplied(form: FormData) {
     stage: applied ? "applied" : "saved", via: "manual", applied_at: applied ? new Date().toISOString() : null, last_activity_at: new Date().toISOString() };
   if (existing) await supabase.from("applications").update(row).eq("id", existing.id);
   else await supabase.from("applications").insert(row);
-  revalidatePath("/app");
+  revalidatePath("/app"); revalidatePath("/app/jobs/[id]", "page");
 }

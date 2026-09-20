@@ -111,7 +111,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
                     <div className="flex items-start gap-3">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-ink font-display text-sm font-extrabold text-white">{initials || "•"}</div>
                       <div className="min-w-0">
-                        <a href={job.url} target="_blank" rel="noopener" className="font-display text-[17px] font-extrabold leading-tight tracking-tight text-ink hover:text-blue">{job.title}</a>
+                        <Link href={`/app/jobs/${job.id}`} className="font-display text-[17px] font-extrabold leading-tight tracking-tight text-ink hover:text-blue">{job.title}</Link>
                         <div className="text-sm text-text">{company}{job.location ? ` · ${job.location}` : ""}{otherLocations.length ? ` · +${otherLocations.length} more ${otherLocations.length === 1 ? "city" : "cities"}` : ""}{pay ? ` · ${pay}` : ""}{tags.relocationOffered ? " · relocation offered" : ""}</div>
                       </div>
                     </div>
@@ -138,6 +138,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
                         <button className={`rounded-full border px-3 py-2 text-[13px] font-semibold ${liked.has(job.id) ? "border-ink bg-ink text-white" : "border-line text-text"}`}>{liked.has(job.id) ? "Liked" : "Like"}</button></form>
                       <form action={hideJob}><input type="hidden" name="jobId" value={job.id} /><input type="hidden" name="fit" value={score.fit} /><input type="hidden" name="band" value={score.band} /><input type="hidden" name="hidden" value={tab === "hidden" ? "0" : "1"} />
                         <button className="rounded-full px-3 py-2 text-[13px] font-semibold text-muted hover:text-ink">{tab === "hidden" ? "Unhide" : "Hide"}</button></form>
+                      <Link href={`/app/jobs/${job.id}`} className="rounded-full border border-line px-3 py-2 text-[13px] font-semibold text-text">Details</Link>
                       <span className="ml-auto text-[11px] text-dim">{job.companies?.ats}</span>
                     </div>
                   </div>
