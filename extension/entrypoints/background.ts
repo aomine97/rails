@@ -12,7 +12,7 @@ export default defineBackground(() => {
       chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => { if (tab?.id) chrome.tabs.sendMessage(tab.id, msg).catch(() => {}); sendResponse({ ok: true }); });
       return true;
     }
-    if (msg?.type === "rails:fill" || msg?.type === "rails:scan") {
+    if (msg?.type === "rails:fill" || msg?.type === "rails:scan" || msg?.type === "rails:scan-form" || msg?.type === "rails:apply" || msg?.type === "rails:options") {
       chrome.tabs.query({ active: true, currentWindow: true }).then(async ([tab]) => {
         if (!tab?.id || !tab.url) return sendResponse({ error: "no_tab" });
         const origin = new URL(tab.url).origin + "/*";

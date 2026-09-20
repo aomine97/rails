@@ -44,7 +44,7 @@ const RULES: Rule[] = [
 ];
 
 /** Questions the extension deliberately leaves alone. Reported back so the user knows what to do by hand. */
-const LEAVE_ALONE = /pronoun|gender|hispanic|latino|race|ethnicit|veteran|disabilit|self-identif|terms|privacy|consent|agree|how did you hear|referr|salary|compensation|cover letter|resume|cv\b|attach/i;
+export const LEAVE_ALONE = /pronoun|gender|hispanic|latino|race|ethnicit|veteran|disabilit|self-identif|terms|privacy|consent|agree|how did you hear|referr|salary|compensation|cover letter|resume|cv\b|attach/i;
 
 export const ATS_SELECTORS: Record<string, Partial<Record<FieldKey, string[]>>> = {
   greenhouse: { firstName: ["#first_name"], lastName: ["#last_name"], email: ["#email"], phone: ["#phone"], linkedin: ['input[name*="linkedin" i]', '[id*="linkedin" i]'], github: ['input[name*="github" i]'], portfolio: ['input[name*="website" i]'] },
@@ -67,17 +67,17 @@ export function atsOf(host: string): string {
   return "generic";
 }
 
-type El = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+export type El = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 const cssEscape = (s: string) => (typeof CSS !== "undefined" && CSS.escape ? CSS.escape(s) : s.replace(/([^a-zA-Z0-9_-])/g, "\\$1"));
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-const clean = (s: string | null | undefined) => (s ?? "").replace(/\s+/g, " ").replace(/\*/g, "").trim();
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+export const clean = (s: string | null | undefined) => (s ?? "").replace(/\s+/g, " ").replace(/\*/g, "").trim();
 
-function isFillable(el: Element | null): el is El {
+export function isFillable(el: Element | null): el is El {
   if (!el) return false;
   if (el instanceof HTMLInputElement) return !["hidden", "submit", "button", "file", "image", "reset", "password"].includes(el.type) && !el.disabled && !el.readOnly;
   return (el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) && !el.disabled;
 }
-const isCombobox = (el: El) => el instanceof HTMLInputElement && (el.getAttribute("role") === "combobox" || el.getAttribute("aria-autocomplete") === "list" || /select__input|react-select/i.test(el.className + " " + (el.parentElement?.className ?? "")));
+export const isCombobox = (el: El) => el instanceof HTMLInputElement && (el.getAttribute("role") === "combobox" || el.getAttribute("aria-autocomplete") === "list" || /select__input|react-select/i.test(el.className + " " + (el.parentElement?.className ?? "")));
 
 export function labelTextFor(el: Element, root: Document | ShadowRoot): string {
   const parts: string[] = [];
@@ -120,10 +120,10 @@ export function setValue(el: El, value: string | boolean): boolean {
   return el.value === String(value);
 }
 
-const mouse = (type: string, t: Element) => t.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, button: 0 }));
-const clickLike = (t: Element) => { mouse("mousedown", t); mouse("mouseup", t); mouse("click", t); };
-const controlOf = (input: HTMLInputElement): Element => input.closest(".select__control, [class*='control' i], [class*='select' i]") ?? input.parentElement ?? input;
-function listboxFor(input: HTMLInputElement, root: Document | ShadowRoot): HTMLElement[] {
+export const mouse = (type: string, t: Element) => t.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, button: 0 }));
+export const clickLike = (t: Element) => { mouse("mousedown", t); mouse("mouseup", t); mouse("click", t); };
+export const controlOf = (input: HTMLInputElement): Element => input.closest(".select__control, [class*='control' i], [class*='select' i]") ?? input.parentElement ?? input;
+export function listboxFor(input: HTMLInputElement, root: Document | ShadowRoot): HTMLElement[] {
   const id = input.getAttribute("aria-controls") ?? input.getAttribute("aria-owns");
   const lb = id ? (root as Document).getElementById?.(id) ?? document.getElementById(id) : null;
   if (lb) return [...lb.querySelectorAll<HTMLElement>('[role="option"]')];
@@ -132,7 +132,7 @@ function listboxFor(input: HTMLInputElement, root: Document | ShadowRoot): HTMLE
   return [...root.querySelectorAll<HTMLElement>('[role="option"]')].filter((o) => !/iti__/.test(o.className)); // never the phone flag list
 }
 const shownValue = (input: HTMLInputElement) => clean(controlOf(input).querySelector(".select__single-value, .select__multi-value, [class*='single-value' i]")?.textContent);
-function bestOption(options: HTMLElement[], want: string): HTMLElement | null {
+export function bestOption(options: HTMLElement[], want: string): HTMLElement | null {
   const w = want.toLowerCase().trim(); const texts = options.map((o) => clean(o.textContent).toLowerCase());
   let idx = texts.findIndex((t) => t === w);
   if (idx < 0 && /^(yes|no)$/.test(w)) idx = texts.findIndex((t) => new RegExp(`^${w}\\b`).test(t));
@@ -143,7 +143,7 @@ function bestOption(options: HTMLElement[], want: string): HTMLElement | null {
 }
 
 /** react-select and friends. Returns true when the control shows the chosen value. Bounded to ~6 s so a slow server-side search cannot hang the fill. */
-async function pickCombobox(input: HTMLInputElement, want: string, root: Document | ShadowRoot, opts: { type?: boolean; budgetMs?: number } = {}): Promise<boolean> {
+export async function pickCombobox(input: HTMLInputElement, want: string, root: Document | ShadowRoot, opts: { type?: boolean; budgetMs?: number } = {}): Promise<boolean> {
   const ctl = controlOf(input); const t0 = Date.now(); const budget = opts.budgetMs ?? 6000;
   const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
   input.focus(); clickLike(ctl);
@@ -182,7 +182,7 @@ function tickBoxes(root: Document | ShadowRoot, wanted: string[]): { el: HTMLInp
   return out;
 }
 
-function cssPath(el: Element): string | null {
+export function cssPath(el: Element): string | null {
   const id = el.getAttribute("id"); if (id) return `#${cssEscape(id)}`;
   const name = el.getAttribute("name"); if (name) return `${el.tagName.toLowerCase()}[name="${name.replace(/"/g, '\\"')}"]`;
   const auto = el.getAttribute("data-automation-id"); if (auto) return `[data-automation-id="${auto}"]`;

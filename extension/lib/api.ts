@@ -25,6 +25,7 @@ export const api = {
   score: (body: { url: string; text?: string; title?: string }) => call<{ job: JobInfo; created: boolean }>("/api/ext/score", { method: "POST", body: JSON.stringify(body) }),
   tailor: (jobId: string) => call<{ text: string; coverageBefore: number; coverageAfter: number; printUrl: string }>("/api/ext/tailor", { method: "POST", body: JSON.stringify({ jobId }) }),
   letter: (jobId: string) => call<{ letter: string; sources: string[] }>("/api/ext/letter", { method: "POST", body: JSON.stringify({ jobId }) }),
+  answers: (body: { url?: string; company?: string; title?: string; questions: { id: string; label: string; kind: string; options?: string[]; required?: boolean }[] }) => call<{ answers: { id: string; value: string | string[] | null; why: string }[] }>("/api/ext/answers", { method: "POST", body: JSON.stringify(body) }),
   addSkill: (skill: string, evidence?: string) => call<{ ok: boolean }>("/api/ext/skill", { method: "POST", body: JSON.stringify({ skill, evidence }) }),
   /** Binary: the file to attach. Returns null when there is nothing to attach (no resume uploaded / no letter). */
   file: async (kind: "resume" | "letter", jobId?: string | null): Promise<{ name: string; type: string; kind: string; bytes: ArrayBuffer } | null> => {
