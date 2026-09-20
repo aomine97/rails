@@ -17,11 +17,13 @@
   },
   {
     "name": "AMD",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-amd",
+    "careersUrl": "https://careers-amd.icims.com",
     "sample": "https://careers.amd.com/jobs/92636?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 66
+    "roles": 66,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "RTX",
@@ -36,11 +38,13 @@
   },
   {
     "name": "ByteDance",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "bytedance",
+    "careersUrl": "https://jobs.smartrecruiters.com/bytedance",
     "sample": "https://jobs.bytedance.com/en/position/7678450462765254965/detail?utm_source=Simplify&ref=Simplify",
-    "roles": 51
+    "roles": 51,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Booz Allen",
@@ -115,11 +119,13 @@
   },
   {
     "name": "Johns Hopkins Applied Physics Laboratory",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-jhuapl",
+    "careersUrl": "https://careers-jhuapl.icims.com",
     "sample": "https://careers.jhuapl.edu/jobs/60049?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 24
+    "roles": 24,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Vertiv",
@@ -132,10 +138,12 @@
   {
     "name": "Waymo",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://careers.withwaymo.com",
+    "slug": "waymo",
+    "careersUrl": "https://job-boards.greenhouse.io/waymo",
     "sample": "https://careers.withwaymo.com/jobs?gh_jid=8214519&utm_source=Simplify&ref=Simplify",
-    "roles": 20
+    "roles": 20,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Google",
@@ -357,10 +365,12 @@
   {
     "name": "Lyft",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://app.careerpuck.com",
+    "slug": "lyft",
+    "careersUrl": "https://job-boards.greenhouse.io/lyft",
     "sample": "https://app.careerpuck.com/job-board/lyft/job/8767726002?gh_jid=8767726002&utm_source=Simplify&ref=Simplify",
-    "roles": 10
+    "roles": 10,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Zipline",
@@ -607,10 +617,12 @@
   {
     "name": "Epic Games",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://epicgames.com",
+    "slug": "epicgames",
+    "careersUrl": "https://job-boards.greenhouse.io/epicgames",
     "sample": "https://epicgames.com/careers/jobs/6200355004?gh_jid=6200355004&utm_source=Simplify&ref=Simplify",
-    "roles": 7
+    "roles": 7,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "LSEG",
@@ -871,11 +883,13 @@
   },
   {
     "name": "Quantbot Technologies",
-    "ats": "greenhouse",
+    "ats": "unknown",
     "slug": null,
-    "careersUrl": "https://www.quantbot.com",
+    "careersUrl": "https://job-boards.greenhouse.io/embed",
     "sample": "https://www.quantbot.com/careers/4340833009?gh_jid=4340833009&utm_source=Simplify&ref=Simplify",
-    "roles": 6
+    "roles": 6,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Repsol",
@@ -1182,19 +1196,23 @@
   },
   {
     "name": "Akuna Capital University",
-    "ats": "greenhouse",
+    "ats": "unknown",
     "slug": null,
-    "careersUrl": "https://www.akunacapital.com",
+    "careersUrl": "https://job-boards.greenhouse.io/embed",
     "sample": "https://www.akunacapital.com/careers/job/8013085/?gh_jid=8013085&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "APEX Analytix",
     "ats": "unknown",
     "slug": null,
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/apex",
     "sample": "https://ats.rippling.com/apexanalytix-careers/jobs/40e4727d-e132-4de0-89ba-b4fdbd5860a7?utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "AspenTech",
@@ -1288,11 +1306,13 @@
   },
   {
     "name": "Constellation Energy",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-constellationenergy",
+    "careersUrl": "https://careers-constellationenergy.icims.com",
     "sample": "https://jobs.constellationenergy.com/jobs/138708?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "CoStar Group",
@@ -1384,10 +1404,12 @@
   {
     "name": "IXL Learning",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://www.ixl.com",
+    "slug": "ixllearning",
+    "careersUrl": "https://job-boards.greenhouse.io/ixllearning",
     "sample": "https://www.ixl.com/company/jobs?gh_jid=8765715002&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Maven Securities",
@@ -1453,11 +1475,13 @@
   },
   {
     "name": "Principal Financial Group",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-principal",
+    "careersUrl": "https://careers-principal.icims.com",
     "sample": "https://careers.principal.com/jobs/52512?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "RELX",
@@ -1481,10 +1505,12 @@
   {
     "name": "Roblox",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://careers.roblox.com",
+    "slug": "roblox",
+    "careersUrl": "https://job-boards.greenhouse.io/roblox",
     "sample": "https://careers.roblox.com/jobs/8072713?gh_jid=8072713&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Scale AI",
@@ -1505,10 +1531,12 @@
   {
     "name": "Stripe",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://stripe.com",
+    "slug": "stripe",
+    "careersUrl": "https://job-boards.greenhouse.io/stripe",
     "sample": "https://stripe.com/jobs/search?gh_jid=8212508&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Talos",
@@ -1567,10 +1595,12 @@
   {
     "name": "Tower Research Capital",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://www.tower-research.com",
+    "slug": "towerresearchcapital",
+    "careersUrl": "https://job-boards.greenhouse.io/towerresearchcapital",
     "sample": "https://www.tower-research.com/open-positions/?gh_jid=8212179&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "U.S. Bank",
@@ -1661,10 +1691,12 @@
   {
     "name": "C3.ai",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://c3.ai",
+    "slug": "c3ascend",
+    "careersUrl": "https://job-boards.greenhouse.io/c3ascend",
     "sample": "https://c3.ai/job-description/8739037002?gh_jid=8739037002&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "CAI",
@@ -1830,11 +1862,13 @@
   },
   {
     "name": "Impulse Space",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "ashby",
+    "slug": "impulse",
+    "careersUrl": "https://jobs.ashbyhq.com/impulse",
     "sample": "https://impulsespace.pinpointhq.com/en/postings/56c98c48-25a5-4af7-ab9d-388c28bdbd50?ats=pinpointhq&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "K2 Space",
@@ -1857,19 +1891,23 @@
   },
   {
     "name": "Keysight Technologies",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-keysight",
+    "careersUrl": "https://careers-keysight.icims.com",
     "sample": "https://jobs.keysight.com/jobs/54165?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Kinder Morgan",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-kindermorgan",
+    "careersUrl": "https://careers-kindermorgan.icims.com",
     "sample": "https://careers.kindermorgan.com/jobs/6171?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Klaviyo",
@@ -1908,11 +1946,13 @@
   },
   {
     "name": "Medpace",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "uscareers-medpace",
+    "careersUrl": "https://uscareers-medpace.icims.com",
     "sample": "https://careers.medpace.com/jobs/12962?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Meijer",
@@ -1946,11 +1986,13 @@
   },
   {
     "name": "Post Holdings",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "postholdingsjobs-postholdings",
+    "careersUrl": "https://postholdingsjobs-postholdings.icims.com",
     "sample": "https://jobs.postholdings.com/jobs/31961?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Q2",
@@ -2084,11 +2126,13 @@
   },
   {
     "name": "V2X",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-gov2x",
+    "careersUrl": "https://careers-gov2x.icims.com",
     "sample": "https://careers.gov2x.com/jobs/62843?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "WallStreetQuants",
@@ -2193,10 +2237,12 @@
   {
     "name": "AQR Capital Management",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://careers.aqr.com",
+    "slug": "aqr",
+    "careersUrl": "https://job-boards.greenhouse.io/aqr",
     "sample": "https://careers.aqr.com/jobs?gh_jid=8156993&gh_jid=8156993&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Atoms",
@@ -2209,10 +2255,12 @@
   {
     "name": "Awardco",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://award.co",
+    "slug": "awardco",
+    "careersUrl": "https://job-boards.greenhouse.io/awardco",
     "sample": "https://award.co/position?gh_jid=4136562004&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Axon",
@@ -2387,10 +2435,12 @@
   {
     "name": "Datadog",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://careers.datadoghq.com",
+    "slug": "datadog",
+    "careersUrl": "https://job-boards.greenhouse.io/datadog",
     "sample": "https://careers.datadoghq.com/detail/8052118/?gh_jid=8052118&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Datalab USA",
@@ -2404,9 +2454,11 @@
     "name": "Deloitte",
     "ats": "unknown",
     "slug": null,
-    "careersUrl": null,
+    "careersUrl": "https://deloitteie.wd3.myworkdayjobs.com/Experienced_Professionals",
     "sample": "https://apply.deloitte.com/en_US/careers/JobDetail/Consultative-Offerings-Summer-Scholar-Data-AI-Solutions-Engineering/363475?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Delta Dental of Iowa",
@@ -2430,10 +2482,12 @@
   {
     "name": "Domino Data Lab",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://app.careerpuck.com",
+    "slug": "dominodatalab",
+    "careersUrl": "https://job-boards.greenhouse.io/dominodatalab",
     "sample": "https://app.careerpuck.com/job-board/domino-data-lab/job/7992560?gh_jid=7992560&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "EAi Technologies",
@@ -2611,10 +2665,12 @@
   {
     "name": "Hudson River Trading",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://www.hudsonrivertrading.com",
+    "slug": "hrttalentcommunity",
+    "careersUrl": "https://job-boards.greenhouse.io/hrttalentcommunity",
     "sample": "https://www.hudsonrivertrading.com/careers/job/?gh_jid=7899574&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Huntington Bancshares",
@@ -2873,11 +2929,13 @@
   },
   {
     "name": "Publicis Groupe",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "publicisgroupe",
+    "careersUrl": "https://publicisgroupe.icims.com",
     "sample": "https://careers.publicisgroupe.com/jobs/172577?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Relay",
@@ -3000,19 +3058,23 @@
   },
   {
     "name": "Spirit AeroSystems",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-spiritaero",
+    "careersUrl": "https://careers-spiritaero.icims.com",
     "sample": "https://careers.spiritaero.com/jobs/17481?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "State Farm",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-statefarm",
+    "careersUrl": "https://careers-statefarm.icims.com",
     "sample": "https://jobs.statefarm.com/jobs/46057?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Steel Dynamics",
@@ -3100,11 +3162,13 @@
   },
   {
     "name": "Trane Technologies",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Trane_Technologies_Careers",
+    "careersUrl": "https://tranetechnologies.wd12.myworkdayjobs.com/Trane_Technologies_Careers",
     "sample": "https://careers.tranetechnologies.com/global/en/job/JR-7608?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": "tranetechnologies",
+    "wdn": 12
   },
   {
     "name": "Transcard Payments",
@@ -3143,11 +3207,13 @@
   },
   {
     "name": "Ulta Beauty",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "ulta",
+    "careersUrl": "https://ulta.icims.com",
     "sample": "https://careers.ulta.com/jobs/423575?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "URBN",
@@ -3159,11 +3225,13 @@
   },
   {
     "name": "Varsity Brands",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "ExternalCareerSite",
+    "careersUrl": "https://varsitybrands.wd503.myworkdayjobs.com/ExternalCareerSite",
     "sample": "https://careers.varsitybrands.com/global/en/job/JR113976?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": "varsitybrands",
+    "wdn": 503
   },
   {
     "name": "Verisk",
@@ -3426,11 +3494,13 @@
   },
   {
     "name": "Aon",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "aon",
+    "careersUrl": "https://aon.icims.com",
     "sample": "https://jobs.aon.com/jobs/105952?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Apogee Engineering",
@@ -3477,19 +3547,23 @@
   },
   {
     "name": "Arthur J. Gallagher & Co.",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "usjobs-ajg",
+    "careersUrl": "https://usjobs-ajg.icims.com",
     "sample": "https://jobs.ajg.com/jobs/57701?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "ASM International",
     "ats": "greenhouse",
-    "slug": null,
-    "careersUrl": "https://www.asm.com",
+    "slug": "asm",
+    "careersUrl": "https://job-boards.greenhouse.io/asm",
     "sample": "https://www.asm.com/open-vacancies/?gh_jid=4876722101&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Astrion",
@@ -3522,7 +3596,7 @@
     "locale": null
   },
   {
-    "name": "AtkinsRéalis",
+    "name": "AtkinsR\u00e9alis",
     "ats": "workday",
     "slug": "careers",
     "careersUrl": "https://slihrms.wd3.myworkdayjobs.com",
@@ -3615,9 +3689,11 @@
     "name": "BJC HealthCare",
     "ats": "unknown",
     "slug": null,
-    "careersUrl": null,
+    "careersUrl": "https://saintlukes.wd1.myworkdayjobs.com/saintlukeshealthcareers",
     "sample": "https://jobs.bjc.org/jobs/116509?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Blenheim Chalcot",
@@ -3759,11 +3835,13 @@
   },
   {
     "name": "CDM Smith",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "cdmsmith",
+    "careersUrl": "https://cdmsmith.icims.com",
     "sample": "https://careers.cdmsmith.com/jobs/4398?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cerity Partners",
@@ -3952,11 +4030,13 @@
   },
   {
     "name": "CTG",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "usjobs-ctg",
+    "careersUrl": "https://usjobs-ctg.icims.com",
     "sample": "https://careers.ctg.com/jobs/17557?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cvent",
@@ -4211,11 +4291,13 @@
   },
   {
     "name": "Exelon",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-exeloncorp",
+    "careersUrl": "https://careers-exeloncorp.icims.com",
     "sample": "https://careers.comed.com/jobs/30120?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "EXL",
@@ -4246,11 +4328,13 @@
   },
   {
     "name": "FAST Enterprises",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-fastenterprises",
+    "careersUrl": "https://careers-fastenterprises.icims.com",
     "sample": "https://careers.fastenterprises.com/jobs/1709?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Federated Insurance",
@@ -4302,9 +4386,11 @@
     "name": "FlexAI",
     "ats": "unknown",
     "slug": null,
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/flex",
     "sample": "https://ats.rippling.com/flexai/jobs/93ada67c-8527-427c-b2f6-4a5557b00674?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "FNBO",
@@ -4557,11 +4643,13 @@
   },
   {
     "name": "Illinois Tool Works",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "External",
+    "careersUrl": "https://itw.wd5.myworkdayjobs.com/External",
     "sample": "https://careers.itw.com/global/en/job/JR10105?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": "itw",
+    "wdn": 5
   },
   {
     "name": "IMC Trading",
@@ -4942,9 +5030,11 @@
     "name": "MSA Safety",
     "ats": "unknown",
     "slug": null,
-    "careersUrl": null,
+    "careersUrl": "https://lar-internal-msasafety.icims.com",
     "sample": "https://careers.msasafety.com/jobs/9993?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "N1",
@@ -5078,11 +5168,13 @@
   },
   {
     "name": "Old Mission",
-    "ats": "greenhouse",
+    "ats": "unknown",
     "slug": null,
-    "careersUrl": "https://www.oldmissioncapital.com",
+    "careersUrl": "https://job-boards.greenhouse.io/embed",
     "sample": "https://www.oldmissioncapital.com/careers/?gh_jid=6309652003&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "OpenGov",
@@ -5129,11 +5221,13 @@
   },
   {
     "name": "Panasonic Holdings",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "napanasonic",
+    "careersUrl": "https://napanasonic.icims.com",
     "sample": "https://careers.na.panasonic.com/jobs/50269?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Parallel Web Systems",
@@ -5207,11 +5301,13 @@
   },
   {
     "name": "Planview",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-planview",
+    "careersUrl": "https://careers-planview.icims.com",
     "sample": "https://careers.planview.com/jobs/5128?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Plastipak",
@@ -5396,11 +5492,13 @@
   },
   {
     "name": "Rivian",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "us-careers-rivian",
+    "careersUrl": "https://us-careers-rivian.icims.com",
     "sample": "https://careers.rivian.com/jobs/33725?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Rollout",
@@ -5550,11 +5648,13 @@
   },
   {
     "name": "SimVentions",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-simventions",
+    "careersUrl": "https://careers-simventions.icims.com",
     "sample": "https://simventions.jibeapply.com/jobs/1631?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Skydio",
@@ -5582,11 +5682,13 @@
   },
   {
     "name": "SMX",
-    "ats": "greenhouse",
+    "ats": "unknown",
     "slug": null,
-    "careersUrl": "https://www.smxtech.com",
+    "careersUrl": "https://job-boards.greenhouse.io/embed",
     "sample": "https://www.smxtech.com/careers/?gh_jid=7984672003&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Snowflake",
@@ -5630,11 +5732,13 @@
   },
   {
     "name": "Specter Aerospace",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "ashby",
+    "slug": "specter",
+    "careersUrl": "https://jobs.ashbyhq.com/specter",
     "sample": "https://specteraerospace.bamboohr.com/careers/122/?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SRI International",
@@ -5675,9 +5779,11 @@
     "name": "Steven's Capital Management",
     "ats": "unknown",
     "slug": null,
-    "careersUrl": null,
+    "careersUrl": "https://jobs.smartrecruiters.com/stevens",
     "sample": "https://grnh.se/abfli75k1us?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Stoke Space",
@@ -5891,11 +5997,13 @@
   },
   {
     "name": "Trillium",
-    "ats": "greenhouse",
+    "ats": "unknown",
     "slug": null,
-    "careersUrl": "https://www.trlm.com",
+    "careersUrl": "https://job-boards.greenhouse.io/embed",
     "sample": "https://www.trlm.com/apply/5076003007?gh_jid=5076003007&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Trulioo",
@@ -5950,11 +6058,13 @@
   },
   {
     "name": "Universal Health Services",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-uhsinc",
+    "careersUrl": "https://careers-uhsinc.icims.com",
     "sample": "https://jobs.uhsinc.com/jobs/367247?icims=1&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Valon",
@@ -6108,11 +6218,13 @@
   },
   {
     "name": "Accenture Federal Services",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "AccentureCareers",
+    "careersUrl": "https://accenture.wd103.myworkdayjobs.com/AccentureCareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "accenture",
+    "wdn": 103
   },
   {
     "name": "Amazon Web Services",
@@ -6124,11 +6236,13 @@
   },
   {
     "name": "Bloomberg Industry Group",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Bloombergindustrygroup_External_Career_Site",
+    "careersUrl": "https://bloomberg.wd1.myworkdayjobs.com/Bloombergindustrygroup_External_Career_Site",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "bloomberg",
+    "wdn": 1
   },
   {
     "name": "Carahsoft",
@@ -6148,19 +6262,23 @@
   },
   {
     "name": "Cloudflare",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "cloudflare",
+    "careersUrl": "https://job-boards.greenhouse.io/cloudflare",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hilton",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://efet.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "IronNet",
@@ -6180,11 +6298,13 @@
   },
   {
     "name": "Marriott",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX",
+    "careersUrl": "https://ejwl.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Microsoft",
@@ -6196,19 +6316,23 @@
   },
   {
     "name": "MITRE",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "MITRE",
+    "careersUrl": "https://mitre.wd5.myworkdayjobs.com/MITRE",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "mitre",
+    "wdn": 5
   },
   {
     "name": "Raytheon",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "REC_RTX_Ext_Gateway",
+    "careersUrl": "https://globalhr.wd5.myworkdayjobs.com/REC_RTX_Ext_Gateway",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "globalhr",
+    "wdn": 5
   },
   {
     "name": "Rebellion Defense",
@@ -6228,18 +6352,22 @@
   },
   {
     "name": "ScienceLogic",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "ashby",
+    "slug": "sciencelogic",
+    "careersUrl": "https://jobs.ashbyhq.com/sciencelogic",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Verizon",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "verizon-careers",
+    "careersUrl": "https://verizon.wd12.myworkdayjobs.com/verizon-careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "verizon",
+    "wdn": 12
   }
 ]

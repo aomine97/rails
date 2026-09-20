@@ -31,7 +31,8 @@ const okJson = async (res, check) => { if (!res || !res.ok) return false; try { 
 /** Does this tenant/slug/site plausibly belong to the company? Any name word (>=3 chars) or the domain base must appear. */
 function resembles(name, domain, ...parts) {
   const hay = parts.filter(Boolean).join(" ").toLowerCase().replace(/[^a-z0-9]/g, "");
-  const words = slugify(name).split(" ").filter((w) => w.length >= 3 && !["inc", "llc", "the", "and", "group", "company", "corp", "corporation", "technologies", "technology", "holdings", "capital", "management", "services", "systems", "international"].includes(w));
+  const GENERIC = new Set(["inc", "llc", "the", "and", "group", "company", "corp", "corporation", "technologies", "technology", "holdings", "capital", "management", "services", "systems", "international", "health", "healthcare", "careers", "career", "jobs", "bank", "financial", "insurance", "energy", "trading", "software", "robotics", "aerospace", "space", "labs", "lab", "partners", "solutions", "global", "america", "american", "national", "university", "securities", "industries", "digital", "data", "tech", "medical", "network", "products", "brands"]);
+  const words = slugify(name).split(" ").filter((w) => w.length >= 3 && !GENERIC.has(w));
   const base = domain ? domain.split(".")[0] : null;
   return words.some((w) => hay.includes(w)) || (base && base.length >= 3 && hay.includes(base)) || hay.includes(slugify(name).replace(/ /g, ""));
 }
@@ -67,7 +68,7 @@ async function probe(name, domain) {
   return null;
 }
 
-const ATS_LINK = /https?:\/\/([a-z0-9-]+)\.wd(\d+)\.myworkdayjobs\.com\/(?:[a-z]{2}-[A-Z]{2}\/)?([A-Za-z0-9_-]+)|https?:\/\/(?:job-boards|boards)\.greenhouse\.io\/(?:embed\/job_(?:board|app)\?(?:[^"'&\s]*&)?for=|)([A-Za-z0-9_-]+)|https?:\/\/jobs\.lever\.co\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.ashbyhq\.com\/([A-Za-z0-9_%-]+)|https?:\/\/jobs\.smartrecruiters\.com\/([A-Za-z0-9_-]+)|https?:\/\/([a-z0-9-]+)\.icims\.com|https?:\/\/apply\.workable\.com\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.jobvite\.com\/([A-Za-z0-9_-]+)|https?:\/\/([a-z0-9.-]+\.oraclecloud\.com)\/hcmUI\/CandidateExperience\/[a-z]{2}\/sites\/([A-Za-z0-9_]+)/g;
+const ATS_LINK = /https?:\/\/([a-z0-9-]+)\.wd(\d+)\.myworkdayjobs\.com\/(?:[a-z]{2}-[A-Z]{2}\/)?([A-Za-z0-9_-]+)|https?:\/\/(?:job-boards|boards)\.greenhouse\.io\/(?:embed\/job_(?:board|app)(?:\/js)?\?(?:[^"'&\s]*&)?for=|)([A-Za-z0-9_-]+)|https?:\/\/jobs\.lever\.co\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.ashbyhq\.com\/([A-Za-z0-9_%-]+)|https?:\/\/jobs\.smartrecruiters\.com\/([A-Za-z0-9_-]+)|https?:\/\/([a-z0-9-]+)\.icims\.com|https?:\/\/apply\.workable\.com\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.jobvite\.com\/([A-Za-z0-9_-]+)|https?:\/\/([a-z0-9.-]+\.oraclecloud\.com)\/hcmUI\/CandidateExperience\/[a-z]{2}\/sites\/([A-Za-z0-9_]+)/g;
 
 function fromLinks(html, ctx) {
   const hits = [];
@@ -77,7 +78,7 @@ function fromLinks(html, ctx) {
     else if (m[5]) hits.push({ ats: "lever", slug: m[5], careersUrl: `https://jobs.lever.co/${m[5]}` });
     else if (m[6]) hits.push({ ats: "ashby", slug: decodeURIComponent(m[6]), careersUrl: `https://jobs.ashbyhq.com/${m[6]}` });
     else if (m[7]) hits.push({ ats: "smartrecruiters", slug: m[7], careersUrl: `https://jobs.smartrecruiters.com/${m[7]}` });
-    else if (m[8] && !/^(www|media|cdn\d*|internal-|events-|intern-|alumni-)/.test(m[8])) hits.push({ ats: "icims", slug: m[8], careersUrl: `https://${m[8]}.icims.com` });
+    else if (m[8] && !/^(www|media|cdn\d*)$|internal|events-|alumni-|^intern-/.test(m[8])) hits.push({ ats: "icims", slug: m[8], careersUrl: `https://${m[8]}.icims.com` });
     else if (m[9]) hits.push({ ats: "workable", slug: m[9], careersUrl: `https://apply.workable.com/${m[9]}` });
     else if (m[10]) hits.push({ ats: "jobvite", slug: m[10], careersUrl: `https://jobs.jobvite.com/${m[10]}` });
     else if (m[11]) hits.push({ ats: "oracle", slug: m[12], careersUrl: `https://${m[11]}` });
@@ -130,6 +131,10 @@ await Promise.all(Array.from({ length: 6 }, async () => {
     console.log(`${(r ? r.ats : "unknown").padEnd(16)} ${c.name.padEnd(40)} ${r ? `${r.tenant ? r.tenant + "." : ""}${r.slug ?? "?"}  (${r.how})` : "-"}`);
   }
 }));
+
+// Hand corrections for names the heuristics get wrong (Flex vs FlexAI, Apex Fintech vs APEX Analytix...). null = force unknown.
+const OVERRIDES = JSON.parse(readFileSync("data/ats-overrides.json", "utf8"));
+for (const entry of results) { const o = OVERRIDES[entry[0].name]; if (o !== undefined) entry[1] = o ? { ...o, how: "override" } : null; }
 
 let changed = 0;
 for (const [c, r] of results) {
