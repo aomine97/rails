@@ -11,7 +11,7 @@ import { ApplyButton } from "./apply-button";
 const PAGE = 25;
 const FIELDS = [["software", "Software"], ["data", "Data"], ["cloud", "Cloud"], ["it_support", "IT support"], ["cyber", "Cyber"], ["product", "Product"]] as const;
 const LEVELS = [["internship", "Internship"], ["new_grad", "New grad"], ["entry", "Entry level"], ["mid", "Mid"], ["senior", "Senior"]] as const;
-const WHERE = [["dmv", "DC · MD · VA"], ["us", "US"], ["remote", "Remote"], ["anywhere", "Anywhere"]] as const;
+const WHERE = [["near", "Near me"], ["us", "US"], ["remote", "Remote"], ["anywhere", "Anywhere"]] as const;
 
 type SP = { tab?: string; field?: string; level?: string; where?: string; sort?: string; q?: string; page?: string };
 
@@ -39,7 +39,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   const liked = new Set((marks ?? []).filter((m) => m.liked).map((m) => m.job_id));
   const hidden = new Set((marks ?? []).filter((m) => m.hidden).map((m) => m.job_id));
   const tab = sp.tab ?? "recommended";
-  const feed = buildFeed(me, (rows ?? []) as unknown as FeedJobRow[], { field: sp.field, level: sp.level, where: (sp.where as "dmv" | "us" | "remote" | "anywhere" | undefined) ?? "us", q: sp.q, sort: sp.sort === "new" ? "new" : "fit" });
+  const feed = buildFeed(me, (rows ?? []) as unknown as FeedJobRow[], { field: sp.field, level: sp.level, where: (sp.where as "near" | "us" | "remote" | "anywhere" | undefined) ?? "us", q: sp.q, sort: sp.sort === "new" ? "new" : "fit" });
   let items = tab === "hidden" ? feed.items.filter((i) => hidden.has(i.job.id)) : feed.items.filter((i) => !hidden.has(i.job.id));
   if (tab === "liked") items = items.filter((i) => liked.has(i.job.id));
   const page = Math.max(1, Number(sp.page ?? 1));
@@ -62,7 +62,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
           <span className="mx-1 h-5 w-px bg-line" />
           {FIELDS.map(([k, l]) => <Link key={k} href={href({ field: sp.field === k ? "" : k, page: "1" })} className={`rounded-full border px-3 py-1.5 ${sp.field === k ? "border-ink bg-ink text-white" : "border-line bg-surface text-text"}`}>{l}</Link>)}
           <span className="mx-1 h-5 w-px bg-line" />
-          {WHERE.map(([k, l]) => <Link key={k} href={href({ where: k, page: "1" })} className={`rounded-full border px-3 py-1.5 ${(sp.where ?? "us") === k ? "border-ink bg-ink text-white" : "border-line bg-surface text-text"}`}>{l}</Link>)}
+          {WHERE.map(([k, l]) => <Link key={k} href={href({ where: k, page: "1" })} title={k === "near" ? `Based on your profile: ${me.constraints.locations.join(", ") || "add a location on your profile"}` : undefined} className={`rounded-full border px-3 py-1.5 ${(sp.where ?? "us") === k ? "border-ink bg-ink text-white" : "border-line bg-surface text-text"}`}>{l}</Link>)}
         </div>
 
         <div className="flex items-center justify-between px-6 pb-2 pt-3 text-[13px] text-text">

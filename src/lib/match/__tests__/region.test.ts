@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { regionOf } from "../region";
+import { nearMatcher, regionOf } from "../region";
 
 describe("regionOf", () => {
   it("classifies", () => {
@@ -14,5 +14,15 @@ describe("regionOf", () => {
     expect(regionOf(null)).toBe("unknown");
     expect(regionOf("Anywhere", "REMOTE")).toBe("remote");
     expect(regionOf("Somewhere", "GB")).toBe("intl");
+  });
+});
+
+describe("nearMatcher", () => {
+  it("uses the user's states and cities", () => {
+    const near = nearMatcher(["Austin, TX", "Remote"])!;
+    expect(near("Plano, TX")).toBe(true); expect(near("Austin, Texas")).toBe(true); expect(near("McLean, VA")).toBe(false);
+    const dmv = nearMatcher(["Leesburg, Virginia"])!;
+    expect(dmv("Washington, DC")).toBe(true); expect(dmv("Bethesda, MD")).toBe(true);
+    expect(nearMatcher(["Remote"])).toBe(null);
   });
 });

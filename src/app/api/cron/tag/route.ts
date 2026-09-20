@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cronAuth } from "../_auth";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { tagJob } from "@/lib/jobs/tagger";
+import { pretag } from "@/lib/jobs/tags";
 import { adapters, type RawJob } from "@/lib/ats";
 
 export const maxDuration = 300;
@@ -14,7 +15,14 @@ export async function GET(req: Request) {
   const started = Date.now();
   const budgetMs = 200_000; // stay well under maxDuration
   const url = new URL(req.url);
-  const enrichN = Number(url.searchParams.get("enrich") ?? 24), tagN = Number(url.searchParams.get("tag") ?? 24);
+  const enrichN = Number(url.searchParams.get("enrich") ?? 32), tagN = Number(url.searchParams.get("tag") ?? 48);
+  // (0) pre-tag: titles that are clearly senior/management or clearly not tech get a stub tag with no model call
+  const { data: raw } = await db.from("jobs").select("id,title").is("tagged_at", null).is("closed_at", null).order("first_seen_at", { ascending: false }).limit(400);
+  let pretagged = 0;
+  for (const j of raw ?? []) {
+    const t = pretag(j.title);
+    if (t) { await db.from("jobs").update({ tags: t, tagged_at: new Date().toISOString() }).eq("id", j.id); pretagged++; }
+  }
   // (a) enrich jobs with no description yet (Workday / SmartRecruiters list-only rows)
   const { data: bare } = await db.from("jobs").select("id,ats,external_id,title,location,url,apply_url,companies(name,ats,slug,tenant,wdn)")
     .is("description_text", null).is("closed_at", null).order("first_seen_at", { ascending: false }).limit(enrichN);
@@ -48,5 +56,5 @@ export async function GET(req: Request) {
   for (let i = 0; i < (jobs ?? []).length && Date.now() - started < budgetMs; i += 4) {
     await Promise.all(jobs!.slice(i, i + 4).map(one));
   }
-  return NextResponse.json({ enriched: enrichedCount, tagged, failed, firstError, ms: Date.now() - started });
+  return NextResponse.json({ pretagged, enriched: enrichedCount, tagged, failed, firstError, ms: Date.now() - started });
 }

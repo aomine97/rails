@@ -47,3 +47,17 @@ Return exactly this shape (values are examples):
  "minDegree":"bachelor","yearsMin":0,"clearanceRequired":"none","usCitizenRequired":null,"sponsorship":"unknown",
  "remote":"hybrid","employmentType":"internship","payMinHourly":40,"payMaxHourly":48,"hasOnlineAssessment":true,
  "summary":"Build internal tools on a small platform team, mostly Python services and a React admin. They want someone who has shipped a project end to end and can talk about it.","relocationOffered":false,"country":"US"}`;
+
+/** Titles that never need a model call: clearly senior/management, or clearly not a tech role. Saves ~half the tagging bill. */
+const SENIOR_RE = /\b(senior|sr\.?|staff|principal|distinguished|director|vp|vice president|head of|chief|manager|managing|lead|architect|fellow|partner)\b/i;
+const NON_TECH_RE = /\b(nurse|nursing|rn\b|physician|clinic|dental|pharmac|janitor|custodi|cashier|barista|cook|chef|server|bartend|driver|cdl|warehouse|forklift|welder|electrician|plumber|hvac|mechanic|technician - hvac|sales associate|retail|store manager|merchandis|marketing manager|account executive|recruiter|hr business|payroll|paralegal|attorney|counsel|actuar|underwrit|loan officer|teller|real estate|property manager|teacher|instructor|professor|lecturer|coach|security guard|patrol|pilot|flight attendant|housekeep|laundry|landscap|groundskeep|maintenance worker|machinist|assembler|production operator|line cook|dishwasher|caregiver|home health|social worker|therapist|counselor|chaplain|veterinar|groomer)\b/i;
+
+export function pretag(title: string): JobTags | null {
+  if (SENIOR_RE.test(title) && !/\b(intern|internship|co-op|junior|associate|entry)\b/i.test(title))
+    return { ...EMPTY_TAGS, level: "senior", field: "other", summary: "" };
+  if (NON_TECH_RE.test(title) && !/\b(software|engineer|developer|data|cloud|it\b|cyber|security analyst|network|devops|analyst|programmer|qa\b|technolog)\b/i.test(title))
+    return { ...EMPTY_TAGS, level: "unknown", field: "other", summary: "" };
+  return null;
+}
+
+export const EMPTY_TAGS: JobTags = { level: "unknown", field: "other", requiredSkills: [], preferredSkills: [], requirements: [], minDegree: "unknown", yearsMin: null, clearanceRequired: "unknown", usCitizenRequired: null, sponsorship: "unknown", remote: "unknown", employmentType: "unknown", payMinHourly: null, payMaxHourly: null, hasOnlineAssessment: null, summary: "", relocationOffered: null, country: "unknown" };

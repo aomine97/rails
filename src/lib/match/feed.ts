@@ -1,7 +1,7 @@
 import type { CanonicalProfile } from "../schemas/profile";
 import { JobTags } from "../jobs/tags";
 import { scoreJob, type Score } from "./score";
-import { regionOf, type Region } from "./region";
+import { nearMatcher, regionOf, type Region } from "./region";
 
 export interface FeedJobRow {
   id: string; title: string; location: string | null; remote: boolean | null; url: string; apply_url: string;
@@ -13,8 +13,8 @@ export interface FeedJobRow {
 export interface FeedFilters {
   field?: string | null;          // software | data | cloud | it_support | cyber | product
   level?: string | null;          // internship | new_grad | entry | mid | senior
-  /** where: dmv (DC/MD/VA) | us | remote | anywhere. Default us = US + remote. */
-  where?: "dmv" | "us" | "remote" | "anywhere" | null;
+  /** where: near (the user's own locations) | us | remote | anywhere. Default us = US + remote. */
+  where?: "near" | "us" | "remote" | "anywhere" | null;
   q?: string | null;
   minFit?: number;
   sort?: "fit" | "new" | null;
@@ -29,6 +29,7 @@ const LEVEL_TO_TYPE: Record<string, CanonicalProfile["constraints"]["employmentT
 /** Pure: profile + rows -> ranked feed. Excludes mid/senior and roles the user isn't looking for; scores the rest. */
 export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: FeedFilters = {}, now = new Date()): { items: FeedItem[]; total: number; newToday: number } {
   const wants = new Set(profile.constraints.employmentTypes);
+  const near = nearMatcher(profile.constraints.locations);
   const items: FeedItem[] = [];
   const q = f.q?.trim().toLowerCase();
   for (const job of rows) {
@@ -40,7 +41,7 @@ export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: Feed
     if (f.level && tags.level !== f.level) continue;
     const region = regionOf(job.location, tags.country, job.remote ?? (tags.remote === "remote"));
     const where = f.where ?? "us";
-    if (where === "dmv" && region !== "dmv" && region !== "remote") continue;
+    if (where === "near" && region !== "remote" && !(near ? near(job.location) : region === "dmv")) continue;
     if (where === "us" && (region === "intl")) continue;
     if (where === "remote" && region !== "remote") continue;
     if (q && !(job.title.toLowerCase().includes(q) || (job.companies?.name ?? "").toLowerCase().includes(q) || (job.location ?? "").toLowerCase().includes(q))) continue;
@@ -56,7 +57,8 @@ export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: Feed
     const key = `${(it.job.companies?.name ?? "").toLowerCase()}|${it.job.title.toLowerCase().replace(/[,(].*$/, "").trim()}`;
     const cur = byKey.get(key);
     if (!cur) { byKey.set(key, it); continue; }
-    const keep = it.region === "dmv" && cur.region !== "dmv" ? it : it.score.fit > cur.score.fit ? it : cur;
+    const nearIt = near ? near(it.job.location) : it.region === "dmv", nearCur = near ? near(cur.job.location) : cur.region === "dmv";
+    const keep = nearIt && !nearCur ? it : it.score.fit > cur.score.fit ? it : cur;
     const drop = keep === it ? cur : it;
     keep.otherLocations = [...cur.otherLocations, ...(drop.job.location ? [drop.job.location] : [])].filter((l) => l !== keep.job.location).slice(0, 6);
     byKey.set(key, keep);

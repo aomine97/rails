@@ -36,6 +36,8 @@ describe("buildFeed", () => {
     expect(swe.job.location).toBe("McLean, VA");           // DMV wins the group
     expect(swe.otherLocations).toEqual(["Plano, TX"]);      // Hong Kong never entered
     expect(buildFeed(profile, rows, { where: "anywhere" }).items.find((i) => i.job.title === "SWE Intern")!.otherLocations).toContain("Hong Kong");
-    expect(buildFeed(profile, rows, { where: "dmv" }).items.map((i) => i.job.title)).toEqual(["SWE Intern", "Data Analyst Intern"]);
+    expect(buildFeed(profile, rows, { where: "near" }).items.map((i) => i.job.title)).toEqual(["SWE Intern", "Data Analyst Intern"]); // no locations on profile: falls back to DMV
+    const texan = { ...profile, constraints: { ...profile.constraints, locations: ["Austin, TX"] } };
+    expect(buildFeed(texan, rows, { where: "near" }).items.find((i) => i.job.title === "SWE Intern")!.job.location).toBe("Plano, TX");
   });
 });

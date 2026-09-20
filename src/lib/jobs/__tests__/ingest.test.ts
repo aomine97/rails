@@ -45,3 +45,16 @@ describe("pollCompany", () => {
     expect(touch.payload).toMatchObject({ closed_at: null });
   });
 });
+
+import { pretag } from "../tags";
+describe("pretag", () => {
+  it("skips the model for senior and non-tech titles only", () => {
+    expect(pretag("Senior Software Engineer")?.level).toBe("senior");
+    expect(pretag("Director, Engineering")?.level).toBe("senior");
+    expect(pretag("Registered Nurse")?.field).toBe("other");
+    expect(pretag("Software Engineer Intern")).toBe(null);
+    expect(pretag("Senior Intern Program - Software")).toBe(null);
+    expect(pretag("IT Support Technician")).toBe(null);
+    expect(pretag("Data Analyst")).toBe(null);
+  });
+});

@@ -2,7 +2,7 @@
 
 ## STATUS (update at the end of every session — this is the handoff for a new chat)
 - Last session: 2026-09-19. Week 1 backend written and unit-tested (15 tests pass, tsc + eslint clean): schema, companies seed (690), ATS adapters (Greenhouse/Lever/Ashby/SmartRecruiters/Workday/USAJobs), poller/verifier/tagger cron routes, canonical profile schema, scoring engine, geo-gate, shell extension.
-- Next item: Job detail (3b) with the side-by-side "what matches / what to fix" view (Ilyas asked for this on Apply), then Tailor. Off-board paste after.
+- Next item: Phase 1, Job detail (3b).
 - Feed feedback round 1 (2026-09-20) applied: levels now include mid/senior (defaults from years of experience), scores recalibrated (relevant jobs 65-90 instead of 40-60), location defaults to US + remote with DC/MD/VA chip, same-title-many-cities grouped into one card, summary + 2 requirement lines per card, gap skills are "+ add" buttons (source:user), Apply asks "Did you apply?" and fills the Applied tab, Hidden tab with Unhide, Newest sort, match panel widened to 300px. Tagger now emits summary/relocation/country for new jobs (older rows fall back to a description snippet and the location heuristic).
 - DONE 2026-09-20: Supabase project prwzndifucrwldykcqft created, keys in .env.local, migration 0001 applied, 689 companies seeded (507 with feed slugs). Repo pushed to github.com/aomine97/rails. Vercel deployed: https://rails-psi.vercel.app (Hobby). Anthropic key + CRON_SECRET set in .env.local and Vercel. GitHub Actions cron secrets set. Chrome Web Store shell submitted. PIPELINE VERIFIED LIVE 2026-09-20: 1,871 jobs from 14 companies after the first polls, tagger returns level/field/skills/requirements (11 of 12 in the first tagged batch).
 - Blocked on: nothing. Ilyas onboarded 2026-09-20 (36 skills, 3 roles parsed). Push and look at /app: first real feed. Report scores that look wrong; that tunes score.ts weights. For Google sign-in: create an OAuth client in Google Cloud (Web application, redirect URI https://prwzndifucrwldykcqft.supabase.co/auth/v1/callback), paste client ID + secret into Supabase -> Authentication -> Providers -> Google. Also: Supabase -> Authentication -> URL Configuration -> Site URL = https://rails-psi.vercel.app, add https://rails-psi.vercel.app/auth/callback to Redirect URLs (otherwise email confirmation links go to localhost).
@@ -17,7 +17,7 @@
 - Career Center: quote per campus, unlimited students, counselor dashboard. First semester free for the first 3 pilot campuses.
 - Launch price countdown = a real date (launch + 14 days), not a resetting timer.
 
-## The 17 screens (canvas order) -> which week builds them
+## The 17 screens (canvas order) -> which phase builds them
 1 Landing + pricing (W4) · 2 Onboarding (W1) · 3 Feed (W1) · 3b Job detail (W2) · 4 Tailor (W2) · 5 Resume score (W2) · 6 Cover letter (W2) · 7 Autopilot (W3) · 8 Coach (W3) · 9 Mock interview (W5+) · 10 Connections (W5+) · 11 Tracker (W2) · 12 Extension panel (W3) · 13 System map (doc only) · 14 Empty states (W1, W2) · 15 Autofill settings (W3) · 16 Career center dashboard (W4, read-only v1)
 
 ## Week 1 — jobs flowing + profile + feed
@@ -34,49 +34,43 @@
 - [x] Feed (screen 3): /app = app shell (icon rail, tabs Recommended/Liked/Applied/External, level/field/remote chips, search), buildFeed() (src/lib/match/feed.ts, tested) scores every tagged open job against profiles.canonical on request, drops mid/senior and levels the user is not looking for, sorts by fit. Cards: badges, matched/missing skill chips, hard-block reasons, Apply now (external), Like/Hide (matches table), MatchPanel ring + 3 meters with numbers. "N new since yesterday". Empty + loading states. Scoring is per-request (fine to ~5k jobs); move to a nightly scorer when it gets slow
 - [ ] Off-board paste: paste any posting URL -> fetch, tag, score, add to feed as External
 
-## Week 2 — apply: detail, tailor, score, letter, tracker, paywall
-- [ ] Job detail (3b): qualifications checked line by line with the resume span that earned each ✓ / ! / ✗; autofill readiness; referral contacts placeholder
-- [ ] Tailor (4): diff view, gap plan, "add a skill you actually have" (user-supplied only), before/after fit meter. Every added line traces to profile or a user-typed source
-- [ ] Resume score (5): 0-100, 6 sub-bars, ranked fixes with point values, versions
-- [ ] Cover letter (6): per-job, sources listed, plain tone
-- [ ] Resume PDF export (one ATS-clean template)
-- [ ] Tracker (11): pipeline funnel, table (via / age / stage / next), manual add, follow-up reminders. Email nudges via Resend
-- [ ] Inbound email alias per user (Cloudflare Email Routing -> worker -> classify reply -> update stage)
-- [ ] Billing per PRICING.md: apply supabase/migrations/0002_credits.sql; `can(user, feature)` helper over src/lib/billing/plans.ts; spend_credit() on tailor/letter/mock; UpgradeModal + UpgradeBanner with PAYWALL_COPY; paywall_events logging; Stripe products pro_monthly / pro_monthly_student / semester / semester_student, .edu verification, customer portal, 7-day refund
-- [ ] Interview-rate metric: applications -> interviews per user and per campus, computed nightly. This is the number that goes on the landing page later
+## Scope (decided 2026-09-20)
+Tech jobs, nationwide first, international as data allows. Students AND experienced engineers (levels internship -> senior). "Near me" comes from each user's own profile, never a fixed region. Nothing in the product assumes NOVA or DC; that is only where the first users are.
 
-## Week 3 — extension + Autopilot + Coach
-- [ ] WXT extension: auth handoff from web app, side panel (screen 12)
-- [ ] Adapter: Workday (shadow DOM walker, multi-step, custom comboboxes) — first because DC contractors and banks are on it
-- [ ] Adapter: Greenhouse
-- [ ] Adapter: Lever
-- [ ] Universal fallback: autocomplete -> name/data-automation-id -> label -> placeholder -> LLM field mapper
-- [ ] Autofill settings (15): standard answers, EEO stays client-side, per-site overrides
-- [ ] Human-confirm overlay; Submit is never clicked by code
-- [ ] Fill telemetry -> fill_events; learned selector map per domain
-- [ ] Autopilot (7): nightly job picks above the user's fit floor, tailors + letter + prefill, queue UI, "Approve N -> board" opens tabs one at a time
-- [ ] Coach (8): chat with tracker context; canned pattern insights (0 interviews after 20 apps -> resume score check, only 200+ applicant roles -> mix in fewer-applicant roles)
-- [ ] Replace shell extension listing with the real build (review already running)
+## Phase 1 — the loop a single user can live in (this week)
+Goal: one person can find, understand, tailor for, and track a job without leaving Rails.
+- [ ] Job detail (3b): /app/jobs/[id]. Full description, every requirement line checked ✓/!/✗ with the profile line that earned it, "why this score" (each sub-score explained in one sentence), matched vs missing skills with "+ add", similar jobs, Apply + did-you-apply, Like/Hide. Opens in the same tab; Apply opens the ATS in a new one
+- [ ] Split view on Apply: the detail page stays open next to the ATS tab with the requirement checklist and the tailored resume ready to copy
+- [ ] Tailor (4): diff view, gap plan, before/after fit, only profile facts + user-added skills, PDF export, 1 credit
+- [ ] Resume score (5): 0-100, 6 sub-bars, ranked fixes, versions
+- [ ] Cover letter (6): per-job, plain, 1 credit
+- [ ] Off-board paste: any posting URL -> fetch, tag, score, External tab
+- [ ] Tracker (11) v1: stages, manual add, notes, follow-up reminders (no email yet)
+- [ ] Billing per PRICING.md: credits live (spend_credit), UpgradeModal/Banner with the six moments, Stripe (Pro / Pro student / Semester / Semester student), .edu verification, customer portal, 7-day refund
 
-## Week 4 — launch
-- [ ] Landing page (1) from the mockup, pricing section with .edu toggle, real countdown date
-- [ ] Career center dashboard (16), read-only v1: campus stats, flagged students, interview rate by program, funnel. Invite-only
-- [ ] Terms, privacy, refund policy. CA/NY gate copy
-- [ ] Onboarding: upload -> matches in under 60 seconds, timed
-- [ ] Email NOVA Annandale career services with the dashboard screenshot + free pilot semester. Same email to Mason and 2 NOVA CS clubs
-- [ ] Founder-face TikTok/Reels: 3 clips a week, "applied to 10 DC internships in 20 minutes" format
-- [ ] r/nova, NOVA and Mason Discords, one post each, not spam
-- [ ] Launch to first 50 users. Watch interview rate, fill success rate, Workday breakage
+## Phase 2 — data that deserves a nationwide product (next 2 weeks, runs alongside Phase 1)
+Goal: every relevant tech posting in the US, tagged within the hour; the international ones that make sense.
+- [ ] Tagger throughput: pre-tag (done), batch 48 / 10 min (done), then a nightly bulk run. Target: every new posting tagged within 60 min
+- [ ] Adapters: iCIMS, Workable, Jobvite, Oracle Recruiting Cloud, Taleo (the "0 jobs" rows). ~130 more companies from the seed alone
+- [ ] Company discovery: crawl careers pages of the Fortune 1000 + YC + Inc 5000 tech list for ATS slugs; Greenhouse/Lever/Ashby board-token discovery; user-pasted URLs auto-add the company
+- [ ] Workday page-3 bug (some tenants stop at 40)
+- [ ] Company table: logo (favicon fallback), size, industry, HQ, "sponsors clearance", "hires from <school>" from user-reported outcomes
+- [ ] International: country on every job (tagger does it now), currency-aware pay, country chips (CA, UK, IN, DE first), work-auth aware scoring per country
+- [ ] Alerts: instant for Pro, daily digest for Free (needs Resend + a domain)
 
-## Week 5+ (post-launch)
-- [ ] Mock interview (9) voice, OA drills (HackerRank/CodeSignal style) — the funnel drop is OA -> interview
-- [ ] Connections / referral finder (10)
-- [ ] iCIMS, Taleo, SmartRecruiters fill adapters
-- [ ] Mobile layouts for feed, tracker, Coach (390 wide)
-- [ ] Salary negotiation module in Coach
+## Phase 3 — the machine (weeks 3-4)
+- [ ] Extension real build (WXT): Workday, Greenhouse, Lever, iCIMS adapters, universal fallback, human-confirm overlay, telemetry, learned selectors. Replaces the shell listing
+- [ ] Autopilot (7): nightly prep above the fit floor, queue UI, approve -> board. Preview for Free
+- [ ] Coach (8) with tracker context; interview-rate metric nightly; momentum banner once real
+- [ ] Inbound email alias -> stage updates; follow-up nudges
+- [ ] Landing page (1) from the mockup + real pricing page + legal + CA/NY gate copy
+
+## Phase 4 — everyone else (weeks 5-8)
+- [ ] Mobile layouts for feed, detail, tracker, Coach
+- [ ] Mock interview (9) + OA drills; Referrals (10); Autofill settings (15)
+- [ ] Career center dashboard (16) + campus plan; first 3 pilot campuses
 - [ ] Callback-probability model once >= 2,000 labeled applications
-- [ ] Product Hunt
-- [ ] Widen by school (VT, JMU, VCU), not by degree
+- [ ] Product Hunt; widen by school and by country
 
 ## Weekly founder work (Ilyas, non-negotiable)
 - 5 customer conversations (NOVA/Mason CS + IT students)
