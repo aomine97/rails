@@ -40,3 +40,6 @@ export function toIso(v: string | number | null | undefined): string | null {
 
 /** Optional cap on postings fetched per company (used by the smoke test). RAILS_MAX_JOBS=25 */
 export const maxJobs = () => Number(process.env.RAILS_MAX_JOBS ?? 0) || Infinity;
+
+/** Smoke-test mode: skip per-posting detail requests. RAILS_LIST_ONLY=1 */
+export const listOnly = () => process.env.RAILS_LIST_ONLY === "1";
