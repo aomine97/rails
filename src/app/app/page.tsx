@@ -8,6 +8,7 @@ export default async function AppHome() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=/app");
   const { data: profile } = await supabase.from("profiles").select("full_name,email,edu_verified,state,onboarding_done").eq("id", user.id).single();
+  if (!profile?.onboarding_done) redirect("/onboarding");
   const { count } = await supabase.from("jobs").select("id", { count: "exact", head: true }).is("closed_at", null);
   return (
     <main className="flex flex-1 flex-col">
@@ -21,7 +22,7 @@ export default async function AppHome() {
         <div className="mt-8 rounded-2xl border border-line bg-surface p-6">
           <div className="font-display text-4xl font-extrabold text-blue">{count?.toLocaleString() ?? "…"}</div>
           <div className="mt-1 text-sm font-semibold text-muted">live tech postings in Rails right now</div>
-          <p className="mt-4 text-sm leading-relaxed text-text">Next: upload your resume and confirm your facts. Then this becomes your feed, scored against every one of them.</p>
+          <p className="mt-4 text-sm leading-relaxed text-text">Profile confirmed. The feed, scored against every one of these, is the next build.</p>
         </div>
       </section>
     </main>

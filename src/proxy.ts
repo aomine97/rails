@@ -23,7 +23,7 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone(); url.pathname = "/not-yet"; url.searchParams.set("state", request.headers.get("x-vercel-ip-country-region")!);
     return NextResponse.redirect(url);
   }
-  if (path.startsWith("/app") && !user) {
+  if ((path.startsWith("/app") || path.startsWith("/onboarding")) && !user) {
     const url = request.nextUrl.clone(); url.pathname = "/login"; url.searchParams.set("next", path);
     return NextResponse.redirect(url);
   }
