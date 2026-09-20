@@ -2,22 +2,22 @@ import { z } from "zod";
 
 /** What the tagger extracts from a posting. Cheap LLM, Zod-validated, cached per job. */
 export const JobTags = z.object({
-  level: z.enum(["internship", "new_grad", "entry", "mid", "senior", "unknown"]),
-  field: z.enum(["software", "data", "cloud", "it_support", "cyber", "product", "other"]),
-  requiredSkills: z.array(z.string()).max(30),   // keys via skillKey()
-  preferredSkills: z.array(z.string()).max(30),
+  level: z.enum(["internship", "new_grad", "entry", "mid", "senior", "unknown"]).catch("unknown"),
+  field: z.enum(["software", "data", "cloud", "it_support", "cyber", "product", "other"]).catch("other"),
+  requiredSkills: z.array(z.string()).max(30).catch([]),   // keys via skillKey()
+  preferredSkills: z.array(z.string()).max(30).catch([]),
   // verbatim lines for the ✓/!/✗ view. Models sometimes return plain strings; coerce them.
   requirements: z.preprocess(
     (v) => (Array.isArray(v) ? v.slice(0, 40).map((r) => (typeof r === "string" ? { text: r, required: !/preferred|nice to have|bonus|plus\b/i.test(r) } : r)) : []),
-    z.array(z.object({ text: z.string(), required: z.boolean().default(true) })).max(40),
+    z.array(z.object({ text: z.string(), required: z.boolean().default(true) })).max(40).catch([]),
   ),
-  minDegree: z.enum(["none", "associate", "bachelor", "master", "phd", "unknown"]),
+  minDegree: z.enum(["none", "associate", "bachelor", "master", "phd", "unknown"]).catch("unknown"),
   yearsMin: z.coerce.number().int().min(0).nullable().catch(null),
-  clearanceRequired: z.enum(["none", "eligible", "public_trust", "secret", "top_secret", "unknown"]),
+  clearanceRequired: z.enum(["none", "eligible", "public_trust", "secret", "top_secret", "unknown"]).catch("unknown"),
   usCitizenRequired: z.boolean().nullable().catch(null),
-  sponsorship: z.enum(["yes", "no", "unknown"]),
-  remote: z.enum(["remote", "hybrid", "onsite", "unknown"]),
-  employmentType: z.enum(["full_time", "part_time", "internship", "contract", "unknown"]),
+  sponsorship: z.enum(["yes", "no", "unknown"]).catch("unknown"),
+  remote: z.enum(["remote", "hybrid", "onsite", "unknown"]).catch("unknown"),
+  employmentType: z.enum(["full_time", "part_time", "internship", "contract", "unknown"]).catch("unknown"),
   payMinHourly: z.coerce.number().nullable().catch(null),
   payMaxHourly: z.coerce.number().nullable().catch(null),
   hasOnlineAssessment: z.boolean().nullable().catch(null),

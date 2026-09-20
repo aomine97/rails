@@ -13,7 +13,10 @@ export async function tagJob(input: { title: string; company: string; location: 
   });
   const raw = res.content.find((c) => c.type === "text")?.text ?? "";
   const json = raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1);
-  const tags = JobTags.parse(JSON.parse(json));
+  const parsed = JSON.parse(json) as Record<string, unknown>;
+  for (const k of ["requiredSkills", "preferredSkills"]) if (Array.isArray(parsed[k])) parsed[k] = (parsed[k] as unknown[]).map((x) => typeof x === "string" ? x : String((x as { name?: string })?.name ?? "")).filter(Boolean);
+  for (const k of ["sponsorship", "remote", "level", "field", "minDegree", "clearanceRequired", "employmentType"]) if (typeof parsed[k] === "string") parsed[k] = (parsed[k] as string).toLowerCase().replace(/[\s-]+/g, "_");
+  const tags = JobTags.parse(parsed);
   tags.requiredSkills = [...new Set(tags.requiredSkills.map(skillKey))];
   tags.preferredSkills = [...new Set(tags.preferredSkills.map(skillKey))].filter((k) => !tags.requiredSkills.includes(k));
   return tags;
