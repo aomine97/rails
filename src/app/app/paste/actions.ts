@@ -6,6 +6,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { fetchPosting, hostToName } from "@/lib/jobs/paste";
 import { tagJob } from "@/lib/jobs/tagger";
 import { detectAts } from "@/lib/jobs/detect";
+import { adapters } from "@/lib/ats";
 
 export type PasteState = { error?: string };
 
@@ -24,14 +25,20 @@ export async function pastePosting(_prev: PasteState, form: FormData): Promise<P
     posting = { url, applyUrl: url, title: String(form.get("title") ?? "").trim() || "Pasted posting", company: hostToName(url), text: pastedText };
   }
   const admin = supabaseAdmin();
-  const { ats, slug } = detectAts(url);
-  // company: reuse by name, else create as unknown/manual
-  const { data: co } = await admin.from("companies").select("id").ilike("name", posting.company).limit(1).maybeSingle();
-  let companyId = co?.id as string | undefined;
+  const det = detectAts(url);
+  const { ats, slug } = det;
+  // Company discovery from a pasted link: if the URL identifies a feed we can poll, the company goes live for everyone.
+  const pollable = !!adapters[ats] && (!!slug || ats === "oracle");
+  const { data: byFeed } = slug ? await admin.from("companies").select("id,active").eq("ats", ats).eq("slug", slug).limit(1).maybeSingle() : { data: null };
+  const { data: byName } = byFeed ? { data: null } : await admin.from("companies").select("id,active,ats,slug").ilike("name", posting.company).limit(1).maybeSingle();
+  let companyId = (byFeed?.id ?? byName?.id) as string | undefined;
   if (!companyId) {
-    const { data: created, error } = await admin.from("companies").insert({ name: posting.company, ats, slug: slug ?? null, careers_url: new URL(url).origin, active: false }).select("id").single();
+    const { data: created, error } = await admin.from("companies").insert({ name: posting.company, ats, slug: slug ?? null, tenant: det.tenant ?? null, wdn: det.wdn ?? null, careers_url: new URL(url).origin, active: pollable }).select("id").single();
     if (error || !created) return { error: "Could not save the company." };
     companyId = created.id;
+  } else if (pollable && byName && (byName.ats === "unknown" || !byName.slug)) {
+    // We knew the name but not the feed; the pasted link just told us.
+    await admin.from("companies").update({ ats, slug, tenant: det.tenant ?? null, wdn: det.wdn ?? null, careers_url: new URL(url).origin, active: true }).eq("id", companyId);
   }
   let tags = null;
   try { tags = await tagJob({ title: posting.title, company: posting.company, location: null, descriptionText: posting.text }); } catch { /* shows untagged; cron will retry */ }
