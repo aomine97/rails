@@ -1,69 +1,26 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Wordmark } from "@/components/ui";
 
+/** Interim landing. The full page from the mockup is the Week 4 item; this just points at signup. */
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="flex flex-1 flex-col bg-marketing">
+      <header className="flex items-center justify-between px-6 py-4">
+        <Wordmark />
+        <nav className="flex items-center gap-3 text-sm font-semibold">
+          <Link href="/login" className="text-ink">Sign in</Link>
+          <Link href="/signup" className="rounded-full bg-orange px-4 py-2 text-ink">Join free</Link>
+        </nav>
+      </header>
+      <section className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-6 pb-24">
+        <h1 className="font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-ink">Apply to ten jobs a day, properly.</h1>
+        <p className="mt-5 max-w-xl text-lg leading-relaxed text-text">Tech jobs for students at non-target schools. Matched jobs with a real fit score, a resume tailored per posting, every form filled in seconds. You click Submit.</p>
+        <div className="mt-8 flex items-center gap-4">
+          <Link href="/signup" className="rounded-full bg-orange px-6 py-3 text-base font-extrabold text-ink">Join free</Link>
+          <span className="text-sm text-muted">Students: $15/mo after the free tier. No card to start.</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+      <footer className="px-6 py-5 text-xs text-muted">Rails · Built in Northern Virginia · Not yet available in CA or NY</footer>
+    </main>
   );
 }

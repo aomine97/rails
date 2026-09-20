@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
+/* Rails design tokens (from the mockups) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #0B1B3A;
+  --text: #33415C;
+  --muted: #5B6B85;
+  --dim: #8A99B3;
+  --ground: #F4F6FA;
+  --marketing-ground: #EEF3FB;
+  --panel: #DCE7F8;
+  --surface: #FFFFFF;
+  --border: #DFE6F2;
+  --border-strong: #C9D3E4;
+  --light: #EDF1F8;
+  --orange: #FF7A2E;
+  --blue: #1D4ED8;
+  --blue-chip: #DBEAFE;
+  --blue-chip-text: #1E40AF;
+  --green: #16A34A;
+  --green-chip: #DCFCE7;
+  --green-chip-text: #166534;
+  --amber: #D97706;
+  --amber-chip: #FFE8CC;
+  --amber-chip-text: #7C3A00;
+  --red: #DC2626;
+  --red-chip: #FDECEC;
+  --red-chip-text: #9F1D1D;
+  --navy-2: #14274D;
+  --navy-line: #26395E;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: var(--ink);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-dim: var(--dim);
+  --color-ground: var(--ground);
+  --color-marketing: var(--marketing-ground);
+  --color-panel: var(--panel);
+  --color-surface: var(--surface);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-light: var(--light);
+  --color-orange: var(--orange);
+  --color-blue: var(--blue);
+  --color-blue-chip: var(--blue-chip);
+  --color-blue-chip-text: var(--blue-chip-text);
+  --color-green: var(--green);
+  --color-green-chip: var(--green-chip);
+  --color-green-chip-text: var(--green-chip-text);
+  --color-amber: var(--amber);
+  --color-amber-chip: var(--amber-chip);
+  --color-amber-chip-text: var(--amber-chip-text);
+  --color-red: var(--red);
+  --color-red-chip: var(--red-chip);
+  --color-red-chip-text: var(--red-chip-text);
+  --color-navy-2: var(--navy-2);
+  --color-navy-line: var(--navy-line);
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
 }
+
+/* Score bands: every meter shows its number; color follows the band */
+.band-strong { color: var(--green); }
+.band-good { color: var(--amber); }
+.band-stretch { color: var(--red); }

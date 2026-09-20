@@ -20,7 +20,7 @@ function fakeDb(existing: { id: string; external_id: string }[]) {
     const b: Record<string, unknown> = {};
     const chain = () => b;
     let op = ""; let payload: unknown;
-    b.select = (_c?: string) => { if (!op) op = "select"; return b; };
+    b.select = () => { if (!op) op = "select"; return b; };
     b.update = (p: unknown) => { op = "update"; payload = p; calls.push({ table, op, payload }); return b; };
     b.upsert = async (p: unknown) => { calls.push({ table, op: "upsert", payload: p }); return { error: null }; };
     b.eq = chain; b.is = chain; b.lt = chain; b.in = chain; b.not = chain; b.or = chain; b.order = chain; b.limit = chain;
@@ -33,7 +33,7 @@ function fakeDb(existing: { id: string; external_id: string }[]) {
 describe("pollCompany", () => {
   it("inserts only unseen postings and touches the rest", async () => {
     const db = fakeDb([{ id: "row1", external_id: "old" }]);
-    const fetchImpl = (async (url: string) => new Response(JSON.stringify([
+    const fetchImpl = (async () => new Response(JSON.stringify([
       { id: "old", text: "Old job", hostedUrl: "u1", applyUrl: "a1", createdAt: 1, categories: {} },
       { id: "new", text: "New job", hostedUrl: "u2", applyUrl: "a2", createdAt: 2, categories: {} },
     ]), { status: 200 })) as unknown as typeof fetch;
