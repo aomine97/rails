@@ -79,3 +79,21 @@ describe("fillForm", () => {
   });
   it("atsOf", () => { expect(atsOf("job-boards.greenhouse.io")).toBe("greenhouse"); expect(atsOf("careers.acme.com")).toBe("generic"); });
 });
+
+import { attachFile } from "./fill";
+describe("attachFile", () => {
+  it("puts the resume in the resume input and the letter in the letter input, never crosswise", () => {
+    document.body.innerHTML = `<label for="r">Resume/CV*</label><input type="file" id="r"><label for="c">Cover Letter</label><input type="file" id="c">`;
+    const pdf = new File([new Uint8Array([37, 80, 68, 70])], "Maya_Resume.pdf", { type: "application/pdf" });
+    const a = attachFile(document, "resume", pdf);
+    expect(a.success).toBe(true); expect(a.selector).toBe("#r");
+    expect((document.getElementById("r") as HTMLInputElement).files?.[0]?.name).toBe("Maya_Resume.pdf");
+    expect((document.getElementById("c") as HTMLInputElement).files?.length ?? 0).toBe(0);
+    const b = attachFile(document, "letter", new File(["x"], "letter.pdf", { type: "application/pdf" }));
+    expect(b.selector).toBe("#c");
+  });
+  it("does nothing when there is no matching input", () => {
+    document.body.innerHTML = `<label for="p">Photo</label><input type="file" id="p"><input type="file" id="q">`;
+    expect(attachFile(document, "letter", new File(["x"], "l.pdf")).success).toBe(false);
+  });
+});

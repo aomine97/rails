@@ -223,3 +223,20 @@ export async function fillForm(root: Document | ShadowRoot, values: Values, opts
   for (const f of root.querySelectorAll<HTMLInputElement>('input[type="file"]')) { const lab = labelTextFor(f, root) || "Resume / attachment"; if (!leftForYou.includes(lab)) leftForYou.unshift(lab); }
   return { results, leftForYou: leftForYou.slice(0, 12) };
 }
+
+/** Attach a file to the matching file input (resume or cover letter). Browsers allow this only via DataTransfer; sites see a normal change event. */
+export function attachFile(root: Document | ShadowRoot, kind: "resume" | "letter", file: File): { selector: string | null; success: boolean } {
+  const inputs = [...root.querySelectorAll<HTMLInputElement>('input[type="file"]')].filter((i) => !i.disabled);
+  const want = kind === "resume" ? /resume|cv\b|curriculum/i : /cover|letter/i;
+  const avoid = kind === "resume" ? /cover|letter|transcript|portfolio|photo/i : /resume|cv\b|transcript|photo/i;
+  const scored = inputs.map((i) => { const lab = `${labelTextFor(i, root)} ${i.name} ${i.id} ${i.getAttribute("aria-label") ?? ""} ${i.closest("div,fieldset,section")?.textContent?.slice(0, 200) ?? ""}`; return { i, hit: want.test(lab) && !avoid.test(lab.replace(want, "")), lab }; });
+  const target = scored.find((s) => s.hit)?.i ?? (kind === "resume" && inputs.length === 1 ? inputs[0] : undefined);
+  if (!target) return { selector: null, success: false };
+  try {
+    if (typeof DataTransfer !== "undefined") { const dt = new DataTransfer(); dt.items.add(file); target.files = dt.files; }
+    else { Object.defineProperty(target, "files", { configurable: true, value: Object.assign([file], { item: (i: number) => (i === 0 ? file : null) }) }); } // jsdom / old engines
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+    target.dispatchEvent(new Event("change", { bubbles: true }));
+    return { selector: target.id ? `#${cssEscape(target.id)}` : target.name ? `input[name="${target.name}"]` : null, success: (target.files?.length ?? 0) > 0 };
+  } catch { return { selector: null, success: false }; }
+}

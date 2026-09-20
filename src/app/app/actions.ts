@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { CanonicalProfile, skillKey } from "@/lib/schemas/profile";
+import { addSkill } from "@/lib/profile/add-skill";
 
 async function me() {
   const supabase = await supabaseServer();
@@ -30,16 +30,7 @@ export async function hideJob(form: FormData) {
 export async function addSkillToProfile(form: FormData) {
   const { user } = await me();
   if (!user) return;
-  const name = String(form.get("skill") ?? "").trim().slice(0, 60);
-  if (!name) return;
-  const admin = supabaseAdmin();
-  const { data: prof } = await admin.from("profiles").select("canonical,canonical_version").eq("id", user.id).single();
-  const parsed = CanonicalProfile.safeParse(prof?.canonical);
-  if (!parsed.success) return;
-  const p = parsed.data; const key = skillKey(name);
-  if (p.skills.some((s) => s.key === key)) return;
-  p.skills.push({ name, key, level: "working", evidence: "Added by you from a job card", source: "user" });
-  await admin.from("profiles").update({ canonical: p, canonical_version: (prof?.canonical_version ?? 0) + 1 }).eq("id", user.id);
+  await addSkill(supabaseAdmin(), user.id, String(form.get("skill") ?? ""));
   revalidatePath("/app"); revalidatePath("/app/jobs/[id]", "page");
 }
 
