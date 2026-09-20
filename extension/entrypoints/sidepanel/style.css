@@ -1,0 +1,26 @@
+:root { --ink:#0B1B3A; --text:#2B3A55; --muted:#6B7A93; --line:#E3E8F0; --light:#F4F6FA; --orange:#FF8A3D; --green:#166534; --green-bg:#DCFCE7; --amber:#D97706; --amber-bg:#FFE8CC; --red:#9F1D1D; --red-bg:#FDECEC; }
+* { box-sizing: border-box; }
+body { margin:0; font: 13px/1.45 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--text); background: var(--light); }
+#app { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; }
+.brand { font-weight:800; font-size:16px; color:var(--ink); letter-spacing:-.01em; display:flex; justify-content:space-between; align-items:center; }
+.brand small { font-weight:600; color:var(--muted); font-size:11px; }
+h2 { margin:0 0 6px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+.btn { display:inline-block; border:0; border-radius:999px; padding:8px 14px; font-weight:800; font-size:13px; cursor:pointer; background:var(--orange); color:var(--ink); }
+.btn.secondary { background:var(--ink); color:#fff; }
+.btn.ghost { background:#fff; border:1px solid var(--line); color:var(--ink); font-weight:700; }
+.btn:disabled { opacity:.5; cursor:default; }
+.row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.fit { font-size:28px; font-weight:800; line-height:1; }
+.muted { color:var(--muted); }
+.ink { color:var(--ink); font-weight:700; }
+ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+.field { display:flex; justify-content:space-between; align-items:center; gap:8px; background:var(--light); border:1px solid var(--line); border-radius:8px; padding:6px 8px; }
+.field .k { font-size:10px; font-weight:800; text-transform:uppercase; color:var(--muted); }
+.field .v { color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:170px; }
+.copy { border:1px solid var(--line); background:#fff; border-radius:999px; padding:3px 8px; font-size:11px; font-weight:700; cursor:pointer; }
+.req { display:flex; gap:6px; align-items:flex-start; font-size:12px; }
+.req .dot { width:8px; height:8px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+.chip { display:inline-block; border-radius:999px; padding:2px 8px; font-size:11px; font-weight:700; }
+pre { white-space:pre-wrap; font: 11px/1.4 -apple-system, sans-serif; background:var(--light); border:1px solid var(--line); border-radius:8px; padding:8px; max-height:180px; overflow:auto; margin:6px 0 0; color:var(--ink); }
+.note { font-size:11px; color:var(--muted); }
