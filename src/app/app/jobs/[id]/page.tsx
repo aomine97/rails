@@ -9,7 +9,7 @@ import { scoreJob, BAND_COLOR } from "@/lib/match/score";
 import { explainScore } from "@/lib/match/explain";
 import { ageLabel, buildFeed, payLabel, type FeedJobRow } from "@/lib/match/feed";
 import { addSkillToProfile, hideJob, likeJob } from "../../actions";
-import { ApplyButton } from "../../apply-button";
+import { SplitApplyButton } from "./apply/split";
 
 export default async function JobDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -70,7 +70,7 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
             <div className="text-[15px] text-text">{company?.name}{job.location ? ` · ${job.location}` : ""}{pay ? ` · ${pay}` : ""}{job.employment_type ? ` · ${job.employment_type}` : ""}</div>
             {tags.success && tags.data.summary && <p className="text-[14px] leading-relaxed text-text">{tags.data.summary}</p>}
             <div className="flex flex-wrap items-center gap-2 pt-1">
-              <ApplyButton jobId={job.id} url={job.apply_url} title={job.title} company={company?.name ?? ""} applied={!!app && app.stage !== "saved"} />
+              <SplitApplyButton jobId={job.id} url={job.apply_url} applied={!!app && app.stage !== "saved" && app.stage !== "prepared"} />
               <a href={job.url} target="_blank" rel="noopener" className="rounded-full border border-line px-3 py-2 text-[13px] font-semibold text-text">Original posting ↗</a>
               {score && <>
                 <form action={likeJob}><input type="hidden" name="jobId" value={job.id} /><input type="hidden" name="fit" value={score.fit} /><input type="hidden" name="band" value={score.band} /><input type="hidden" name="liked" value={mark?.liked ? "0" : "1"} />
