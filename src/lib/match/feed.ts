@@ -7,6 +7,7 @@ export interface FeedJobRow {
   id: string; title: string; location: string | null; remote: boolean | null; url: string; apply_url: string;
   posted_at: string | null; first_seen_at: string; tags: unknown; pay_min: number | null; pay_max: number | null; pay_period: string | null;
   description_text?: string | null;
+  source?: string;
   companies: { name: string; ats: string } | null;
 }
 

@@ -30,7 +30,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   const me = parsed.data;
 
   const [{ data: rows }, { data: marks }, { data: apps }] = await Promise.all([
-    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,companies(name,ats)")
+    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats)")
       .is("closed_at", null).not("tagged_at", "is", null).order("first_seen_at", { ascending: false }).limit(3000),
     supabase.from("matches").select("job_id,liked,hidden").eq("user_id", user.id),
     supabase.from("applications").select("id,job_id,title,company_name,url,stage,applied_at,last_activity_at").eq("user_id", user.id).order("last_activity_at", { ascending: false }),
@@ -39,9 +39,12 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   const liked = new Set((marks ?? []).filter((m) => m.liked).map((m) => m.job_id));
   const hidden = new Set((marks ?? []).filter((m) => m.hidden).map((m) => m.job_id));
   const tab = sp.tab ?? "recommended";
-  const feed = buildFeed(me, (rows ?? []) as unknown as FeedJobRow[], { field: sp.field, level: sp.level, where: (sp.where as "near" | "us" | "remote" | "anywhere" | undefined) ?? "us", q: sp.q, sort: sp.sort === "new" ? "new" : "fit" });
+  const mine = new Set((marks ?? []).map((m) => m.job_id));
+  const visibleRows = ((rows ?? []) as unknown as FeedJobRow[]).filter((r) => r.source !== "paste" || mine.has(r.id));
+  const feed = buildFeed(me, visibleRows, { field: sp.field, level: sp.level, where: (sp.where as "near" | "us" | "remote" | "anywhere" | undefined) ?? "us", q: sp.q, sort: sp.sort === "new" ? "new" : "fit" });
   let items = tab === "hidden" ? feed.items.filter((i) => hidden.has(i.job.id)) : feed.items.filter((i) => !hidden.has(i.job.id));
   if (tab === "liked") items = items.filter((i) => liked.has(i.job.id));
+  if (tab === "external") items = items.filter((i) => i.job.id && (i.job as unknown as { source?: string }).source === "paste");
   const page = Math.max(1, Number(sp.page ?? 1));
   const pageItems = items.slice((page - 1) * PAGE, page * PAGE);
   const href = (patch: Partial<SP>) => { const p = new URLSearchParams({ ...sp, ...Object.fromEntries(Object.entries(patch).map(([k, v]) => [k, v ?? ""])) } as Record<string, string>); [...p.keys()].forEach((k) => !p.get(k) && p.delete(k)); return `/app?${p}`; };
@@ -54,7 +57,8 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
           {[["recommended", "Recommended"], ["liked", `Liked ${liked.size ? liked.size : ""}`], ["applied", `Applied ${appliedIds.size ? appliedIds.size : ""}`], ["external", "External"], ["hidden", `Hidden ${hidden.size ? hidden.size : ""}`]].map(([k, l]) => (
             <Link key={k} href={href({ tab: k, page: "1" })} className={`border-b-2 px-3 pb-2 ${tab === k ? "border-blue text-ink" : "border-transparent text-muted"}`}>{l}</Link>
           ))}
-          <form className="ml-auto pb-2" action="/app"><input name="q" defaultValue={sp.q} placeholder="Search title, company, city" className="h-9 w-64 rounded-lg border border-line bg-ground px-3 text-sm font-normal outline-none focus:border-blue" /></form>
+          <Link href="/app/paste" className="ml-auto mr-3 pb-2 text-[13px] font-semibold text-blue">+ Paste a link</Link>
+          <form className="pb-2" action="/app"><input name="q" defaultValue={sp.q} placeholder="Search title, company, city" className="h-9 w-64 rounded-lg border border-line bg-ground px-3 text-sm font-normal outline-none focus:border-blue" /></form>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 px-6 pt-3 text-xs font-semibold">
@@ -84,8 +88,8 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
               ))}
             </ul>
           )
-        ) : tab === "external" ? (
-          <Empty title="No external jobs yet." body="Paste any posting URL and Rails scores it like the rest. Coming in the next build." />
+        ) : tab === "external" && pageItems.length === 0 ? (
+          <Empty title="No external jobs yet." body="Paste any posting link (LinkedIn, Handshake, a company site) and Rails scores it like the rest." />
         ) : pageItems.length === 0 ? (
           <Empty title={items.length === 0 && feed.total === 0 ? "Nothing matches yet." : "No jobs on this page."} body={feed.total === 0 ? "Try clearing a filter. If the feed is empty with no filters, the tagger is still catching up on new postings; check back in 15 minutes." : "Go back a page or clear a filter."} />
         ) : (
