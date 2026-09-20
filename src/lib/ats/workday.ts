@@ -4,7 +4,7 @@
 // Poll politely: one list call + one detail call per new posting, and never more than once an hour per company.
 import type { Adapter, CompanyRef, FetchLike, FetchOpts, RawJob } from "./types";
 import { AdapterError } from "./types";
-import { getJson, htmlToText, isRemote } from "./util";
+import { getJson, htmlToText, isRemote, listOnly, maxJobs } from "./util";
 
 interface WdList { total: number; jobPostings: { title: string; externalPath: string; locationsText?: string; postedOn?: string; bulletFields?: string[] }[] }
 interface WdDetail { jobPostingInfo?: { title?: string; jobDescription?: string; location?: string; additionalLocations?: string[]; postedOn?: string; startDate?: string; timeType?: string; jobReqId?: string; externalUrl?: string; remoteType?: string } }
@@ -49,8 +49,9 @@ export const workday: Adapter = {
         body: JSON.stringify({ appliedFacets: {}, limit, offset, searchText: "" }),
       });
       for (const p of list.jobPostings ?? []) {
+        if (out.length >= maxJobs(opts)) return out;
         let info: WdDetail["jobPostingInfo"] = {};
-        try { info = (await getJson<WdDetail>("workday", c.name, `${base}${p.externalPath}`, fetchImpl)).jobPostingInfo ?? {}; } catch { /* keep list data */ }
+        if (!listOnly(opts)) try { info = await detail(c, p.externalPath, fetchImpl); } catch { /* keep list data */ }
         const id = info?.jobReqId ?? p.externalPath.split("_").pop() ?? p.externalPath;
         const html = info?.jobDescription ?? null;
         const publicUrl = info?.externalUrl ?? `https://${c.tenant}.wd${c.wdn}.myworkdayjobs.com/${c.slug}${p.externalPath}`;

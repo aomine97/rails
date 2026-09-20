@@ -1,6 +1,6 @@
 // SmartRecruiters Posting API (public): https://developers.smartrecruiters.com/docs/posting-api
 import type { Adapter, CompanyRef, FetchLike, FetchOpts, RawJob } from "./types";
-import { getJson, htmlToText, isRemote, toIso } from "./util";
+import { getJson, htmlToText, isRemote, listOnly, maxJobs, toIso } from "./util";
 
 interface SrPosting {
   id: string; name: string; releasedDate?: string; ref: string;
@@ -26,8 +26,9 @@ export const smartrecruiters: Adapter = {
     for (let offset = 0; offset < 2000; offset += 100) {
       const page = await getJson<{ totalFound: number; content: SrPosting[] }>("smartrecruiters", c.name, `https://api.smartrecruiters.com/v1/companies/${encodeURIComponent(c.slug)}/postings?limit=100&offset=${offset}`, fetchImpl);
       for (const p of page.content ?? []) {
+        if (out.length >= maxJobs(opts)) return out;
         let detail: SrDetail = {};
-        try { detail = await getJson<SrDetail>("smartrecruiters", c.name, p.ref, fetchImpl); } catch { /* list row still usable */ }
+        if (!listOnly(opts)) try { detail = await getJson<SrDetail>("smartrecruiters", c.name, p.ref, fetchImpl); } catch { /* list row still usable */ }
         const html = Object.values(detail.jobAd?.sections ?? {}).map((s) => `<h3>${s.title ?? ""}</h3>${s.text ?? ""}`).join("");
         const loc = [p.location?.city, p.location?.region, p.location?.country].filter(Boolean).join(", ") || null;
         const url = detail.postingUrl ?? `https://jobs.smartrecruiters.com/${c.slug}/${p.id}`;
