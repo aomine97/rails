@@ -69,8 +69,18 @@ export function normalizeParsed(p: Parsed, fallbackEmail: string): CanonicalProf
     links: { linkedin: p.links.linkedin, github: p.links.github, portfolio: p.links.portfolio },
     headline: p.headline?.trim() || null, targetRoles: p.targetRoles.map((r) => r.trim()).filter(Boolean).slice(0, 5),
     skills, experience, education, certifications,
-    constraints: { workAuthorization: p.workAuthorization, clearance: p.clearance, locations: p.locations.slice(0, 3), maxCommuteMiles: 30, remoteOk: true, employmentTypes: ["internship", "new_grad", "entry"], earliestStart: null, minPayHourly: null },
+    constraints: { workAuthorization: p.workAuthorization, clearance: p.clearance, locations: p.locations.slice(0, 3), maxCommuteMiles: 30, remoteOk: true, employmentTypes: defaultTypes(experience), earliestStart: null, minPayHourly: null },
   });
+}
+
+/** Students default to internship/new grad/entry; 3+ years of jobs adds mid; 7+ adds senior. */
+function defaultTypes(exp: { kind: string; start: string | null; end: string | null }[]): CanonicalProfile["constraints"]["employmentTypes"] {
+  const now = new Date();
+  const months = exp.filter((e) => e.kind === "job").reduce((a, e) => {
+    if (!e.start) return a; const [sy, sm] = e.start.split("-").map(Number); const [ey, em] = e.end ? e.end.split("-").map(Number) : [now.getFullYear(), now.getMonth() + 1];
+    return a + Math.max(0, (ey - sy) * 12 + (em - sm));
+  }, 0);
+  if (months >= 84) return ["mid", "senior"]; if (months >= 36) return ["entry", "mid"]; return ["internship", "new_grad", "entry"];
 }
 
 /** "May 2027" / "2025-08" / "08/2025" / "Present" -> "YYYY-MM" or null */

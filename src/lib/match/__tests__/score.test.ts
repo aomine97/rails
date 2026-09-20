@@ -25,7 +25,7 @@ const base: JobTags = {
   level: "internship", field: "software", requiredSkills: ["python", "sql"], preferredSkills: ["aws", "react"],
   requirements: [{ text: "Proficiency in Python", required: true }, { text: "Experience with React", required: false }, { text: "Strong communication", required: true }],
   minDegree: "bachelor", yearsMin: 0, clearanceRequired: "none", usCitizenRequired: null, sponsorship: "unknown", remote: "hybrid",
-  employmentType: "internship", payMinHourly: 40, payMaxHourly: 48, hasOnlineAssessment: true,
+  employmentType: "internship", payMinHourly: 40, payMaxHourly: 48, hasOnlineAssessment: true, summary: "", relocationOffered: null, country: "US",
 };
 
 describe("scoreJob", () => {
@@ -33,7 +33,7 @@ describe("scoreJob", () => {
     const s = scoreJob(profile, base, { title: "Software Engineer Intern", location: "McLean, VA" });
     expect(s.hardBlocks).toEqual([]);
     expect(s.fit).toBeGreaterThanOrEqual(70);
-    expect(s.sub.skills).toBe(Math.round(100 * (2 + 0.5) / 3));
+    expect(s.sub.skills).toBe(Math.round(30 + 70 * ((2 + 0.5) / 3)));
     expect(s.requirements[0]).toMatchObject({ status: "met", evidence: "Built a Flask API for a class project" });
     expect(s.requirements[1]).toMatchObject({ status: "missing" });
     expect(s.requirements[2]).toMatchObject({ status: "partial" });

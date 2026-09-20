@@ -104,7 +104,7 @@ export function ConfirmForm({ initial }: { initial: P }) {
             <input className={input} value={p.constraints.locations.join(", ")} onChange={(e) => set("constraints", { ...p.constraints, locations: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="McLean, VA; Remote" /></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Looking for</span>
             <div className="flex flex-wrap gap-2 pt-1">
-              {(["internship", "new_grad", "entry", "part_time", "contract"] as const).map((t) => (
+              {(["internship", "new_grad", "entry", "mid", "senior", "part_time", "contract"] as const).map((t) => (
                 <label key={t} className="flex items-center gap-1 text-sm"><input type="checkbox" checked={p.constraints.employmentTypes.includes(t)} onChange={(e) => set("constraints", { ...p.constraints, employmentTypes: e.target.checked ? [...p.constraints.employmentTypes, t] : p.constraints.employmentTypes.filter((x) => x !== t) })} />{t.replace("_", " ")}</label>
               ))}
             </div></label>

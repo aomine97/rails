@@ -72,27 +72,30 @@ export function scoreJob(p: CanonicalProfile, t: JobTags, job: { title: string; 
   p.certifications.forEach((cert) => have.add(cert.key));
   const req = t.requiredSkills.map(skillKey), pref = t.preferredSkills.map(skillKey);
   const reqHit = req.filter((k) => have.has(k)), prefHit = pref.filter((k) => have.has(k));
-  const skills = req.length === 0 && pref.length === 0 ? 75
-    : Math.round(100 * ((reqHit.length * 1.0 + prefHit.length * 0.5) / Math.max(1, req.length * 1.0 + pref.length * 0.5)));
+  // Skills: partial credit curve. One real match already puts you on the board; a perfect match is 100.
+  const ratio = (reqHit.length * 1.0 + prefHit.length * 0.5) / Math.max(1, req.length * 1.0 + pref.length * 0.5);
+  const skills = req.length === 0 && pref.length === 0 ? 70 : reqHit.length + prefHit.length === 0 ? 20 : Math.round(30 + 70 * ratio);
 
   // Experience: months of relevant experience vs years asked, plus level fit
   const relevantMonths = p.experience.filter((e) => e.kind !== "club" && e.kind !== "volunteer").reduce((a, e) => a + monthsOf(e), 0);
   const askedMonths = (t.yearsMin ?? 0) * 12;
-  let experience = askedMonths === 0 ? 85 : Math.min(100, Math.round(100 * relevantMonths / askedMonths));
-  if (t.level === "internship" || t.level === "new_grad") experience = Math.max(experience, 80);
-  if ((t.level === "mid" || t.level === "senior") && relevantMonths < 36) experience = Math.min(experience, 45);
+  let experience = askedMonths === 0 ? 85 : Math.min(100, Math.round(60 + 40 * Math.min(1, relevantMonths / askedMonths)));
+  if (t.level === "internship" || t.level === "new_grad") experience = Math.max(experience, 82);
+  if ((t.level === "mid" || t.level === "senior") && relevantMonths < 36) experience = Math.min(experience, 55);
   if (p.experience.some((e) => e.kind === "project" || e.kind === "internship")) experience = Math.min(100, experience + 8);
 
   // Field: does the profile's headline/target roles/skills point at this job's field?
   const hay = [p.headline ?? "", ...p.targetRoles, ...p.skills.map((s) => s.name), ...p.education.map((e) => e.field), job.title].join(" ").toLowerCase();
   const hints = FIELD_HINTS[t.field];
   const fieldHits = hints.filter((h) => hay.includes(h)).length;
-  let field = hints.length ? Math.min(100, 55 + fieldHits * 12) : 70;
+  const roleHit = p.targetRoles.some((r) => job.title.toLowerCase().includes(r.toLowerCase().replace(/ intern(ship)?$/, "")) || r.toLowerCase().includes(t.field.replace("_", " ")));
+  let field = hints.length ? Math.min(100, 60 + fieldHits * 8 + (roleHit ? 12 : 0)) : 70;
   const degreeRank = { none: 0, associate: 1, bachelor: 2, master: 3, phd: 4, unknown: 0 } as const;
   const bestDegree = Math.max(0, ...p.education.map((e) => /phd|doctor/i.test(e.degree) ? 4 : /^m/i.test(e.degree) ? 3 : /^b/i.test(e.degree) ? 2 : /^a|associate/i.test(e.degree) ? 1 : 0));
-  if (degreeRank[t.minDegree] > bestDegree) field = Math.min(field, 62); // shown as amber, not a block: many postings say "or equivalent"
+  if (degreeRank[t.minDegree] > bestDegree) field = Math.min(field, 68); // shown as amber, not a block: many postings say "or equivalent"
 
-  const fit = hardBlocks.length ? Math.min(45, Math.round(0.45 * skills + 0.3 * experience + 0.25 * field)) : Math.round(0.45 * skills + 0.3 * experience + 0.25 * field);
+  const raw = Math.round(0.4 * skills + 0.3 * experience + 0.3 * field);
+  const fit = hardBlocks.length ? Math.min(45, raw) : raw;
 
   const requirements: RequirementCheck[] = t.requirements.map((r) => {
     const keys = [...req, ...pref].filter((k) => r.text.toLowerCase().includes(k.replace(/-/g, " ")) || r.text.toLowerCase().includes(k));

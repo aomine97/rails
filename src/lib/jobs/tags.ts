@@ -21,6 +21,11 @@ export const JobTags = z.object({
   payMinHourly: z.coerce.number().nullable().catch(null),
   payMaxHourly: z.coerce.number().nullable().catch(null),
   hasOnlineAssessment: z.boolean().nullable().catch(null),
+  /** two plain sentences: what the job is and what they want. Shown on the card. */
+  summary: z.string().max(400).catch(""),
+  relocationOffered: z.boolean().nullable().catch(null),
+  /** ISO-2 country of the primary location, "REMOTE" when fully remote, "unknown" otherwise */
+  country: z.string().max(8).catch("unknown"),
 });
 export type JobTags = z.infer<typeof JobTags>;
 
@@ -32,9 +37,13 @@ export const TAGGER_SYSTEM = `You extract structured facts from a job posting. O
 - clearanceRequired / usCitizenRequired: only from explicit text. Unknown otherwise.
 - Convert annual pay to hourly by dividing by 2080. Null when absent.
 - hasOnlineAssessment: true only if the text mentions HackerRank, CodeSignal, coding assessment, or similar.
+- summary: two plain sentences a student can read in 5 seconds: what you'd actually do, and the one or two things they care most about. No marketing language.
+- relocationOffered: true only if relocation assistance is explicitly offered.
+- country: ISO-2 code of the primary work location (US, CA, GB, IN...), "REMOTE" if fully remote with no country, "unknown" if unclear.
 
 Return exactly this shape (values are examples):
 {"level":"internship","field":"software","requiredSkills":["python","sql"],"preferredSkills":["aws"],
  "requirements":[{"text":"Currently pursuing a degree in Computer Science","required":true},{"text":"Experience with AWS","required":false}],
  "minDegree":"bachelor","yearsMin":0,"clearanceRequired":"none","usCitizenRequired":null,"sponsorship":"unknown",
- "remote":"hybrid","employmentType":"internship","payMinHourly":40,"payMaxHourly":48,"hasOnlineAssessment":true}`;
+ "remote":"hybrid","employmentType":"internship","payMinHourly":40,"payMaxHourly":48,"hasOnlineAssessment":true,
+ "summary":"Build internal tools on a small platform team, mostly Python services and a React admin. They want someone who has shipped a project end to end and can talk about it.","relocationOffered":false,"country":"US"}`;

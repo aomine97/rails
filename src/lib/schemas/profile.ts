@@ -48,7 +48,7 @@ export const Constraints = z.object({
   locations: z.array(z.string()).default([]), // "McLean, VA", "Remote"
   maxCommuteMiles: z.number().nullable().default(null),
   remoteOk: z.boolean().default(true),
-  employmentTypes: z.array(z.enum(["internship", "new_grad", "entry", "part_time", "contract"])).default(["internship", "new_grad", "entry"]),
+  employmentTypes: z.array(z.enum(["internship", "new_grad", "entry", "mid", "senior", "part_time", "contract"])).default(["internship", "new_grad", "entry"]),
   earliestStart: z.string().nullable().default(null),
   minPayHourly: z.number().nullable().default(null),
 });

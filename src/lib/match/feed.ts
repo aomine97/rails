@@ -1,25 +1,29 @@
 import type { CanonicalProfile } from "../schemas/profile";
 import { JobTags } from "../jobs/tags";
 import { scoreJob, type Score } from "./score";
+import { regionOf, type Region } from "./region";
 
 export interface FeedJobRow {
   id: string; title: string; location: string | null; remote: boolean | null; url: string; apply_url: string;
   posted_at: string | null; first_seen_at: string; tags: unknown; pay_min: number | null; pay_max: number | null; pay_period: string | null;
+  description_text?: string | null;
   companies: { name: string; ats: string } | null;
 }
 
 export interface FeedFilters {
   field?: string | null;          // software | data | cloud | it_support | cyber | product
-  level?: string | null;          // internship | new_grad | entry
-  remote?: "remote" | "local" | null;
+  level?: string | null;          // internship | new_grad | entry | mid | senior
+  /** where: dmv (DC/MD/VA) | us | remote | anywhere. Default us = US + remote. */
+  where?: "dmv" | "us" | "remote" | "anywhere" | null;
   q?: string | null;
   minFit?: number;
+  sort?: "fit" | "new" | null;
 }
 
-export interface FeedItem { job: FeedJobRow; tags: JobTags; score: Score; isNew: boolean; ageDays: number | null }
+export interface FeedItem { job: FeedJobRow; tags: JobTags; score: Score; isNew: boolean; ageDays: number | null; region: Region; otherLocations: string[] }
 
-const LEVEL_TO_TYPE: Record<string, CanonicalProfile["constraints"]["employmentTypes"][number] | null> = {
-  internship: "internship", new_grad: "new_grad", entry: "entry", mid: null, senior: null, unknown: "entry",
+const LEVEL_TO_TYPE: Record<string, CanonicalProfile["constraints"]["employmentTypes"][number]> = {
+  internship: "internship", new_grad: "new_grad", entry: "entry", mid: "mid", senior: "senior", unknown: "entry",
 };
 
 /** Pure: profile + rows -> ranked feed. Excludes mid/senior and roles the user isn't looking for; scores the rest. */
@@ -31,21 +35,36 @@ export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: Feed
     const t = JobTags.safeParse(job.tags); if (!t.success) continue;
     const tags = t.data;
     const type = LEVEL_TO_TYPE[tags.level];
-    if (type === null) continue;                                   // mid / senior: never shown to students
     if (wants.size && !wants.has(type) && !(tags.employmentType === "part_time" && wants.has("part_time")) && !(tags.employmentType === "contract" && wants.has("contract"))) continue;
     if (f.field && tags.field !== f.field) continue;
     if (f.level && tags.level !== f.level) continue;
-    if (f.remote === "remote" && tags.remote !== "remote" && job.remote !== true) continue;
-    if (f.remote === "local" && (tags.remote === "remote" || job.remote === true)) continue;
+    const region = regionOf(job.location, tags.country, job.remote ?? (tags.remote === "remote"));
+    const where = f.where ?? "us";
+    if (where === "dmv" && region !== "dmv" && region !== "remote") continue;
+    if (where === "us" && (region === "intl")) continue;
+    if (where === "remote" && region !== "remote") continue;
     if (q && !(job.title.toLowerCase().includes(q) || (job.companies?.name ?? "").toLowerCase().includes(q) || (job.location ?? "").toLowerCase().includes(q))) continue;
     const score = scoreJob(profile, tags, { title: job.title, location: job.location });
     if (f.minFit && score.fit < f.minFit) continue;
     const seen = new Date(job.first_seen_at).getTime();
     const posted = job.posted_at ? new Date(job.posted_at).getTime() : null;
-    items.push({ job, tags, score, isNew: now.getTime() - seen < 24 * 3600_000, ageDays: posted ? Math.max(0, Math.floor((now.getTime() - posted) / 86_400_000)) : null });
+    items.push({ job, tags, score, isNew: now.getTime() - seen < 24 * 3600_000, ageDays: posted ? Math.max(0, Math.floor((now.getTime() - posted) / 86_400_000)) : null, region, otherLocations: [] });
   }
-  items.sort((a, b) => b.score.fit - a.score.fit || (b.job.posted_at ?? "").localeCompare(a.job.posted_at ?? ""));
-  return { items, total: items.length, newToday: items.filter((i) => i.isNew).length };
+  // Same title at the same company posted in several cities: one card, other cities listed.
+  const byKey = new Map<string, FeedItem>();
+  for (const it of items) {
+    const key = `${(it.job.companies?.name ?? "").toLowerCase()}|${it.job.title.toLowerCase().replace(/[,(].*$/, "").trim()}`;
+    const cur = byKey.get(key);
+    if (!cur) { byKey.set(key, it); continue; }
+    const keep = it.region === "dmv" && cur.region !== "dmv" ? it : it.score.fit > cur.score.fit ? it : cur;
+    const drop = keep === it ? cur : it;
+    keep.otherLocations = [...cur.otherLocations, ...(drop.job.location ? [drop.job.location] : [])].filter((l) => l !== keep.job.location).slice(0, 6);
+    byKey.set(key, keep);
+  }
+  const deduped = [...byKey.values()];
+  if (f.sort === "new") deduped.sort((a, b) => (b.job.posted_at ?? b.job.first_seen_at).localeCompare(a.job.posted_at ?? a.job.first_seen_at));
+  else deduped.sort((a, b) => b.score.fit - a.score.fit || (b.job.posted_at ?? "").localeCompare(a.job.posted_at ?? ""));
+  return { items: deduped, total: deduped.length, newToday: deduped.filter((i) => i.isNew).length };
 }
 
 export const ageLabel = (d: number | null) => d == null ? "" : d === 0 ? "today" : d === 1 ? "1 day ago" : d < 30 ? `${d} days ago` : "30+ days ago";
