@@ -3,11 +3,11 @@
 ## STATUS (update at the end of every session — this is the handoff for a new chat)
 - Last session: 2026-09-19. Week 1 backend written and unit-tested (15 tests pass, tsc + eslint clean): schema, companies seed (690), ATS adapters (Greenhouse/Lever/Ashby/SmartRecruiters/Workday/USAJobs), poller/verifier/tagger cron routes, canonical profile schema, scoring engine, geo-gate, shell extension.
 - Next item: Ilyas does the account steps below, then me: "Auth: email + Google" (Week 1) and the Feed UI.
-- Blocked on (Ilyas, ~45 min total):
-  1. Supabase project -> paste URL/anon/service keys into .env.local -> run supabase/migrations/0001_init.sql in the SQL editor -> `npm run seed:db`
-  2. Anthropic API key -> .env.local (tagger)
-  3. Chrome dev account ($5) -> upload extension-shell zip (see extension-shell/README.md), visibility Unlisted
-  5. Push repo to GitHub (private); Vercel project so the crons in vercel.json run (set CRON_SECRET)
+- DONE 2026-09-20: Supabase project prwzndifucrwldykcqft created, keys in .env.local, migration 0001 applied, 689 companies seeded (507 with feed slugs). Repo pushed to github.com/aomine97/rails.
+- Blocked on (Ilyas, ~20 min):
+  1. Anthropic API key -> .env.local ANTHROPIC_API_KEY (tagger)
+  2. Chrome dev account ($5) -> upload extension-shell zip (see extension-shell/README.md), visibility Unlisted
+  3. Vercel: import aomine97/rails, paste .env.local into Environment Variables, add CRON_SECRET, deploy. Crons then run hourly.
 - Known gaps: `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Tagger prompt untested against the model. Workday detail fetch is ~0.5-1s per posting: poller should fetch details only for NEW postings (todo in ingest.ts). SmartRecruiters same.
 - Decisions made: name Rails; tech-only (software, data, cloud, IT, cyber); pricing below; human clicks Submit always; career centers are the B2B channel; no LinkedIn/Indeed scraping; geo-gate CA and NY at signup.
 
@@ -23,9 +23,9 @@
 1 Landing + pricing (W4) · 2 Onboarding (W1) · 3 Feed (W1) · 3b Job detail (W2) · 4 Tailor (W2) · 5 Resume score (W2) · 6 Cover letter (W2) · 7 Autopilot (W3) · 8 Coach (W3) · 9 Mock interview (W5+) · 10 Connections (W5+) · 11 Tracker (W2) · 12 Extension panel (W3) · 13 System map (doc only) · 14 Empty states (W1, W2) · 15 Autofill settings (W3) · 16 Career center dashboard (W4, read-only v1)
 
 ## Week 1 — jobs flowing + profile + feed
-- [ ] Push repo to GitHub (private). Create Supabase, Stripe (test), Anthropic keys -> .env.local
+- [~] Push repo to GitHub (done). Supabase (done). Stripe (test) + Anthropic keys -> .env.local (pending)
 - [~] Shell extension built in /extension-shell (zip + upload = Ilyas, needs the $5 dev account)
-- [x] Schema v0 written: supabase/migrations/0001_init.sql (RLS, signup trigger, user_funnel + campus_funnel views). NOT YET APPLIED (no Supabase project)
+- [x] Schema v0 applied to Supabase 2026-09-20: supabase/migrations/0001_init.sql (RLS, signup trigger, user_funnel + campus_funnel views)
 - [ ] Auth: email + Google, RLS on every table. Geo-gate CA/NY at signup (state field + IP check, show "not yet available") — src/lib/geo.ts + supabase clients written, no auth UI yet
 - [x] companies seed: scripts/seed-companies.mjs -> data/companies.json (690 companies, 508 with resolvable slugs: 241 Workday, 116 Greenhouse, 86 Ashby, 21 SmartRecruiters, 18 Lever). scripts/seed-db.mjs loads it
 - [x] Adapters written + unit-tested on documented shapes: src/lib/ats/*. Poller: src/app/api/cron/poll (Vercel cron hourly). LIVE-VERIFIED 2026-09-20 from Ilyas's Mac: Workday (RTX, Booz Allen, NVIDIA incl. detail pages), Greenhouse (SpaceX 2505, Schonfeld, NISC), Lever (Palantir 313, CesiumAstro, Immuta), Ashby (Notion 128, Northwood, Bedrock), SmartRecruiters (Pilot, Solidigm, WD incl. detail). No adapter yet for icims/workable/jobvite (0 jobs, expected)
