@@ -7,9 +7,8 @@
   1. Supabase project -> paste URL/anon/service keys into .env.local -> run supabase/migrations/0001_init.sql in the SQL editor -> `npm run seed:db`
   2. Anthropic API key -> .env.local (tagger)
   3. Chrome dev account ($5) -> upload extension-shell zip (see extension-shell/README.md), visibility Unlisted
-  4. On your Mac with normal internet: `npx tsx scripts/check-feeds.mjs 3` — this is the first time the adapters touch real feeds. Paste the output into the next chat. Expect Workday to need fixes.
   5. Push repo to GitHub (private); Vercel project so the crons in vercel.json run (set CRON_SECRET)
-- Known gaps: `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Adapters are written from vendor docs, not live responses. Tagger prompt untested against the model.
+- Known gaps: `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Tagger prompt untested against the model. Workday detail fetch is ~0.5-1s per posting: poller should fetch details only for NEW postings (todo in ingest.ts). SmartRecruiters same.
 - Decisions made: name Rails; tech-only (software, data, cloud, IT, cyber); pricing below; human clicks Submit always; career centers are the B2B channel; no LinkedIn/Indeed scraping; geo-gate CA and NY at signup.
 
 ## Pricing (final)
@@ -29,7 +28,7 @@
 - [x] Schema v0 written: supabase/migrations/0001_init.sql (RLS, signup trigger, user_funnel + campus_funnel views). NOT YET APPLIED (no Supabase project)
 - [ ] Auth: email + Google, RLS on every table. Geo-gate CA/NY at signup (state field + IP check, show "not yet available") — src/lib/geo.ts + supabase clients written, no auth UI yet
 - [x] companies seed: scripts/seed-companies.mjs -> data/companies.json (690 companies, 508 with resolvable slugs: 241 Workday, 116 Greenhouse, 86 Ashby, 21 SmartRecruiters, 18 Lever). scripts/seed-db.mjs loads it
-- [x] Adapters written + unit-tested on documented shapes: src/lib/ats/*. Poller: src/app/api/cron/poll (Vercel cron hourly). LIVE FEEDS NOT YET HIT (sandbox blocks the ATS hosts): run `npx tsx scripts/check-feeds.mjs` on your Mac first
+- [x] Adapters written + unit-tested on documented shapes: src/lib/ats/*. Poller: src/app/api/cron/poll (Vercel cron hourly). LIVE-VERIFIED 2026-09-20 from Ilyas's Mac: Workday (RTX, Booz Allen, NVIDIA incl. detail pages), Greenhouse (SpaceX 2505, Schonfeld, NISC), Lever (Palantir 313, CesiumAstro, Immuta), Ashby (Notion 128, Northwood, Bedrock), SmartRecruiters (Pilot, Solidigm, WD incl. detail). No adapter yet for icims/workable/jobvite (0 jobs, expected)
 - [x] Verifier: src/app/api/cron/verify (daily 03:30). Feed-sourced jobs also close when they vanish from the feed
 - [x] Normalizer (src/lib/jobs/ingest.ts) + tagger (src/lib/jobs/tagger.ts, Haiku, Zod-validated JobTags, cron every 10 min). Untested against the real model until ANTHROPIC_API_KEY exists
 - [x] USAJobs adapter (needs USAJOBS_API_KEY + USAJOBS_USER_AGENT)
