@@ -11,7 +11,7 @@ const NAV: { href: string; label: string; badge?: string; soon?: boolean; icon: 
   { href: "/app/interview", label: "Interview", soon: true, badge: "NEW", icon: "M12 3v10M8 7a4 4 0 008 0M6 21h12" },
   { href: "/app/referrals", label: "Referrals", soon: true, icon: "M16 11a4 4 0 10-8 0M4 21a8 8 0 0116 0" },
   { href: "/app/billing", label: "Billing", icon: "M3 7h18v10H3zM3 11h18" },
-  { href: "/app/settings", label: "Settings", soon: true, icon: "M12 8a4 4 0 100 8 4 4 0 000-8zM3 12h2M19 12h2M12 3v2M12 19v2" },
+  { href: "/app/settings", label: "Settings", icon: "M12 8a4 4 0 100 8 4 4 0 000-8zM3 12h2M19 12h2M12 3v2M12 19v2" },
 ];
 
 export function AppShell({ children, active = "/app", name, credits }: { children: ReactNode; active?: string; name?: string | null; credits?: number | null }) {
