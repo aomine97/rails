@@ -5,7 +5,7 @@ import type { CanonicalProfile } from "../../schemas/profile";
 const profile: CanonicalProfile = {
   version: 1, name: "M", email: "m@x.edu", phone: null, links: { linkedin: null, github: null, portfolio: null }, headline: "software", targetRoles: ["Software Engineer Intern"],
   skills: [{ name: "Python", key: "python", level: "strong", source: "resume" }], experience: [], education: [{ school: "NOVA", degree: "AAS", field: "IST", gradYear: 2027, gpa: null, coursework: [], source: "resume" }], certifications: [],
-  constraints: { workAuthorization: "us_citizen", clearance: "none", locations: [], maxCommuteMiles: null, remoteOk: true, employmentTypes: ["internship", "new_grad"], earliestStart: null, minPayHourly: null },
+  constraints: { workAuthorization: "us_citizen", clearance: "none", locations: [], workCountries: [], maxCommuteMiles: null, remoteOk: true, employmentTypes: ["internship", "new_grad"], earliestStart: null, minPayHourly: null },
 };
 const base = { location: "McLean, VA", remote: false, url: "u", apply_url: "a", posted_at: "2026-09-19T00:00:00Z", first_seen_at: new Date().toISOString(), pay_min: null, pay_max: null, pay_period: null, companies: { name: "Acme", ats: "lever" } };
 const tags = (o: Record<string, unknown>) => ({ level: "internship", field: "software", requiredSkills: ["python"], preferredSkills: [], requirements: [], minDegree: "none", yearsMin: 0, clearanceRequired: "none", usCitizenRequired: null, sponsorship: "unknown", remote: "onsite", employmentType: "internship", payMinHourly: null, payMaxHourly: null, hasOnlineAssessment: null, ...o });
@@ -37,7 +37,7 @@ describe("buildFeed", () => {
     expect(swe.otherLocations).toEqual(["Plano, TX"]);      // Hong Kong never entered
     expect(buildFeed(profile, rows, { where: "anywhere" }).items.find((i) => i.job.title === "SWE Intern")!.otherLocations).toContain("Hong Kong");
     expect(buildFeed(profile, rows, { where: "near" }).items.map((i) => i.job.title)).toEqual(["SWE Intern", "Data Analyst Intern"]); // no locations on profile: falls back to DMV
-    const texan = { ...profile, constraints: { ...profile.constraints, locations: ["Austin, TX"] } };
+    const texan = { ...profile, constraints: { ...profile.constraints, workCountries: [], locations: ["Austin, TX"] } };
     expect(buildFeed(texan, rows, { where: "near" }).items.find((i) => i.job.title === "SWE Intern")!.job.location).toBe("Plano, TX");
   });
 });

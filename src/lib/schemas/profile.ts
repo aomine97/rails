@@ -46,6 +46,7 @@ export const Constraints = z.object({
   workAuthorization: z.enum(["us_citizen", "permanent_resident", "visa_needs_sponsorship", "visa_no_sponsorship", "unknown"]).default("unknown"),
   clearance: z.enum(["none", "eligible", "public_trust", "secret", "top_secret"]).default("none"),
   locations: z.array(z.string()).default([]), // "McLean, VA", "Remote"
+  workCountries: z.array(z.string()).default([]), // ISO-2 where they can legally work besides the US, e.g. ["CA","GB"]
   maxCommuteMiles: z.number().nullable().default(null),
   remoteOk: z.boolean().default(true),
   employmentTypes: z.array(z.enum(["internship", "new_grad", "entry", "mid", "senior", "part_time", "contract"])).default(["internship", "new_grad", "entry"]),

@@ -8,12 +8,13 @@ import { ageLabel, buildFeed, payLabel, type FeedJobRow } from "@/lib/match/feed
 import { addSkillToProfile, hideJob, likeJob } from "./actions";
 import { ApplyButton } from "./apply-button";
 import { CompanyLogo } from "@/components/company-logo";
+import { COUNTRY_CHIPS } from "@/lib/match/country";
 import { upNext, type TrackedApp } from "@/lib/tracker/stages";
 
 const PAGE = 25;
 const FIELDS = [["software", "Software"], ["data", "Data"], ["cloud", "Cloud"], ["it_support", "IT support"], ["cyber", "Cyber"], ["product", "Product"]] as const;
 const LEVELS = [["internship", "Internship"], ["new_grad", "New grad"], ["entry", "Entry level"], ["mid", "Mid"], ["senior", "Senior"]] as const;
-const WHERE = [["near", "Near me"], ["us", "US"], ["remote", "Remote"], ["anywhere", "Anywhere"]] as const;
+const WHERE = [["near", "Near me"], ["us", "US"], ["remote", "Remote"], ...COUNTRY_CHIPS, ["anywhere", "Anywhere"]] as [string, string][];
 
 type SP = { tab?: string; field?: string; level?: string; where?: string; sort?: string; q?: string; page?: string };
 
@@ -44,7 +45,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   const tab = sp.tab ?? "recommended";
   const mine = new Set((marks ?? []).map((m) => m.job_id));
   const visibleRows = ((rows ?? []) as unknown as FeedJobRow[]).filter((r) => r.source !== "paste" || mine.has(r.id));
-  const feed = buildFeed(me, visibleRows, { field: sp.field, level: sp.level, where: (sp.where as "near" | "us" | "remote" | "anywhere" | undefined) ?? "us", q: sp.q, sort: sp.sort === "new" ? "new" : "fit" });
+  const feed = buildFeed(me, visibleRows, { field: sp.field, level: sp.level, where: sp.where ?? "us", q: sp.q, sort: sp.sort === "new" ? "new" : "fit" });
   let items = tab === "hidden" ? feed.items.filter((i) => hidden.has(i.job.id)) : feed.items.filter((i) => !hidden.has(i.job.id));
   if (tab === "liked") items = items.filter((i) => liked.has(i.job.id));
   if (tab === "external") items = items.filter((i) => i.job.id && (i.job as unknown as { source?: string }).source === "paste");
@@ -134,6 +135,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
                       {score.matchedSkills.length > 0 && <span className="text-muted">You bring:</span>}
                       {score.matchedSkills.slice(0, 5).map((k) => <span key={k} className="rounded-md bg-green-chip px-2 py-1 text-green-chip-text">✓ {k}</span>)}
                       {score.hardBlocks.map((b) => <span key={b} className="rounded-md bg-red-chip px-2 py-1 text-red-chip-text">✗ {b}</span>)}
+                      {score.softNotes.map((b) => <span key={b} className="rounded-md bg-amber-chip px-2 py-1 text-amber-chip-text">! {b}</span>)}
                     </div>
                     {gaps.length > 0 && (
                       <div className="flex flex-wrap items-center gap-1.5 text-[12px] font-semibold">

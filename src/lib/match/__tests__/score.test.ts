@@ -18,7 +18,7 @@ const profile: CanonicalProfile = {
   ],
   education: [{ school: "NOVA", degree: "AAS", field: "Information Systems Technology, Cloud Computing", gradYear: 2028, gpa: 3.6, coursework: ["Java Programming", "Networking"], source: "resume" }],
   certifications: [{ name: "AWS Cloud Practitioner", key: "aws-ccp", year: 2026, source: "resume" }],
-  constraints: { workAuthorization: "us_citizen", clearance: "none", locations: ["McLean, VA"], maxCommuteMiles: 30, remoteOk: true, employmentTypes: ["internship", "new_grad", "entry"], earliestStart: null, minPayHourly: null },
+  constraints: { workAuthorization: "us_citizen", clearance: "none", workCountries: [], locations: ["McLean, VA"], maxCommuteMiles: 30, remoteOk: true, employmentTypes: ["internship", "new_grad", "entry"], earliestStart: null, minPayHourly: null },
 };
 
 const base: JobTags = {
@@ -58,5 +58,24 @@ describe("scoreJob", () => {
   });
   it("bands", () => {
     expect(bandOf(85)).toBe("strong"); expect(bandOf(84)).toBe("good"); expect(bandOf(69)).toBe("stretch");
+  });
+});
+
+describe("work authorization abroad", () => {
+  it("caps a foreign job at amber with a note, never a block", () => {
+    const s = scoreJob(profile, { ...base, country: "CA" }, { title: "SWE Intern", location: "Toronto, ON" });
+    expect(s.hardBlocks).toEqual([]);
+    expect(s.fit).toBeLessThanOrEqual(74);
+    expect(s.softNotes[0]).toContain("Canada");
+  });
+  it("no cap when the profile lists that country or a location there", () => {
+    const withCa = { ...profile, constraints: { ...profile.constraints, workCountries: ["CA"] } };
+    expect(scoreJob(withCa, { ...base, country: "CA" }, { title: "x", location: "Toronto, ON" }).softNotes).toEqual([]);
+    const livesThere = { ...profile, constraints: { ...profile.constraints, locations: ["Vancouver, Canada"] } };
+    expect(scoreJob(livesThere, { ...base, country: "CA" }, { title: "x", location: "Vancouver, BC" }).softNotes).toEqual([]);
+  });
+  it("US and remote jobs are untouched", () => {
+    expect(scoreJob(profile, base, { title: "x", location: "Reston, VA" }).softNotes).toEqual([]);
+    expect(scoreJob(profile, { ...base, country: "REMOTE" }, { title: "x", location: "Remote" }).softNotes).toEqual([]);
   });
 });

@@ -10,7 +10,7 @@ const base: CanonicalProfile = {
     { id: "e2", title: "Inventory app", org: "Personal", kind: "project", start: null, end: null, bullets: ["Built a Flask app used by 3 labs", "Cut lookup time by 50%"], skills: [], source: "resume" },
   ],
   education: [{ school: "NOVA", degree: "AAS", field: "IST", gradYear: 2027, gpa: null, coursework: [], source: "resume" }], certifications: [],
-  constraints: { workAuthorization: "unknown", clearance: "none", locations: [], maxCommuteMiles: null, remoteOk: true, employmentTypes: ["internship"], earliestStart: null, minPayHourly: null },
+  constraints: { workAuthorization: "unknown", clearance: "none", locations: [], workCountries: [], maxCommuteMiles: null, remoteOk: true, employmentTypes: ["internship"], earliestStart: null, minPayHourly: null },
 };
 
 describe("scoreResume", () => {

@@ -20,6 +20,7 @@ export function explainScore(p: CanonicalProfile, t: JobTags, s: Score): { exper
     : s.sub.field >= 70 ? `This is ${fieldName}; your profile leans that way but the target roles don't say it explicitly.`
     : `This is ${fieldName}, which your profile doesn't point at yet. Adding it as a target role would move this.`;
   const overall = s.hardBlocks.length ? `Capped: ${s.hardBlocks.join("; ")}.`
+    : s.softNotes.length ? `Capped at amber: ${s.softNotes.join("; ")}.`
     : s.band === "strong" ? "Apply. This is one of the closest matches in your feed."
     : s.band === "good" ? "Worth applying. Fix the gaps below first and the number goes up."
     : "A stretch. Apply if you want it, but the tailored resume should lean on what you do match.";

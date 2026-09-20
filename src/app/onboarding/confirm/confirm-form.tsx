@@ -102,6 +102,8 @@ export function ConfirmForm({ initial }: { initial: P }) {
             </select></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Where you can work</span>
             <input className={input} value={p.constraints.locations.join(", ")} onChange={(e) => set("constraints", { ...p.constraints, locations: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="McLean, VA; Remote" /></label>
+          <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Other countries where you can legally work</span>
+            <input className={input} value={p.constraints.workCountries.join(", ")} onChange={(e) => set("constraints", { ...p.constraints, workCountries: e.target.value.toUpperCase().split(/[,\s]+/).map((s) => s.trim()).filter((s) => /^[A-Z]{2}$/.test(s)) })} placeholder="CA, GB (two-letter codes; leave empty for US only)" /></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Looking for</span>
             <div className="flex flex-wrap gap-2 pt-1">
               {(["internship", "new_grad", "entry", "mid", "senior", "part_time", "contract"] as const).map((t) => (

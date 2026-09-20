@@ -8,7 +8,7 @@ const profile: CanonicalProfile = {
   skills: [{ name: "Python", key: "python", level: "strong", source: "resume" }, { name: "AWS", key: "aws", level: "working", source: "user" }],
   experience: [{ id: "e1", title: "Help Desk", org: "NOVA", kind: "job", start: "2025-08", end: null, bullets: ["Resolved 300 tickets in ServiceNow", "Imaged lab machines"], skills: [], source: "resume" }],
   education: [], certifications: [],
-  constraints: { workAuthorization: "unknown", clearance: "none", locations: [], maxCommuteMiles: null, remoteOk: true, employmentTypes: ["internship"], earliestStart: null, minPayHourly: null },
+  constraints: { workAuthorization: "unknown", clearance: "none", locations: [], workCountries: [], maxCommuteMiles: null, remoteOk: true, employmentTypes: ["internship"], earliestStart: null, minPayHourly: null },
 };
 const tags = { requiredSkills: ["python", "aws"], preferredSkills: ["servicenow"] } as unknown as JobTags;
 

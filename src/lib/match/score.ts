@@ -1,3 +1,4 @@
+import { countryOf, COUNTRY_NAME } from "./country";
 import type { CanonicalProfile } from "../schemas/profile";
 import { skillKey } from "../schemas/profile";
 import type { JobTags } from "../jobs/tags";
@@ -14,6 +15,7 @@ export interface Score {
   band: Band;
   sub: { experience: number; skills: number; field: number };
   hardBlocks: string[];      // reasons the job is excluded outright (shown, not hidden)
+  softNotes: string[];       // caps that are not blocks (work authorization abroad)
   requirements: RequirementCheck[];
   matchedSkills: string[];
   missingRequired: string[];
@@ -65,6 +67,11 @@ export function scoreJob(p: CanonicalProfile, t: JobTags, job: { title: string; 
   if (clearanceRank[t.clearanceRequired] > clearanceRank[c.clearance] && t.clearanceRequired !== "eligible") hardBlocks.push(`Active ${t.clearanceRequired.replace("_", " ")} clearance required`);
   if (t.remote === "onsite" && !c.remoteOk && c.locations.length && job.location && !c.locations.some((l) => job.location!.toLowerCase().includes(l.split(",")[0].toLowerCase()))) hardBlocks.push("On-site outside your locations");
   if (t.payMaxHourly != null && c.minPayHourly != null && t.payMaxHourly < c.minPayHourly) hardBlocks.push(`Pays under your $${c.minPayHourly}/hr floor`);
+  // Work authorization outside the US: a soft cap (amber), not a block. Their US status says nothing about, say, Canada.
+  const country = countryOf(job.location, t.country);
+  const foreign = country !== "US" && country !== "REMOTE" && country !== "unknown";
+  const canWork = foreign && (c.workCountries.includes(country) || c.locations.some((l) => countryOf(l) === country));
+  const workCap = foreign && !canWork && c.workAuthorization !== "unknown" ? 74 : null;
 
   // Skills
   const have = new Set(p.skills.map((s) => s.key));
@@ -95,7 +102,8 @@ export function scoreJob(p: CanonicalProfile, t: JobTags, job: { title: string; 
   if (degreeRank[t.minDegree] > bestDegree) field = Math.min(field, 68); // shown as amber, not a block: many postings say "or equivalent"
 
   const raw = Math.round(0.4 * skills + 0.3 * experience + 0.3 * field);
-  const fit = hardBlocks.length ? Math.min(45, raw) : raw;
+  const fit = hardBlocks.length ? Math.min(45, raw) : workCap != null ? Math.min(workCap, raw) : raw;
+  const softNotes: string[] = workCap != null && raw > workCap ? [`Needs work authorization in ${COUNTRY_NAME[country] ?? country}; add it on your profile if you have it`] : [];
 
   const requirements: RequirementCheck[] = t.requirements.map((r) => {
     const keys = [...req, ...pref].filter((k) => r.text.toLowerCase().includes(k.replace(/-/g, " ")) || r.text.toLowerCase().includes(k));
@@ -105,7 +113,7 @@ export function scoreJob(p: CanonicalProfile, t: JobTags, job: { title: string; 
   });
 
   return {
-    fit, band: bandOf(fit), sub: { experience, skills, field }, hardBlocks, requirements,
+    fit, band: bandOf(fit), sub: { experience, skills, field }, hardBlocks, softNotes, requirements,
     matchedSkills: [...reqHit, ...prefHit], missingRequired: req.filter((k) => !have.has(k)), missingPreferred: pref.filter((k) => !have.has(k)),
   };
 }

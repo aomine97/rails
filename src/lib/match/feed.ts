@@ -2,10 +2,11 @@ import type { CanonicalProfile } from "../schemas/profile";
 import { JobTags } from "../jobs/tags";
 import { scoreJob, type Score } from "./score";
 import { nearMatcher, regionOf, type Region } from "./region";
+import { countryOf, currencyFor, formatPay } from "./country";
 
 export interface FeedJobRow {
   id: string; title: string; location: string | null; remote: boolean | null; url: string; apply_url: string;
-  posted_at: string | null; first_seen_at: string; tags: unknown; pay_min: number | null; pay_max: number | null; pay_period: string | null;
+  posted_at: string | null; first_seen_at: string; tags: unknown; pay_min: number | null; pay_max: number | null; pay_period: string | null; pay_currency?: string | null;
   description_text?: string | null;
   source?: string;
   companies: { name: string; ats: string; domain?: string | null; logo_url?: string | null } | null;
@@ -14,8 +15,8 @@ export interface FeedJobRow {
 export interface FeedFilters {
   field?: string | null;          // software | data | cloud | it_support | cyber | product
   level?: string | null;          // internship | new_grad | entry | mid | senior
-  /** where: near (the user's own locations) | us | remote | anywhere. Default us = US + remote. */
-  where?: "near" | "us" | "remote" | "anywhere" | null;
+  /** where: near (the user's own locations) | us | remote | anywhere | an ISO-2 country code (CA, GB, IN, DE...). Default us = US + remote. */
+  where?: string | null;
   q?: string | null;
   minFit?: number;
   sort?: "fit" | "new" | null;
@@ -45,6 +46,7 @@ export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: Feed
     if (where === "near" && region !== "remote" && !(near ? near(job.location) : region === "dmv")) continue;
     if (where === "us" && (region === "intl")) continue;
     if (where === "remote" && region !== "remote") continue;
+    if (/^[A-Z]{2}$/.test(where) && where !== "US") { const cc = countryOf(job.location, tags.country); if (cc !== where && !(region === "remote" && cc === "REMOTE")) continue; }
     if (q && !(job.title.toLowerCase().includes(q) || (job.companies?.name ?? "").toLowerCase().includes(q) || (job.location ?? "").toLowerCase().includes(q))) continue;
     const score = scoreJob(profile, tags, { title: job.title, location: job.location });
     if (f.minFit && score.fit < f.minFit) continue;
@@ -72,7 +74,9 @@ export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: Feed
 
 export const ageLabel = (d: number | null) => d == null ? "" : d === 0 ? "today" : d === 1 ? "1 day ago" : d < 30 ? `${d} days ago` : "30+ days ago";
 export const payLabel = (t: JobTags, row: FeedJobRow) => {
-  if (t.payMinHourly || t.payMaxHourly) return `$${Math.round(t.payMinHourly ?? t.payMaxHourly!)}${t.payMaxHourly && t.payMinHourly ? ` - $${Math.round(t.payMaxHourly)}` : ""}/hr`;
-  if (row.pay_min || row.pay_max) return row.pay_period === "hour" ? `$${row.pay_min ?? row.pay_max}/hr` : `$${Math.round((row.pay_min ?? row.pay_max!) / 1000)}k${row.pay_max && row.pay_min ? ` - $${Math.round(row.pay_max / 1000)}k` : ""}`;
+  const country = countryOf(row.location, t.country);
+  const cur = currencyFor(country === "REMOTE" || country === "unknown" ? "US" : country, row.pay_currency);
+  if (t.payMinHourly || t.payMaxHourly) return formatPay(t.payMinHourly, t.payMaxHourly, cur, "hour");
+  if (row.pay_min || row.pay_max) return formatPay(row.pay_min, row.pay_max, cur, row.pay_period === "hour" ? "hour" : "year");
   return null;
 };
