@@ -138,6 +138,7 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
                 <div className="text-[13px] font-bold">Tailor my resume for this</div>
                 <div className="mt-0.5 text-[12px] text-[#C9D3E4]">Rewrites your bullets toward what this posting asks for, from your profile only. Shows the fit before and after.</div>
                 <Link href={`/app/jobs/${job.id}/tailor`} className="mt-2 block w-full rounded-lg bg-orange px-3 py-2 text-center text-[13px] font-extrabold text-ink">Tailor · 1 credit</Link>
+                <Link href={`/app/jobs/${job.id}/letter`} className="mt-2 block w-full rounded-lg border border-[#33466B] px-3 py-2 text-center text-[13px] font-bold text-white">Cover letter · 1 credit</Link>
               </div>
             </div>
           ) : (
