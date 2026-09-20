@@ -43,6 +43,7 @@ export const workday: Adapter = {
     const base = baseOf(c);
     const out: RawJob[] = [];
     const limit = 20;
+    let total: number | null = null; // some tenants report total only on the first page (NXP: 791, then 0)
     for (let offset = 0; offset < 1000; offset += limit) {
       const list = await getJson<WdList>("workday", c.name, `${base}/jobs`, fetchImpl, {
         method: "POST", headers: { "content-type": "application/json" },
@@ -64,7 +65,8 @@ export const workday: Adapter = {
           url: publicUrl, applyUrl: publicUrl, postedAt: parsePostedOn(info?.postedOn ?? p.postedOn), pay: null,
         });
       }
-      if (!list.jobPostings || list.jobPostings.length < limit || offset + limit >= (list.total ?? 0)) break;
+      if (total == null && list.total) total = list.total;
+      if (!list.jobPostings || list.jobPostings.length < limit || (total != null && offset + limit >= total)) break;
     }
     return out;
   },

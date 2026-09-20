@@ -28,21 +28,36 @@ async function get(url, init = {}, ms = 10_000) {
 }
 const okJson = async (res, check) => { if (!res || !res.ok) return false; try { return check(await res.json()); } catch { return false; } };
 
+/** Does this tenant/slug/site plausibly belong to the company? Any name word (>=3 chars) or the domain base must appear. */
+function resembles(name, domain, ...parts) {
+  const hay = parts.filter(Boolean).join(" ").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const words = slugify(name).split(" ").filter((w) => w.length >= 3 && !["inc", "llc", "the", "and", "group", "company", "corp", "corporation", "technologies", "technology", "holdings", "capital", "management", "services", "systems", "international"].includes(w));
+  const base = domain ? domain.split(".")[0] : null;
+  return words.some((w) => hay.includes(w)) || (base && base.length >= 3 && hay.includes(base)) || hay.includes(slugify(name).replace(/ /g, ""));
+}
+const okJsonText = async (res) => { if (!res || !res.ok) return null; try { return await res.json(); } catch { return null; } };
+
 /** Probe the JSON APIs with slug guesses. Returns {ats, slug, count} or null. */
 async function probe(name, domain) {
   for (const slug of candidates(name, domain)) {
     let r;
     // Every check requires at least one posting: SmartRecruiters (and some others) answer 200 with an empty list for ANY slug.
     r = await get(`https://boards-api.greenhouse.io/v1/boards/${slug}/jobs`);
-    if (await okJson(r, (j) => Array.isArray(j.jobs) && j.jobs.length > 0)) return { ats: "greenhouse", slug, careersUrl: `https://job-boards.greenhouse.io/${slug}` };
+    if (await okJson(r, (j) => Array.isArray(j.jobs) && j.jobs.length > 0)) {
+      const meta = await okJsonText(await get(`https://boards-api.greenhouse.io/v1/boards/${slug}`));
+      if (meta?.name && resembles(name, domain, meta.name, slug)) return { ats: "greenhouse", slug, careersUrl: `https://job-boards.greenhouse.io/${slug}` };
+    }
+    const strong = slug.length >= 6 || slugify(name).split(" ").length === 1 || slug === (domain ?? "").split(".")[0];
     r = await get(`https://api.lever.co/v0/postings/${slug}?mode=json&limit=1`);
+    if (!strong) { /* a 3-5 letter fragment of a multi-word name is a coin flip; skip the nameless APIs */ } else {
     if (await okJson(r, (j) => Array.isArray(j) && j.length > 0)) return { ats: "lever", slug, careersUrl: `https://jobs.lever.co/${slug}` };
     r = await get(`https://api.ashbyhq.com/posting-api/job-board/${slug}`);
     if (await okJson(r, (j) => Array.isArray(j.jobs) && j.jobs.length > 0)) return { ats: "ashby", slug, careersUrl: `https://jobs.ashbyhq.com/${slug}` };
     r = await get(`https://api.smartrecruiters.com/v1/companies/${slug}/postings?limit=1`);
-    if (await okJson(r, (j) => j.totalFound > 0 && Array.isArray(j.content) && j.content.length > 0)) return { ats: "smartrecruiters", slug, careersUrl: `https://jobs.smartrecruiters.com/${slug}` };
+    if (await okJson(r, (j) => j.totalFound > 0 && Array.isArray(j.content) && j.content.length > 0 && resembles(name, domain, j.content[0]?.company?.name ?? "", j.content[0]?.company?.identifier ?? ""))) return { ats: "smartrecruiters", slug, careersUrl: `https://jobs.smartrecruiters.com/${slug}` };
     r = await get(`https://apply.workable.com/api/v3/accounts/${slug}/jobs`, { method: "POST", body: "{}", headers: { "content-type": "application/json" } });
     if (await okJson(r, (j) => Array.isArray(j.results) && j.results.length > 0)) return { ats: "workable", slug, careersUrl: `https://apply.workable.com/${slug}` };
+    }
   }
   for (const pre of ["careers-", "careersus-", "jobs-", ""]) for (const slug of candidates(name, domain).slice(0, 3)) {
     const host = `${pre}${slug}.icims.com`;
@@ -52,17 +67,17 @@ async function probe(name, domain) {
   return null;
 }
 
-const ATS_LINK = /https?:\/\/([a-z0-9-]+)\.wd(\d+)\.myworkdayjobs\.com\/(?:[a-z]{2}-[A-Z]{2}\/)?([A-Za-z0-9_-]+)|https?:\/\/(?:job-boards|boards)\.greenhouse\.io\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.lever\.co\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.ashbyhq\.com\/([A-Za-z0-9_%-]+)|https?:\/\/jobs\.smartrecruiters\.com\/([A-Za-z0-9_-]+)|https?:\/\/([a-z0-9-]+)\.icims\.com|https?:\/\/apply\.workable\.com\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.jobvite\.com\/([A-Za-z0-9_-]+)|https?:\/\/([a-z0-9.-]+\.oraclecloud\.com)\/hcmUI\/CandidateExperience\/[a-z]{2}\/sites\/([A-Za-z0-9_]+)/g;
+const ATS_LINK = /https?:\/\/([a-z0-9-]+)\.wd(\d+)\.myworkdayjobs\.com\/(?:[a-z]{2}-[A-Z]{2}\/)?([A-Za-z0-9_-]+)|https?:\/\/(?:job-boards|boards)\.greenhouse\.io\/(?:embed\/job_(?:board|app)\?(?:[^"'&\s]*&)?for=|)([A-Za-z0-9_-]+)|https?:\/\/jobs\.lever\.co\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.ashbyhq\.com\/([A-Za-z0-9_%-]+)|https?:\/\/jobs\.smartrecruiters\.com\/([A-Za-z0-9_-]+)|https?:\/\/([a-z0-9-]+)\.icims\.com|https?:\/\/apply\.workable\.com\/([A-Za-z0-9_-]+)|https?:\/\/jobs\.jobvite\.com\/([A-Za-z0-9_-]+)|https?:\/\/([a-z0-9.-]+\.oraclecloud\.com)\/hcmUI\/CandidateExperience\/[a-z]{2}\/sites\/([A-Za-z0-9_]+)/g;
 
-function fromLinks(html) {
+function fromLinks(html, ctx) {
   const hits = [];
   for (const m of html.matchAll(ATS_LINK)) {
-    if (m[1]) hits.push({ ats: "workday", tenant: m[1], wdn: Number(m[2]), slug: /^(job|jobs|login|wday)$/i.test(m[3]) ? null : m[3], careersUrl: `https://${m[1]}.wd${m[2]}.myworkdayjobs.com/${m[3]}` });
+    if (m[1]) { if (resembles(ctx.name, ctx.domain, m[1], m[3])) hits.push({ ats: "workday", tenant: m[1], wdn: Number(m[2]), slug: /^(job|jobs|login|wday)$/i.test(m[3]) ? null : m[3], careersUrl: `https://${m[1]}.wd${m[2]}.myworkdayjobs.com/${m[3]}` }); }
     else if (m[4]) hits.push({ ats: "greenhouse", slug: m[4], careersUrl: `https://job-boards.greenhouse.io/${m[4]}` });
     else if (m[5]) hits.push({ ats: "lever", slug: m[5], careersUrl: `https://jobs.lever.co/${m[5]}` });
     else if (m[6]) hits.push({ ats: "ashby", slug: decodeURIComponent(m[6]), careersUrl: `https://jobs.ashbyhq.com/${m[6]}` });
     else if (m[7]) hits.push({ ats: "smartrecruiters", slug: m[7], careersUrl: `https://jobs.smartrecruiters.com/${m[7]}` });
-    else if (m[8] && !/^(www|media|cdn)$/.test(m[8])) hits.push({ ats: "icims", slug: m[8], careersUrl: `https://${m[8]}.icims.com` });
+    else if (m[8] && !/^(www|media|cdn\d*|internal-|events-|intern-|alumni-)/.test(m[8])) hits.push({ ats: "icims", slug: m[8], careersUrl: `https://${m[8]}.icims.com` });
     else if (m[9]) hits.push({ ats: "workable", slug: m[9], careersUrl: `https://apply.workable.com/${m[9]}` });
     else if (m[10]) hits.push({ ats: "jobvite", slug: m[10], careersUrl: `https://jobs.jobvite.com/${m[10]}` });
     else if (m[11]) hits.push({ ats: "oracle", slug: m[12], careersUrl: `https://${m[11]}` });
@@ -75,20 +90,20 @@ function fromLinks(html) {
 }
 
 /** Crawl the company's own pages for ATS links; follow one level of "careers"-looking links. */
-async function crawl(domain) {
+async function crawl(domain, ctx) {
   const seeds = [`https://www.${domain}/careers`, `https://careers.${domain}`, `https://jobs.${domain}`, `https://www.${domain}/careers/`, `https://www.${domain}/jobs`, `https://www.${domain}`, `https://${domain}/careers`];
   const seen = new Set();
   for (const url of seeds) {
     const r = await get(url, { headers: { accept: "text/html" } }); if (!r || !r.ok) continue;
     const finalUrl = r.url ?? url; const html = await r.text();
-    const direct = fromLinks(finalUrl + "\n" + html); if (direct) return direct;
+    const direct = fromLinks(finalUrl + "\n" + html, ctx); if (direct) return direct;
     // one hop: links that look like careers/jobs pages
     const links = [...html.matchAll(/href=["']([^"']+)["']/gi)].map((m) => { try { return new URL(m[1], finalUrl).href; } catch { return null; } })
       .filter((u) => u && /career|job|join|work-with|opportunit/i.test(u) && !seen.has(u)).slice(0, 8);
     for (const u of links) {
       seen.add(u);
       const r2 = await get(u, { headers: { accept: "text/html" } }); if (!r2 || !r2.ok) continue;
-      const hit = fromLinks((r2.url ?? u) + "\n" + await r2.text()); if (hit) return hit;
+      const hit = fromLinks((r2.url ?? u) + "\n" + await r2.text(), ctx); if (hit) return hit;
     }
   }
   return null;
@@ -96,7 +111,8 @@ async function crawl(domain) {
 
 async function resolve(c) {
   const domain = domains[c.name] ?? (c.careersUrl ? new URL(c.careersUrl).hostname.replace(/^www\./, "") : null);
-  if (domain) { const viaCrawl = await crawl(domain); if (viaCrawl) return { ...viaCrawl, how: "crawl" }; }
+  const ctx = { name: c.name, domain };
+  if (domain) { const viaCrawl = await crawl(domain, ctx); if (viaCrawl) return { ...viaCrawl, how: "crawl" }; }
   const viaProbe = await probe(c.name, domain);
   if (viaProbe) return { ...viaProbe, how: "probe" };
   return null;
