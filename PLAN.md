@@ -2,12 +2,10 @@
 
 ## STATUS (update at the end of every session — this is the handoff for a new chat)
 - Last session: 2026-09-19. Week 1 backend written and unit-tested (15 tests pass, tsc + eslint clean): schema, companies seed (690), ATS adapters (Greenhouse/Lever/Ashby/SmartRecruiters/Workday/USAJobs), poller/verifier/tagger cron routes, canonical profile schema, scoring engine, geo-gate, shell extension.
-- Next item: Ilyas does the account steps below, then me: "Auth: email + Google" (Week 1) and the Feed UI.
-- DONE 2026-09-20: Supabase project prwzndifucrwldykcqft created, keys in .env.local, migration 0001 applied, 689 companies seeded (507 with feed slugs). Repo pushed to github.com/aomine97/rails. Vercel deployed: https://rails-psi.vercel.app (Hobby). Anthropic key + CRON_SECRET set in .env.local and Vercel.
-- Blocked on (Ilyas):
-  1. Chrome dev account ($5) -> upload rails-extension-shell.zip, paste extension-shell/store/LISTING.md, Unlisted
-  2. GitHub repo secrets for the hourly crons: Settings -> Secrets and variables -> Actions -> APP_URL=https://rails-psi.vercel.app, CRON_SECRET=(value in .env.local)
-- Known gaps: `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Tagger prompt untested against the model. Poller is list-only + details for up to 40 new postings per company per run; tag cron backfills the rest (done 2026-09-20).
+- Next item: "Auth: email + Google" (Week 1), then Onboarding (screen 2) and the Feed UI (screen 3) on top of the live jobs table.
+- DONE 2026-09-20: Supabase project prwzndifucrwldykcqft created, keys in .env.local, migration 0001 applied, 689 companies seeded (507 with feed slugs). Repo pushed to github.com/aomine97/rails. Vercel deployed: https://rails-psi.vercel.app (Hobby). Anthropic key + CRON_SECRET set in .env.local and Vercel. GitHub Actions cron secrets set. Chrome Web Store shell submitted. PIPELINE VERIFIED LIVE 2026-09-20: 1,871 jobs from 14 companies after the first polls, tagger returns level/field/skills/requirements (11 of 12 in the first tagged batch).
+- Blocked on: nothing. Build.
+- Known gaps: some Workday sites returned exactly 40 postings on the first poll (NXP, Visa, GM, First National); check whether page 3 of the cxs list endpoint fails for those tenants. Tagger puts most skills under preferredSkills when postings say "familiarity with"; scoring already weights preferred at 0.5 so it's fine for now. `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Tagger prompt untested against the model. Poller is list-only + details for up to 40 new postings per company per run; tag cron backfills the rest (done 2026-09-20).
 - Decisions made: name Rails; tech-only (software, data, cloud, IT, cyber); pricing below; human clicks Submit always; career centers are the B2B channel; no LinkedIn/Indeed scraping; geo-gate CA and NY at signup.
 
 ## Pricing (final)
@@ -22,14 +20,14 @@
 1 Landing + pricing (W4) · 2 Onboarding (W1) · 3 Feed (W1) · 3b Job detail (W2) · 4 Tailor (W2) · 5 Resume score (W2) · 6 Cover letter (W2) · 7 Autopilot (W3) · 8 Coach (W3) · 9 Mock interview (W5+) · 10 Connections (W5+) · 11 Tracker (W2) · 12 Extension panel (W3) · 13 System map (doc only) · 14 Empty states (W1, W2) · 15 Autofill settings (W3) · 16 Career center dashboard (W4, read-only v1)
 
 ## Week 1 — jobs flowing + profile + feed
-- [~] Push repo to GitHub (done). Supabase (done). Stripe (test) + Anthropic keys -> .env.local (pending)
-- [~] Shell extension built in /extension-shell (zip + upload = Ilyas, needs the $5 dev account)
+- [x] Push repo to GitHub, Supabase, Anthropic key, Vercel deploy (done). Stripe test keys still pending (Week 2)
+- [x] Shell extension submitted to the Chrome Web Store 2026-09-20 (Unlisted). Review clock running
 - [x] Schema v0 applied to Supabase 2026-09-20: supabase/migrations/0001_init.sql (RLS, signup trigger, user_funnel + campus_funnel views)
 - [ ] Auth: email + Google, RLS on every table. Geo-gate CA/NY at signup (state field + IP check, show "not yet available") — src/lib/geo.ts + supabase clients written, no auth UI yet
 - [x] companies seed: scripts/seed-companies.mjs -> data/companies.json (690 companies, 508 with resolvable slugs: 241 Workday, 116 Greenhouse, 86 Ashby, 21 SmartRecruiters, 18 Lever). scripts/seed-db.mjs loads it
 - [x] Adapters written + unit-tested on documented shapes: src/lib/ats/*. Poller: src/app/api/cron/poll (Vercel cron hourly). LIVE-VERIFIED 2026-09-20 from Ilyas's Mac: Workday (RTX, Booz Allen, NVIDIA incl. detail pages), Greenhouse (SpaceX 2505, Schonfeld, NISC), Lever (Palantir 313, CesiumAstro, Immuta), Ashby (Notion 128, Northwood, Bedrock), SmartRecruiters (Pilot, Solidigm, WD incl. detail). No adapter yet for icims/workable/jobvite (0 jobs, expected)
 - [x] Verifier: src/app/api/cron/verify (daily 03:30). Feed-sourced jobs also close when they vanish from the feed
-- [x] Normalizer (src/lib/jobs/ingest.ts) + tagger (src/lib/jobs/tagger.ts, Haiku, Zod-validated JobTags, cron every 10 min). Untested against the real model until ANTHROPIC_API_KEY exists
+- [x] Normalizer (src/lib/jobs/ingest.ts) + tagger (src/lib/jobs/tagger.ts, Haiku, Zod-validated JobTags, cron every 15 min via GitHub Actions). Verified against the real model 2026-09-20
 - [x] USAJobs adapter (needs USAJOBS_API_KEY + USAJOBS_USER_AGENT)
 - [ ] Resume upload (PDF/DOCX) -> text -> canonical profile (Zod schema in src/lib/schemas) -> Onboarding "confirm your facts" screen (screen 2)
 - [ ] Feed (screen 3): hard filters + scoring — scoring engine done and tested (src/lib/match/score.ts), no UI yet. Fit = weighted sub-scores (Experience / Skills / Field), color bands green >=85 / amber 70-84 / red <70. "N new since yesterday". Empty and loading states (screen 14)

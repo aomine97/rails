@@ -7,7 +7,7 @@ export async function tagJob(input: { title: string; company: string; location: 
   const text = input.descriptionText.slice(0, 12_000);
   const res = await client.messages.create({
     model: process.env.TAGGER_MODEL ?? "claude-haiku-4-5",
-    max_tokens: 1200,
+    max_tokens: 2500,
     system: TAGGER_SYSTEM,
     messages: [{ role: "user", content: `Title: ${input.title}\nCompany: ${input.company}\nLocation: ${input.location ?? "n/a"}\n\n${text}\n\nReturn JSON with keys: ${Object.keys(JobTags.shape).join(", ")}.` }],
   });
