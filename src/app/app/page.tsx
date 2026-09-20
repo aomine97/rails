@@ -7,6 +7,7 @@ import { CanonicalProfile } from "@/lib/schemas/profile";
 import { ageLabel, buildFeed, payLabel, type FeedJobRow } from "@/lib/match/feed";
 import { addSkillToProfile, hideJob, likeJob } from "./actions";
 import { ApplyButton } from "./apply-button";
+import { upNext, type TrackedApp } from "@/lib/tracker/stages";
 
 const PAGE = 25;
 const FIELDS = [["software", "Software"], ["data", "Data"], ["cloud", "Cloud"], ["it_support", "IT support"], ["cyber", "Cyber"], ["product", "Product"]] as const;
@@ -33,8 +34,9 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
     supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats)")
       .is("closed_at", null).not("tagged_at", "is", null).order("first_seen_at", { ascending: false }).limit(3000),
     supabase.from("matches").select("job_id,liked,hidden").eq("user_id", user.id),
-    supabase.from("applications").select("id,job_id,title,company_name,url,stage,applied_at,last_activity_at").eq("user_id", user.id).order("last_activity_at", { ascending: false }),
+    supabase.from("applications").select("id,job_id,title,company_name,url,stage,applied_at,last_activity_at,next_action,next_action_at,notes,created_at").eq("user_id", user.id).order("last_activity_at", { ascending: false }),
   ]);
+  const due = upNext((apps ?? []) as TrackedApp[], new Date().getTime()).filter((x) => x.f.kind !== "suggested");
   const appliedIds = new Set((apps ?? []).filter((a) => a.stage !== "saved").map((a) => a.job_id));
   const liked = new Set((marks ?? []).filter((m) => m.liked).map((m) => m.job_id));
   const hidden = new Set((marks ?? []).filter((m) => m.hidden).map((m) => m.job_id));
@@ -60,6 +62,13 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
           <Link href="/app/paste" className="ml-auto mr-3 pb-2 text-[13px] font-semibold text-blue">+ Paste a link</Link>
           <form className="pb-2" action="/app"><input name="q" defaultValue={sp.q} placeholder="Search title, company, city" className="h-9 w-64 rounded-lg border border-line bg-ground px-3 text-sm font-normal outline-none focus:border-blue" /></form>
         </div>
+        {due.length > 0 && (
+          <Link href="/app/tracker" className="flex items-center gap-2 border-b border-line bg-amber-chip px-6 py-2 text-[13px] text-amber-chip-text">
+            <span className="font-bold">{due.length} follow-up{due.length === 1 ? "" : "s"} due</span>
+            <span className="truncate">{due.slice(0, 3).map((x) => `${x.app.company_name}: ${x.f.text}`).join(" · ")}</span>
+            <span className="ml-auto font-semibold">Open tracker →</span>
+          </Link>
+        )}
 
         <div className="flex flex-wrap items-center gap-2 px-6 pt-3 text-xs font-semibold">
           {LEVELS.map(([k, l]) => <Link key={k} href={href({ level: sp.level === k ? "" : k, page: "1" })} className={`rounded-full border px-3 py-1.5 ${sp.level === k ? "border-ink bg-ink text-white" : "border-line bg-surface text-text"}`}>{l}</Link>)}

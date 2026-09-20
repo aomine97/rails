@@ -2,7 +2,7 @@
 
 ## STATUS (update at the end of every session — this is the handoff for a new chat)
 - Last session: 2026-09-19. Week 1 backend written and unit-tested (15 tests pass, tsc + eslint clean): schema, companies seed (690), ATS adapters (Greenhouse/Lever/Ashby/SmartRecruiters/Workday/USAJobs), poller/verifier/tagger cron routes, canonical profile schema, scoring engine, geo-gate, shell extension.
-- Next item: Phase 1, Tracker v1 (stages, manual add, notes, follow-up reminders), then Split view on Apply, then Billing (Stripe).
+- Next item: Phase 1, Split view on Apply, then Billing (Stripe).
 - Feed feedback round 1 (2026-09-20) applied: levels now include mid/senior (defaults from years of experience), scores recalibrated (relevant jobs 65-90 instead of 40-60), location defaults to US + remote with DC/MD/VA chip, same-title-many-cities grouped into one card, summary + 2 requirement lines per card, gap skills are "+ add" buttons (source:user), Apply asks "Did you apply?" and fills the Applied tab, Hidden tab with Unhide, Newest sort, match panel widened to 300px. Tagger now emits summary/relocation/country for new jobs (older rows fall back to a description snippet and the location heuristic).
 - DONE 2026-09-20: Supabase project prwzndifucrwldykcqft created, keys in .env.local, migration 0001 applied, 689 companies seeded (507 with feed slugs). Repo pushed to github.com/aomine97/rails. Vercel deployed: https://rails-psi.vercel.app (Hobby). Anthropic key + CRON_SECRET set in .env.local and Vercel. GitHub Actions cron secrets set. Chrome Web Store shell submitted. PIPELINE VERIFIED LIVE 2026-09-20: 1,871 jobs from 14 companies after the first polls, tagger returns level/field/skills/requirements (11 of 12 in the first tagged batch).
 - Blocked on: nothing. Ilyas onboarded 2026-09-20 (36 skills, 3 roles parsed). Push and look at /app: first real feed. Report scores that look wrong; that tunes score.ts weights. For Google sign-in: create an OAuth client in Google Cloud (Web application, redirect URI https://prwzndifucrwldykcqft.supabase.co/auth/v1/callback), paste client ID + secret into Supabase -> Authentication -> Providers -> Google. Also: Supabase -> Authentication -> URL Configuration -> Site URL = https://rails-psi.vercel.app, add https://rails-psi.vercel.app/auth/callback to Redirect URLs (otherwise email confirmation links go to localhost).
@@ -45,7 +45,7 @@ Goal: one person can find, understand, tailor for, and track a job without leavi
 - [x] Resume score (5): /app/resume. Deterministic scorer (src/lib/resume/score.ts, tested): numbers in bullets, action verbs, filler, skills coverage, depth, completeness. Ranked fixes with point values and the offending line, "do all of these and it reads N", tailored versions list. No model call, instant, no credit
 - [x] Cover letter (6): /app/jobs/[id]/letter. 3 paragraphs, plain voice, honest gap line, sources listed; stored on the application row; 1 credit
 - [x] Off-board paste: any posting URL -> fetch, tag, score, External tab
-- [ ] Tracker (11) v1: stages, manual add, notes, follow-up reminders (no email yet)
+- [x] Tracker (11) v1: stages, manual add, notes, follow-up reminders (no email yet)
 - [ ] Billing per PRICING.md: credits live (spend_credit), UpgradeModal/Banner with the six moments, Stripe (Pro / Pro student / Semester / Semester student), .edu verification, customer portal, 7-day refund
 
 ## Phase 2 — data that deserves a nationwide product (next 2 weeks, runs alongside Phase 1)

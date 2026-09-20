@@ -19,7 +19,7 @@ export default async function PrintResume({ params }: { params: Promise<{ id: st
   return (
     <main className="mx-auto max-w-[8.5in] bg-white p-[0.7in] font-sans text-[11pt] leading-[1.35] text-black print:p-0">
       <style>{`@page { size: letter; margin: 0.6in } @media print { body { background: white } .noprint { display: none } }`}</style>
-      <div className="noprint mb-4 flex items-center justify-between rounded-lg bg-[#EDF1F8] px-3 py-2 text-[10pt]"><span>Press Cmd+P / Ctrl+P and choose "Save as PDF".</span><span className="text-[#5B6B85]">Rails</span></div>
+      <div className="noprint mb-4 flex items-center justify-between rounded-lg bg-[#EDF1F8] px-3 py-2 text-[10pt]"><span>Press Cmd+P / Ctrl+P and choose &ldquo;Save as PDF&rdquo;.</span><span className="text-[#5B6B85]">Rails</span></div>
       <header className="border-b-2 border-black pb-2">
         <div className="text-[20pt] font-extrabold tracking-tight">{p.name}</div>
         <div className="text-[10pt]">{[p.email, p.phone, p.links.linkedin, p.links.github, p.links.portfolio].filter(Boolean).join(" · ")}</div>

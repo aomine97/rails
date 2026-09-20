@@ -3,12 +3,12 @@ import type { ReactNode } from "react";
 
 const NAV: { href: string; label: string; badge?: string; soon?: boolean; icon: string }[] = [
   { href: "/app", label: "Jobs", icon: "M4 6h16M4 12h16M4 18h10" },
+  { href: "/app/tracker", label: "Tracker", icon: "M5 4h14v16H5zM8 9h8M8 13h6" },
   { href: "/app/autopilot", label: "Autopilot", soon: true, icon: "M13 2L3 14h7l-1 8 10-12h-7l1-8z" },
   { href: "/app/resume", label: "Resume", icon: "M7 3h7l5 5v13H7zM14 3v5h5" },
   { href: "/app/coach", label: "Coach", soon: true, icon: "M4 5h16v10H8l-4 4z" },
   { href: "/app/interview", label: "Interview", soon: true, badge: "NEW", icon: "M12 3v10M8 7a4 4 0 008 0M6 21h12" },
   { href: "/app/referrals", label: "Referrals", soon: true, icon: "M16 11a4 4 0 10-8 0M4 21a8 8 0 0116 0" },
-  { href: "/app/log", label: "Log", soon: true, icon: "M5 4h14v16H5zM8 9h8M8 13h6" },
   { href: "/app/settings", label: "Settings", soon: true, icon: "M12 8a4 4 0 100 8 4 4 0 000-8zM3 12h2M19 12h2M12 3v2M12 19v2" },
 ];
 

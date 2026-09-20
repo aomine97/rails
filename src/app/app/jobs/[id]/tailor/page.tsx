@@ -87,7 +87,7 @@ export default async function TailorPage({ params }: { params: Promise<{ id: str
               <div className="rounded-2xl border border-line bg-surface p-4">
                 <div className="text-[11px] font-bold uppercase tracking-wide text-muted">Get it out</div>
                 <Link href={`/app/jobs/${id}/tailor/print`} target="_blank" className="mt-2 block rounded-lg bg-orange px-3 py-2 text-center text-[13px] font-extrabold text-ink">Open as PDF</Link>
-                <p className="mt-2 text-[11px] leading-relaxed text-muted">Opens a clean one-page version; use your browser's Save as PDF. Or copy the text below into your own template.</p>
+                <p className="mt-2 text-[11px] leading-relaxed text-muted">Opens a clean one-page version; use your browser&apos;s Save as PDF. Or copy the text below into your own template.</p>
                 <details className="mt-2"><summary className="cursor-pointer text-[12px] font-semibold text-blue">Plain text</summary><pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap rounded-lg bg-light p-3 text-[11px] leading-relaxed text-text">{t.text}</pre></details>
               </div>
               {t.gapPlan.length > 0 && (
