@@ -22,7 +22,7 @@ describe("normalizeParsed", () => {
     const c = normalizeParsed(p, "fallback@x.edu");
     expect(c.email).toBe("mp@email.vccs.edu");
     expect(c.skills.map((s) => s.key)).toEqual(["python", "nodejs", "aws-ccp"]);
-    expect(c.experience[0]).toMatchObject({ id: "e1", start: "2025-08", end: null, bullets: ["Reset 300+ passwords"], skills: ["activedirectory"], source: "resume" });
+    expect(c.experience[0]).toMatchObject({ id: "e1", start: "2025-08", end: null, bullets: ["Reset 300+ passwords."], skills: ["activedirectory"], source: "resume" });
     expect(c.certifications[0].key).toBe("aws-ccp");
     expect(c.constraints.employmentTypes).toContain("internship");
   });

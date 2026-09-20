@@ -15,6 +15,12 @@ export function ConfirmForm({ initial }: { initial: P }) {
   const [state, action, pending] = useActionState<ConfirmState, FormData>(confirmProfile, {});
   const set = <K extends keyof P>(k: K, v: P[K]) => setP({ ...p, [k]: v });
   const [newSkill, setNewSkill] = useState("");
+  // Comma lists are typed as text and split on blur, so spaces and commas can be typed normally.
+  const [rolesText, setRolesText] = useState(initial.targetRoles.join(", "));
+  const [locText, setLocText] = useState(initial.constraints.locations.join(", "));
+  const [ccText, setCcText] = useState(initial.constraints.workCountries.join(", "));
+  const splitList = (t: string) => t.split(/[,;]/).map((x) => x.trim()).filter(Boolean);
+  const tidy = (v: string) => v.replace(/\s+/g, " ").trim() || null;
 
   const addSkill = () => {
     const name = newSkill.trim(); if (!name) return;
@@ -34,7 +40,7 @@ export function ConfirmForm({ initial }: { initial: P }) {
           <input className={input} value={p.links.linkedin ?? ""} onChange={(e) => set("links", { ...p.links, linkedin: e.target.value || null })} placeholder="LinkedIn URL" />
           <input className={input} value={p.links.github ?? ""} onChange={(e) => set("links", { ...p.links, github: e.target.value || null })} placeholder="GitHub URL" />
         </div>
-        <input className={`${input} mt-3`} value={p.targetRoles.join(", ")} onChange={(e) => set("targetRoles", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))} placeholder="Roles you want, comma separated: Software Engineer Intern, Cloud Support" />
+        <input className={`${input} mt-3`} value={rolesText} onChange={(e) => { setRolesText(e.target.value); set("targetRoles", splitList(e.target.value)); }} onBlur={() => setRolesText(splitList(rolesText).join(", "))} placeholder="Roles you want, comma separated: Software Engineer Intern, Cloud Support" />
       </section>
 
       <section className={card}>
@@ -94,11 +100,15 @@ export function ConfirmForm({ initial }: { initial: P }) {
         <div className={label}>Facts that filter jobs</div>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Preferred first name</span>
-            <input className={input} value={p.preferredName ?? ""} onChange={(e) => set("preferredName", e.target.value.trim() || null)} placeholder="If different from your legal first name" /></label>
+            <input className={input} value={p.preferredName ?? ""} onChange={(e) => set("preferredName", e.target.value || null)} onBlur={(e) => set("preferredName", tidy(e.target.value))} placeholder="If different from your legal first name" /></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Mailing address (forms ask; never shown publicly)</span>
-            <div className="grid grid-cols-[1fr_90px] gap-2">
-              <input className={input} value={p.address.street ?? ""} onChange={(e) => set("address", { ...p.address, street: e.target.value.trim() || null })} placeholder="Street" />
-              <input className={input} value={p.address.zip ?? ""} onChange={(e) => set("address", { ...p.address, zip: e.target.value.trim() || null })} placeholder="ZIP" />
+            <div className="grid grid-cols-1 gap-2">
+              <input className={input} value={p.address.street ?? ""} onChange={(e) => set("address", { ...p.address, street: e.target.value || null })} onBlur={(e) => set("address", { ...p.address, street: tidy(e.target.value) })} placeholder="Street address" autoComplete="street-address" />
+              <div className="grid grid-cols-[1fr_70px_90px] gap-2">
+                <input className={input} value={p.address.city ?? ""} onChange={(e) => set("address", { ...p.address, city: e.target.value || null })} onBlur={(e) => set("address", { ...p.address, city: tidy(e.target.value) })} placeholder="City" autoComplete="address-level2" />
+                <input className={input} value={p.address.state ?? ""} onChange={(e) => set("address", { ...p.address, state: e.target.value.toUpperCase().slice(0, 2) || null })} placeholder="VA" autoComplete="address-level1" maxLength={2} />
+                <input className={input} value={p.address.zip ?? ""} onChange={(e) => set("address", { ...p.address, zip: e.target.value || null })} onBlur={(e) => set("address", { ...p.address, zip: tidy(e.target.value) })} placeholder="ZIP" autoComplete="postal-code" inputMode="numeric" />
+              </div>
             </div></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Work authorization</span>
             <select className={input} value={p.constraints.workAuthorization} onChange={(e) => set("constraints", { ...p.constraints, workAuthorization: e.target.value as P["constraints"]["workAuthorization"] })}>
@@ -109,9 +119,9 @@ export function ConfirmForm({ initial }: { initial: P }) {
               <option value="none">None</option><option value="eligible">Eligible, none yet</option><option value="public_trust">Public Trust</option><option value="secret">Secret</option><option value="top_secret">Top Secret</option>
             </select></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Where you can work</span>
-            <input className={input} value={p.constraints.locations.join(", ")} onChange={(e) => set("constraints", { ...p.constraints, locations: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="McLean, VA; Remote" /></label>
+            <input className={input} value={locText} onChange={(e) => { setLocText(e.target.value); set("constraints", { ...p.constraints, locations: splitList(e.target.value) }); }} onBlur={() => setLocText(splitList(locText).join(", "))} placeholder="McLean, VA; Remote" /></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Other countries where you can legally work</span>
-            <input className={input} value={p.constraints.workCountries.join(", ")} onChange={(e) => set("constraints", { ...p.constraints, workCountries: e.target.value.toUpperCase().split(/[,\s]+/).map((s) => s.trim()).filter((s) => /^[A-Z]{2}$/.test(s)) })} placeholder="CA, GB (two-letter codes; leave empty for US only)" /></label>
+            <input className={input} value={ccText} onChange={(e) => { setCcText(e.target.value); set("constraints", { ...p.constraints, workCountries: e.target.value.toUpperCase().split(/[,;\s]+/).filter((x) => /^[A-Z]{2}$/.test(x)) }); }} onBlur={() => setCcText(p.constraints.workCountries.join(", "))} placeholder="CA, GB (two-letter codes; leave empty for US only)" /></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Looking for</span>
             <div className="flex flex-wrap gap-2 pt-1">
               {(["internship", "new_grad", "entry", "mid", "senior", "part_time", "contract"] as const).map((t) => (

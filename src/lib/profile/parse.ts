@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
+import { bullet } from "../text/punctuate";
 import { CanonicalProfile, skillKey } from "../schemas/profile";
 
 /** What the model returns. Looser than CanonicalProfile; normalizeParsed() makes it canonical. */
@@ -60,7 +61,7 @@ export function normalizeParsed(p: Parsed, fallbackEmail: string): CanonicalProf
     .filter((s) => s.name && !seen.has(s.key) && seen.add(s.key));
   const experience = p.experience.map((e, i) => ({
     id: `e${i + 1}`, title: e.title.trim(), org: e.org.trim(), kind: e.kind, start: ym(e.start), end: ym(e.end),
-    bullets: e.bullets.map((b) => b.trim()).filter(Boolean), skills: [...new Set(e.skills.map(skillKey))], source: "resume" as const,
+    bullets: e.bullets.map((b) => bullet(b)).filter(Boolean), skills: [...new Set(e.skills.map(skillKey))], source: "resume" as const,
   })).filter((e) => e.title);
   const education = p.education.map((ed) => ({ school: ed.school.trim(), degree: ed.degree.trim(), field: ed.field.trim(), gradYear: ed.gradYear, startYear: ed.startYear, gpa: ed.gpa, coursework: ed.coursework.map((c) => c.trim()).filter(Boolean), source: "resume" as const })).filter((e) => e.school);
   const certifications = p.certifications.map((c) => ({ name: c.name.trim(), key: skillKey(c.name), year: c.year, source: "resume" as const })).filter((c) => c.name);

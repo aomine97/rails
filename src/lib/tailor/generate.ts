@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { bullet, title as titleCase, paragraph } from "../text/punctuate";
 import { z } from "zod";
 import type { CanonicalProfile } from "../schemas/profile";
 import type { JobTags } from "../jobs/tags";
@@ -66,19 +67,19 @@ export function validateTailored(profile: CanonicalProfile, tags: JobTags, out: 
     for (const b of gen?.bullets ?? []) {
       const f = b.from.trim();
       const m = f.match(/^skill:\s*(.+)$/i);
-      if (m) { const name = skillNames.get(norm(m[1])); if (name) after.push({ text: b.text.trim(), from: name, kind: "skill" }); continue; }
+      if (m) { const name = skillNames.get(norm(m[1])); if (name) after.push({ text: bullet(b.text), from: name, kind: "skill" }); continue; }
       const idx = originals.findIndex((o) => o === norm(f) || (o.length > 20 && (o.includes(norm(f).slice(0, 40)) || norm(f).includes(o.slice(0, 40)))));
-      if (idx >= 0) after.push({ text: b.text.trim(), from: e.bullets[idx], kind: "rewrite" });
+      if (idx >= 0) after.push({ text: bullet(b.text), from: e.bullets[idx], kind: "rewrite" });
       // else: unverifiable provenance -> dropped silently
     }
-    return { id: e.id, title: e.title, org: e.org, before: e.bullets, after: after.length ? after : e.bullets.map((t) => ({ text: t, from: t, kind: "rewrite" as const })) };
+    return { id: e.id, title: e.title, org: e.org, before: e.bullets, after: after.length ? after : e.bullets.map((t) => ({ text: bullet(t), from: t, kind: "rewrite" as const })) };
   });
   const skillsOrder = out.skillsOrder.map((n) => skillNames.get(norm(n))).filter((x): x is string => !!x);
   const rest = profile.skills.map((s) => s.name).filter((n) => !skillsOrder.includes(n));
   const allSkills = [...skillsOrder, ...rest];
 
   const beforeText = [profile.headline ?? "", ...profile.experience.flatMap((e) => e.bullets), ...profile.skills.map((s) => s.name)].join("\n");
-  const text = [profile.name, out.headline || profile.headline || "", "", out.summary, "", "SKILLS", allSkills.join(" · "), "",
+  const text = [profile.name, titleCase(out.headline || profile.headline || ""), "", paragraph(out.summary), "", "SKILLS", allSkills.join(" · "), "",
     ...experience.flatMap((e) => ["EXPERIENCE", `${e.title}, ${e.org}`, ...e.after.map((b) => `• ${b.text}`), ""]),
     "EDUCATION", ...profile.education.map((ed) => `${ed.degree} ${ed.field}, ${ed.school}${ed.gradYear ? ` (${ed.gradYear})` : ""}`),
     ...(profile.certifications.length ? ["", "CERTIFICATIONS", profile.certifications.map((c) => c.name).join(" · ")] : []),
