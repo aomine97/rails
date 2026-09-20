@@ -6,7 +6,7 @@ Read PLAN.md at the start of every session and work the next unchecked item only
 ## Stack
 - Next.js 15 (App Router, src/), TypeScript, Tailwind
 - Supabase: auth, Postgres + RLS, pgvector, storage (resume PDFs)
-- Stripe: Free (3 tailors/day) · Pro $25/mo, $15/mo with verified .edu · Semester Pass $79 / $49 students (one-time, 4 months). No weekly plan. 7-day refund
+- Pricing and gating: PRICING.md is the source of truth; limits live in src/lib/billing/plans.ts. Free = 3 AI credits refilling every 72h, Autopilot preview-only. Pro $25/mo ($15 student) · Semester Pass $79 ($49 student, 4 months). Feed, scores, autofill, tracker are never gated. One hard paywall modal per session, always show the refill time.
 - LLM: cheap model for parsing/field mapping, strong model only for resume tailoring
 - Chrome extension: WXT + TypeScript, in /extension (Phase 3)
 - Email inbound: Resend/Postmark inbound alias for outcome tracking (Gmail OAuth is a post-launch item — Google restricted-scope review takes 4–8 weeks)

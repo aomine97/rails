@@ -8,7 +8,7 @@
 - Known gaps: some Workday sites returned exactly 40 postings on the first poll (NXP, Visa, GM, First National); check whether page 3 of the cxs list endpoint fails for those tenants. Tagger puts most skills under preferredSkills when postings say "familiarity with"; scoring already weights preferred at 0.5 so it's fine for now. `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Tagger prompt untested against the model. Poller is list-only + details for up to 40 new postings per company per run; tag cron backfills the rest (done 2026-09-20).
 - Decisions made: name Rails; tech-only (software, data, cloud, IT, cyber); pricing below; human clicks Submit always; career centers are the B2B channel; no LinkedIn/Indeed scraping; geo-gate CA and NY at signup.
 
-## Pricing (final)
+## Pricing (final; full pipeline in PRICING.md)
 - Free: full feed with fit scores, unlimited autofill, tracker, 1 resume score, 3 tailors/day. No card.
 - Pro: $25/mo. Students with a verified .edu: $15/mo ($10 off, every month while enrolled). Anchor shown as $39.99 struck through. 7-day money back.
 - Semester Pass: $79 / students $49, one payment, 4 months.
@@ -41,7 +41,7 @@
 - [ ] Resume PDF export (one ATS-clean template)
 - [ ] Tracker (11): pipeline funnel, table (via / age / stage / next), manual add, follow-up reminders. Email nudges via Resend
 - [ ] Inbound email alias per user (Cloudflare Email Routing -> worker -> classify reply -> update stage)
-- [ ] Stripe: Free limits (3 tailors/day), Pro checkout $25, .edu verification -> $15 price, Semester Pass one-time, customer portal, 7-day refund button
+- [ ] Billing per PRICING.md: apply supabase/migrations/0002_credits.sql; `can(user, feature)` helper over src/lib/billing/plans.ts; spend_credit() on tailor/letter/mock; UpgradeModal + UpgradeBanner with PAYWALL_COPY; paywall_events logging; Stripe products pro_monthly / pro_monthly_student / semester / semester_student, .edu verification, customer portal, 7-day refund
 - [ ] Interview-rate metric: applications -> interviews per user and per campus, computed nightly. This is the number that goes on the landing page later
 
 ## Week 3 — extension + Autopilot + Coach
