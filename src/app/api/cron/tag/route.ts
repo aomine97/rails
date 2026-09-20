@@ -11,11 +11,16 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   const denied = cronAuth(req); if (denied) return denied;
   const db = supabaseAdmin();
-  // (a) enrich up to 40 jobs with no description yet (Workday / SmartRecruiters list-only rows)
+  const started = Date.now();
+  const budgetMs = 200_000; // stay well under maxDuration
+  const url = new URL(req.url);
+  const enrichN = Number(url.searchParams.get("enrich") ?? 24), tagN = Number(url.searchParams.get("tag") ?? 24);
+  // (a) enrich jobs with no description yet (Workday / SmartRecruiters list-only rows)
   const { data: bare } = await db.from("jobs").select("id,ats,external_id,title,location,url,apply_url,companies(name,ats,slug,tenant,wdn)")
-    .is("description_text", null).is("closed_at", null).order("first_seen_at", { ascending: false }).limit(40);
+    .is("description_text", null).is("closed_at", null).order("first_seen_at", { ascending: false }).limit(enrichN);
   let enrichedCount = 0;
   for (const j of bare ?? []) {
+    if (Date.now() - started > budgetMs / 2) break;
     const co = (j as unknown as { companies: { name: string; ats: RawJob["ats"]; slug: string | null; tenant: string | null; wdn: number | null } | null }).companies;
     const fn = co ? adapters[co.ats]?.enrich : undefined;
     if (!co || !fn) { await db.from("jobs").update({ description_text: "" }).eq("id", j.id); continue; } // nothing to fetch; stop retrying
@@ -27,10 +32,10 @@ export async function GET(req: Request) {
     } catch { await db.from("jobs").update({ description_text: "" }).eq("id", j.id); }
   }
   const { data: jobs, error } = await db.from("jobs").select("id,title,location,description_text,companies(name)")
-    .is("tagged_at", null).is("closed_at", null).not("description_text", "is", null).neq("description_text", "").order("first_seen_at", { ascending: false }).limit(60);
+    .is("tagged_at", null).is("closed_at", null).not("description_text", "is", null).neq("description_text", "").order("first_seen_at", { ascending: false }).limit(tagN);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  let tagged = 0, failed = 0;
-  for (const j of jobs ?? []) {
+  let tagged = 0, failed = 0; let firstError: string | null = null;
+  const one = async (j: NonNullable<typeof jobs>[number]) => {
     try {
       const company = (j as unknown as { companies: { name: string } | null }).companies?.name ?? "";
       const tags = await tagJob({ title: j.title, company, location: j.location, descriptionText: j.description_text! });
@@ -38,7 +43,10 @@ export async function GET(req: Request) {
       const skills = [...tags.requiredSkills.map((k) => ({ job_id: j.id, skill_key: k, required: true })), ...tags.preferredSkills.map((k) => ({ job_id: j.id, skill_key: k, required: false }))];
       if (skills.length) await db.from("job_skills").upsert(skills, { onConflict: "job_id,skill_key" });
       tagged++;
-    } catch { failed++; }
+    } catch (e) { failed++; firstError ??= String((e as Error).message).slice(0, 300); }
+  };
+  for (let i = 0; i < (jobs ?? []).length && Date.now() - started < budgetMs; i += 4) {
+    await Promise.all(jobs!.slice(i, i + 4).map(one));
   }
-  return NextResponse.json({ enriched: enrichedCount, tagged, failed });
+  return NextResponse.json({ enriched: enrichedCount, tagged, failed, firstError, ms: Date.now() - started });
 }
