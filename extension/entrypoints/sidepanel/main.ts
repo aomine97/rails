@@ -8,10 +8,13 @@ const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&
 const b64 = (buf: ArrayBuffer) => { let s = ""; const b = new Uint8Array(buf); for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode(...b.subarray(i, i + 0x8000)); return btoa(s); };
 
 type FileInfo = { kind: "resume" | "letter"; name: string; type: string; origin: string; bytes: ArrayBuffer } | null;
-type State = { me: Me | null; job: JobInfo | null; tabUrl: string | null; status: string | null; needsPermission: string | null; lastFill: { filled: number; attempted: number; left: string[] } | null; busy: "score" | "tailor" | "letter" | "fill" | null; show: { resume: boolean; letter: boolean; fields: boolean; diff: boolean }; resume: FileInfo; letter: FileInfo; added: Set<string>; form: FormState | null; formOpen: boolean; saved: Record<string, string | string[] | boolean> };
-const state: State = { me: null, job: null, tabUrl: null, status: null, needsPermission: null, lastFill: null, busy: null, show: { resume: false, letter: false, fields: false, diff: true }, resume: null, letter: null, added: new Set(), form: null, formOpen: true, saved: {} };
+type State = { me: Me | null; job: JobInfo | null; tabUrl: string | null; status: string | null; needsPermission: string | null; lastFill: { filled: number; attempted: number; left: string[] } | null; busy: "score" | "tailor" | "letter" | "fill" | null; show: { resume: boolean; letter: boolean; fields: boolean; diff: boolean }; resume: FileInfo; letter: FileInfo; added: Set<string>; forms: Map<number, FormState>; tabId: number | null; formOpen: boolean; saved: Record<string, string | string[] | boolean> };
+const state: State = { me: null, job: null, tabUrl: null, status: null, needsPermission: null, lastFill: null, busy: null, show: { resume: false, letter: false, fields: false, diff: true }, resume: null, letter: null, added: new Set(), forms: new Map(), tabId: null, formOpen: true, saved: {} };
 
-async function activeTabUrl(): Promise<string | null> { const [tab] = await chrome.tabs.query({ active: true, currentWindow: true }); return tab?.url ?? null; }
+async function activeTab(): Promise<{ id: number | null; url: string | null }> { const [tab] = await chrome.tabs.query({ active: true, currentWindow: true }); return { id: tab?.id ?? null, url: tab?.url ?? null }; }
+async function activeTabUrl(): Promise<string | null> { return (await activeTab()).url; }
+/** The checklist for the tab the panel is looking at. A run keeps going on its own tab while you look at another. */
+const currentForm = (): FormState | null => (state.tabId != null ? state.forms.get(state.tabId) ?? null : null);
 
 /** Profile completeness for the red-dot row: the fields forms ask for most. */
 function completeness(me: Me): { pct: number; missing: string[] } {
@@ -49,9 +52,9 @@ function render() {
   const { me, job } = state;
   void pushBadge();
   if (!me) {
-    app.innerHTML = `<div class="card"><div class="brand"><span class="row" style="gap:6px">${logo(22)} Rails</span> <small>not connected</small></div>
+    app.innerHTML = `<div class="card"><div class="top" style="padding:0 0 8px"><span class="wordmark">${logo(26)} Rails</span><span class="plan">Not connected</span></div>
       <p>Connect once and the panel shows your fit for the job on this tab and fills applications from your profile.</p>
-      <button class="btn" id="connect">Connect to Rails</button>
+      <button class="btn primary" id="connect">Connect to Rails</button>
       <p class="note" style="margin-top:8px">Opens rails-psi.vercel.app in a tab. Sign in there if asked, then come back.</p>
       ${state.status ? `<p class="note">${esc(state.status)}</p>` : ""}</div>`;
     document.getElementById("connect")!.onclick = () => chrome.tabs.create({ url: `${SITE}/ext/connect` });
@@ -63,36 +66,37 @@ function render() {
   const titleLine = job?.titleMatch === "strong" ? "Title matches what you're aiming for." : job?.titleMatch === "partial" ? `Title is close to your target (${esc(job.yourTitle ?? "")}).` : job?.titleMatch === "none" ? `Title is far from your target (${esc(job.yourTitle ?? "your roles")}).` : "";
   const fields: [string, unknown][] = [["Name", f.fullName], ["Preferred", f.preferredName], ["Email", f.email], ["Phone", f.phone], ["LinkedIn", f.linkedin], ["GitHub", f.github], ["Portfolio", f.portfolio], ["Street", f.street], ["City", f.city], ["State", f.state], ["ZIP", f.zip], ["School", f.school], ["Degree", f.degree], ["Major", f.major], ["Start year", f.startYear], ["Grad year", f.gradYear], ["GPA", f.gpa]];
 
+  const ago = (iso: string | null | undefined) => { if (!iso) return null; const d = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 86400000)); return d === 0 ? "Posted today" : d === 1 ? "Posted yesterday" : d < 7 ? `Posted ${d} days ago` : d < 30 ? `Posted ${Math.round(d / 7)} week${Math.round(d / 7) === 1 ? "" : "s"} ago` : `Posted ${Math.round(d / 30)} month${Math.round(d / 30) === 1 ? "" : "s"} ago`; };
+  const src = job?.source ? ({ greenhouse: "Greenhouse", lever: "Lever", ashby: "Ashby", smartrecruiters: "SmartRecruiters", workday: "Workday", usajobs: "USAJobs", workable: "Workable", jobvite: "Jobvite", icims: "iCIMS", oracle: "Oracle", ext: "Your paste" } as Record<string, string>)[job.source] ?? job.source : null;
+  const meAvatar = (me.name ?? me.email).split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? "").join("");
+
   app.innerHTML = `
-    <div class="brand" style="padding:2px 2px 0"><span class="row" style="gap:6px">${logo(22)} Rails</span> <small>${esc(me.name ?? me.email)} · ${me.plan === "free" ? `${me.credits} credits` : esc(String(me.plan).toUpperCase())}</small></div>
+    <div class="top"><span class="wordmark">${logo(26)} Rails</span><span class="plan"><span class="avatar">${esc(meAvatar)}</span>${me.plan === "free" ? `Free <span class="credits">· ${me.credits} credits</span>` : esc(me.plan === "pro" ? "Pro" : me.plan === "semester" ? "Semester Pass" : String(me.plan))}</span></div>
 
     ${job ? `<div class="card">
-      <div class="row" style="justify-content:space-between;align-items:flex-start">
-        <div class="row" style="gap:10px">${companyLogo(job, initials)}<div><div class="ink">${esc(job.company)}</div><div class="muted">${esc(job.location ?? "")}${job.level ? `${job.location ? " · " : ""}${esc(levelLabel(job.level))}` : ""}</div></div></div>
-      </div>
-      <div style="font-weight:800;font-size:15px;color:var(--ink);margin-top:8px;line-height:1.3">${esc(job.title)}</div>
-      <div class="row" style="gap:12px;margin-top:10px;align-items:center;background:var(--light);border:1px solid var(--line);border-radius:10px;padding:8px 10px">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px">${ring(job.fit, 68, { label: "Fit" })}<span style="font-size:9px;font-weight:800;letter-spacing:.1em;color:${BAND[bandOf(job.fit)]}">${job.fit == null ? "NOT SCORED" : bandLabel(job.fit)}</span></div>
-        <div style="flex:1;display:flex;flex-direction:column;gap:6px">${job.sub ? [meter("Skills", job.sub.skills), meter("Experience", job.sub.experience), meter("Field", job.sub.field)].join("") : `<span class="note">Score arrives when the tagger finishes.</span>`}</div>
-      </div>
-      ${job.hardBlocks.length ? `<div style="margin-top:6px">${job.hardBlocks.map((b) => `<span class="chip" style="background:var(--red-bg);color:var(--red)">✗ ${esc(b)}</span>`).join(" ")}</div>` : ""}
-      ${(job.softNotes ?? []).length ? `<div style="margin-top:6px">${job.softNotes!.map((b) => `<span class="chip" style="background:var(--amber-bg);color:var(--amber)">! ${esc(b)}</span>`).join(" ")}</div>` : ""}
-      <div class="row" style="margin-top:8px"><a class="muted" style="font-size:11px" href="${esc(job.detailUrl)}" target="_blank">Open in Rails ↗</a></div>
-    </div>` : `<div class="card"><h2>This page</h2><div class="muted">${state.tabUrl ? "Not a job Rails knows yet. Score it here and it joins your feed; autofill works either way." : "Open a job posting or application form."}</div>${state.tabUrl && /^https?:/.test(state.tabUrl) ? `<button class="btn secondary" style="margin-top:8px" id="score" ${busy ? "disabled" : ""}>${busy === "score" ? "Scoring… (about 15 s)" : "Score this job"}</button>` : ""}</div>`}
+      <div class="job-head">${companyLogo(job, initials)}<div style="min-width:0"><div class="job-co">${esc(job.company)}</div><div class="job-sub">${[job.level ? levelLabel(job.level) : null, job.field ? esc(job.field.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())) : null].filter(Boolean).join(" · ")}</div></div>
+        <div class="fitpill">${ring(job.fit, 56, { label: "Fit", suffix: "", stroke: 5 })}<span class="grade" style="color:${BAND[bandOf(job.fit)]}">${job.fit == null ? "UNSCORED" : bandLabel(job.fit)}</span></div></div>
+      <div class="job-title">${esc(job.title)}</div>
+      <div class="job-meta">${[ago(job.postedAt), job.location ? esc(job.location) : job.remote ? "Remote" : null, job.pay ? `<b>${esc(job.pay)}</b>` : null, src ? `via ${esc(src)}` : null].filter(Boolean).join("<span>·</span>")}</div>
+      <div class="meters">${job.sub ? [meter("Skills", job.sub.skills), meter("Experience", job.sub.experience), meter("Field", job.sub.field)].join("") : `<span class="note">Score arrives when the tagger finishes (a few minutes).</span>`}</div>
+      ${job.hardBlocks.length ? `<div class="chips">${job.hardBlocks.map((b) => `<span class="chip" style="background:var(--red-bg);color:var(--red)">✗ ${esc(b)}</span>`).join("")}</div>` : ""}
+      ${(job.softNotes ?? []).length ? `<div class="chips">${job.softNotes!.map((b) => `<span class="chip" style="background:var(--amber-bg);color:var(--amber)">! ${esc(b)}</span>`).join("")}</div>` : ""}
+      <div class="row" style="margin-top:10px;justify-content:space-between"><a class="link" href="${esc(job.detailUrl)}" target="_blank">Open in Rails ↗</a>${job.stage ? `<span class="chip" style="background:var(--light);color:var(--ink)">${esc(job.stage)}</span>` : ""}</div>
+    </div>` : `<div class="card"><h2>This page</h2><div class="muted">${state.tabUrl ? "Not a job Rails knows yet. Score it here and it joins your feed; autofill works either way." : "Open a job posting or application form."}</div>${state.tabUrl && /^https?:/.test(state.tabUrl) ? `<button class="btn secondary" style="margin-top:10px" id="score" ${busy ? "disabled" : ""}>${busy === "score" ? "Scoring… (about 15 s)" : "Score this job"}</button>` : ""}</div>`}
 
-    ${state.needsPermission ? `<div class="card"><p>Rails needs permission to read and fill forms on <b>${esc(new URL(state.needsPermission).hostname)}</b>. Nothing leaves the page except which fields were filled.</p><button class="btn" id="grant" style="width:100%">Allow on this site</button></div>`
-      : `<button class="btn" id="fill" style="width:100%;padding:12px;font-size:15px" ${busy ? "disabled" : ""}>${busy === "fill" ? esc(state.form?.step ?? "Filling…") : state.form ? "Autofill again" : "Autofill this page"}</button>`}
-    ${state.form ? renderForm(state.form, state.formOpen) : ""}
+    ${state.needsPermission ? `<div class="card"><p>Rails needs permission to read and fill forms on <b>${esc(new URL(state.needsPermission).hostname)}</b>. Nothing leaves the page except which fields were filled.</p><button class="btn primary" id="grant">Allow on this site</button></div>`
+      : `<button class="btn primary" id="fill" ${busy ? "disabled" : ""}>${currentForm()?.running ? esc(currentForm()!.step) : currentForm() ? "Autofill again" : "Autofill this page"}</button>`}
+    ${currentForm() ? renderForm(currentForm()!, state.formOpen) : ""}
     ${state.status ? `<p class="note" style="margin:-4px 2px 0">${esc(state.status)}</p>` : ""}
 
     <div class="card" style="padding:0">
-      <div class="row" style="justify-content:space-between;padding:10px 12px;cursor:pointer" id="row-info"><span class="ink">Your autofill information</span><span class="row" style="gap:6px">${ring(comp.pct, 30, { suffix: "", label: "Complete", stroke: 4, color: comp.pct === 100 ? "var(--green)" : comp.pct >= 70 ? "var(--amber)" : "var(--red)" })}<span class="muted">${state.show.fields ? "▾" : "▸"}</span></span></div>
-      ${state.show.fields ? `<div style="padding:0 12px 10px">${comp.missing.length ? `<p class="note" style="margin:0 0 6px">Missing: ${esc(comp.missing.join(", "))}. <a href="${SITE}/onboarding/confirm" target="_blank">Edit profile ↗</a></p>` : ""}<ul>${fields.filter(([, v]) => v).map(([k, v]) => `<li class="field"><div><div class="k">${esc(k)}</div><div class="v" title="${esc(v)}">${esc(v)}</div></div><button class="copy" data-v="${esc(v)}">Copy</button></li>`).join("")}</ul></div>` : ""}
+      <div class="sect"><div class="sect-head" id="row-info"><span class="t">Your autofill information</span><span class="r">${ring(comp.pct, 28, { suffix: "", label: "Complete", stroke: 4, color: comp.pct === 100 ? "var(--green-2)" : comp.pct >= 70 ? "var(--amber)" : "var(--red)" })}<span class="chev">${state.show.fields ? "▾" : "▸"}</span></span></div>
+      ${state.show.fields ? `<div style="padding-top:10px">${comp.missing.length ? `<p class="note" style="margin:0 0 6px">Missing: ${esc(comp.missing.join(", "))}. <a href="${SITE}/onboarding/confirm" target="_blank">Edit profile ↗</a></p>` : ""}<ul>${fields.filter(([, v]) => v).map(([k, v]) => `<li class="field"><div><div class="k">${esc(k)}</div><div class="v" title="${esc(v)}">${esc(v)}</div></div><button class="copy" data-v="${esc(v)}">Copy</button></li>`).join("")}</ul></div>` : ""}</div>
 
-      <div style="border-top:1px solid var(--line);padding:10px 12px">
-        <div class="row" style="justify-content:space-between"><span class="ink">Resume</span><span class="muted" style="font-size:11px">${state.resume ? `${state.resume.origin === "tailored" ? "Tailored for this job" : "Your upload"}: ${esc(state.resume.name)}` : "No resume on file"}</span></div>
-        ${job && !job.resume && state.show.diff && (kw || titleLine) ? `<div style="margin-top:8px;background:var(--light);border:1px solid var(--line);border-radius:8px;padding:8px">
-          <div class="muted" style="font-size:11px;font-weight:800;letter-spacing:.05em">SEE YOUR DIFFERENCE</div>
+      <div class="sect">
+        <div class="sect-head" style="cursor:default"><span class="t">Resume</span><span class="r">${state.resume ? `${state.resume.origin === "tailored" ? "Tailored for this job" : "Your upload"}: ${esc(state.resume.name)}` : "No resume on file"}</span></div>
+        ${job && !job.resume && state.show.diff && (kw || titleLine) ? `<div class="diff">
+          <div class="h">SEE YOUR DIFFERENCE</div>
           ${titleLine ? `<div style="margin-top:4px;font-size:12px">${titleLine}</div>` : ""}
           ${kw ? `<div style="margin-top:6px;font-size:12px"><span class="ink">Keywords ${kw.matched.length}/${kw.matched.length + kw.missing.length}</span></div>
           <div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px">${kw.matched.map((k) => `<span class="chip" style="background:var(--green-bg);color:var(--green)">✓ ${esc(k)}</span>`).join("")}${[...missingReq, ...missingPref].map((m) => state.added.has(m.key) ? `<span class="chip" style="background:var(--green-bg);color:var(--green)">✓ ${esc(m.key)}</span>` : `<button class="chip add-skill" data-k="${esc(m.key)}" style="border:1px dashed var(--line);background:#fff;cursor:pointer;color:var(--ink)" title="Only if you actually have it. It goes on your profile and every score updates.">+ ${esc(m.key)}${m.required ? "" : " (nice to have)"}</button>`).join("")}</div>
@@ -105,15 +109,15 @@ function render() {
         ${job?.resume && state.show.resume ? `<pre>${esc(job.resume)}</pre>` : ""}
       </div>
 
-      <div style="border-top:1px solid var(--line);padding:10px 12px">
-        <div class="row" style="justify-content:space-between"><span class="ink">Cover letter</span><span class="muted" style="font-size:11px">${job?.coverLetter ? "Ready, attached when the form asks" : "Only if the form asks"}</span></div>
+      <div class="sect">
+        <div class="sect-head" style="cursor:default"><span class="t">Cover letter</span><span class="r">${job?.coverLetter ? "Ready, attached when the form asks" : "Only if the form asks"}</span></div>
         <div class="row" style="margin-top:8px">
           ${job ? (job.coverLetter ? `<button class="btn ghost" id="toggle-letter">${state.show.letter ? "Hide" : "View"}</button><button class="btn ghost" id="copy-letter">Copy text</button>` : `<button class="btn ghost" id="letter" ${busy || !job.tagged ? "disabled" : ""}>${busy === "letter" ? "Writing… (about 15 s)" : `✦ Generate cover letter${me.plan === "free" ? " · 1 credit" : ""}`}</button>`) : ""}
         </div>
         ${job?.coverLetter && state.show.letter ? `<pre>${esc(job.coverLetter)}</pre>` : ""}
       </div>
     </div>
-    <div class="row" style="justify-content:space-between;padding:0 2px"><a class="muted" href="${SITE}/app" target="_blank">Open Rails</a><button class="btn ghost" id="disconnect" style="padding:4px 10px;font-size:11px">Disconnect</button></div>`;
+    <div class="footer"><a class="link" href="${SITE}/app" target="_blank">Open Rails</a><button class="btn ghost sm" id="disconnect">Disconnect</button></div>`;
 
   for (const b of app.querySelectorAll<HTMLButtonElement>(".copy")) b.onclick = async () => { await navigator.clipboard.writeText(b.dataset.v ?? ""); b.textContent = "Copied"; setTimeout(() => (b.textContent = "Copy"), 1200); };
   for (const b of app.querySelectorAll<HTMLButtonElement>(".add-skill")) b.onclick = () => addSkill(b.dataset.k ?? "");
@@ -151,38 +155,38 @@ async function loadFiles() {
 }
 
 type Msg<T> = T & { ok?: boolean; error?: string; origin?: string };
-const relay = <T,>(msg: Record<string, unknown>) => chrome.runtime.sendMessage(msg) as Promise<Msg<T>>;
-const rowOf = (id: string): (Row & { remember?: boolean }) | undefined => state.form?.rows.find((r) => r.f.id === id);
-const setRow = (id: string, s: Row["s"], extra: { why?: string; value?: string } = {}) => { const r = rowOf(id); if (r) { r.s = s; if (extra.why !== undefined) r.why = extra.why; if (extra.value !== undefined) r.value = extra.value; } render(); };
+const relay = <T,>(msg: Record<string, unknown>, tabId?: number | null) => chrome.runtime.sendMessage({ ...msg, tabId: tabId ?? undefined }) as Promise<Msg<T>>;
+const rowOf = (id: string, fs: FormState | null = currentForm()): (Row & { remember?: boolean }) | undefined => fs?.rows.find((r) => r.f.id === id);
+const setRow = (fs: FormState, id: string, s: Row["s"], extra: { why?: string; value?: string } = {}) => { const r = rowOf(id, fs); if (r) { r.s = s; if (extra.why !== undefined) r.why = extra.why; if (extra.value !== undefined) r.value = extra.value; } render(); };
 const valueText = (v: string | string[] | boolean) => Array.isArray(v) ? v.join(", ") : typeof v === "boolean" ? (v ? "Yes" : "No") : v;
 
 async function loadSaved() { try { const r = await chrome.storage.local.get("rails_answers"); state.saved = (r.rails_answers ?? {}) as typeof state.saved; } catch { state.saved = {}; } }
 async function remember(label: string, v: string | string[] | boolean) { state.saved[answerKey(label)] = v; try { await chrome.storage.local.set({ rails_answers: state.saved }); } catch { /* ignore */ } }
 
 /** Rescan the page and refresh filled/value on the rows we already have (keeps options read earlier). */
-async function refreshRows() {
-  const scan = await relay<{ fields?: ScannedField[] }>({ type: "rails:scan-form" });
-  if (!scan?.ok || !scan.fields || !state.form) return;
+async function refreshRows(fs: FormState) {
+  const scan = await relay<{ fields?: ScannedField[] }>({ type: "rails:scan-form" }, fs.tabId);
+  if (!scan?.ok || !scan.fields) return;
   const byId = new Map(scan.fields.map((f) => [f.id, f]));
-  for (const r of state.form.rows) { const f = byId.get(r.f.id); if (!f) continue; if (f.filled) { r.s = "done"; r.value = f.value; } else if (r.s === "done") r.s = r.f.conditional ? "skip" : "left"; }
-  for (const f of scan.fields) if (!state.form.rows.some((r) => r.f.id === f.id)) state.form.rows.push({ f, s: f.filled ? "done" : f.conditional ? "skip" : "todo", value: f.value });
+  for (const r of fs.rows) { const f = byId.get(r.f.id); if (!f) continue; if (f.filled) { r.s = "done"; r.value = f.value; } else if (r.s === "done") r.s = r.f.conditional ? "skip" : "left"; }
+  for (const f of scan.fields) if (!fs.rows.some((r) => r.f.id === f.id)) fs.rows.push({ f, s: f.filled ? "done" : f.conditional ? "skip" : "todo", value: f.value });
 }
 
 /** One field, from the user's pick in the checklist. */
 async function fillOne(id: string, v: string | string[] | boolean) {
-  const r = rowOf(id); if (!r) return;
-  setRow(id, "filling");
-  const res = await relay<{ results?: { id: string; ok: boolean }[] }>({ type: "rails:apply", answers: [{ field: r.f, value: v }] });
+  const fs = currentForm(); const r = rowOf(id, fs); if (!fs || !r) return;
+  setRow(fs, id, "filling");
+  const res = await relay<{ results?: { id: string; ok: boolean }[] }>({ type: "rails:apply", answers: [{ field: r.f, value: v }] }, fs.tabId);
   let ok = !!res?.ok && !!res.results?.[0]?.ok;
-  if (!ok) { await refreshRows(); ok = rowOf(id)?.s === "done"; } // the page may show it even when the widget gave no signal
-  setRow(id, ok ? "done" : "failed", { value: ok ? valueText(v) : r.value, why: ok ? undefined : "The page did not take that. Try another option or set it on the page." });
+  if (!ok) { await refreshRows(fs); ok = rowOf(id, fs)?.s === "done"; } // the page may show it even when the widget gave no signal
+  setRow(fs, id, ok ? "done" : "failed", { value: ok ? valueText(v) : r.value, why: ok ? undefined : "The page did not take that. Try another option or set it on the page." });
   if (ok && r.remember) await remember(r.f.label, v);
-  if (ok) await refreshRows(); render();
+  if (ok) await refreshRows(fs); render();
 }
 
 async function listOptions(id: string) {
-  const r = rowOf(id); if (!r) return;
-  const res = await relay<{ options?: string[]; searchable?: boolean }>({ type: "rails:options", field: r.f });
+  const fs = currentForm(); const r = rowOf(id, fs); if (!fs || !r) return;
+  const res = await relay<{ options?: string[]; searchable?: boolean }>({ type: "rails:options", field: r.f }, fs.tabId);
   if (res?.ok) { r.f.options = res.options ?? []; if (res.searchable) r.f.searchable = true; }
   render();
 }
@@ -190,59 +194,62 @@ async function listOptions(id: string) {
 /** The whole flow, Jobright-style: read the form, fill by rules, apply saved answers, ask the server for the rest, show every question with its state. */
 async function doFill() {
   if (!state.me || state.busy) return;
-  const url = await activeTabUrl();
-  state.busy = "fill"; state.status = null; state.formOpen = true; state.form = { rows: [], running: true, step: "Reading the form…", url: url ?? "" }; render();
-  await loadSaved();
-  const scan = await relay<{ fields?: ScannedField[]; url?: string }>({ type: "rails:scan-form", readOptions: true });
-  if (scan?.error === "needs_permission") { state.busy = null; state.form = null; state.needsPermission = scan.origin ?? null; render(); return; }
-  if (!scan?.ok || !scan.fields) { state.busy = null; state.form = null; state.status = scan?.error === "no_tab" ? "No active tab." : "Could not reach this page. Reload it and try again."; render(); return; }
-  state.form.rows = scan.fields.map((f) => ({ f, s: f.filled ? "done" : f.conditional ? "skip" : "todo", value: f.value }));
-  if (!state.form.rows.length) { state.busy = null; state.form.running = false; state.status = "No form fields on this page. Open the application form first."; render(); return; }
+  const tab = await activeTab(); if (tab.id == null) { state.status = "No active tab."; render(); return; }
+  const fs: FormState = { rows: [], running: true, step: "Reading the form…", url: tab.url ?? "", tabId: tab.id };
+  state.forms.set(tab.id, fs); state.tabId = tab.id;
+  state.busy = "fill"; state.status = null; state.formOpen = true; render();
+  const finish = () => { fs.running = false; fs.step = ""; state.busy = null; render(); };
+  try {
+    await loadSaved();
+    const scan = await relay<{ fields?: ScannedField[]; url?: string }>({ type: "rails:scan-form", readOptions: true }, fs.tabId);
+    if (scan?.error === "needs_permission") { state.forms.delete(tab.id); state.needsPermission = scan.origin ?? null; finish(); return; }
+    if (!scan?.ok || !scan.fields) { state.forms.delete(tab.id); state.status = "Could not reach this page. Reload it and try again."; finish(); return; }
+    fs.rows = scan.fields.map((f) => ({ f, s: f.filled ? "done" : f.conditional ? "skip" : "todo", value: f.value }));
+    if (!fs.rows.length) { state.status = "No form fields on this page. Open the application form first."; finish(); return; }
 
-  // 1. rule-based pass (names, addresses, education, work auth) + file attachments
-  state.form.step = "Filling your details…"; render();
-  let learned: Record<string, string[]> = {};
-  try { if (url) learned = (await api.learned(new URL(url).hostname)).selectors; } catch { /* optional */ }
-  const files = [state.resume, state.letter].filter((x): x is NonNullable<FileInfo> => !!x).map((x) => ({ kind: x.kind, name: x.name, type: x.type, b64: b64(x.bytes) }));
-  const res = await relay<{ results?: { key: string; selector: string | null; strategy: string; success: boolean }[]; leftForYou?: string[]; url?: string }>({ type: "rails:fill", values: state.me.fields, learned, files, quiet: true });
-  const results = res?.results ?? [];
-  try { await api.fillReport({ url: res?.url ?? url ?? "", jobId: state.job?.id, leftForYou: res?.leftForYou, fields: results }); } catch { /* best effort */ }
-  await refreshRows(); render();
+    // 1. rule-based pass (names, addresses, education, work auth) + file attachments
+    fs.step = "Filling your details…"; render();
+    let learned: Record<string, string[]> = {};
+    try { if (fs.url) learned = (await api.learned(new URL(fs.url).hostname)).selectors; } catch { /* optional */ }
+    const files = [state.resume, state.letter].filter((x): x is NonNullable<FileInfo> => !!x).map((x) => ({ kind: x.kind, name: x.name, type: x.type, b64: b64(x.bytes) }));
+    const res = await relay<{ results?: { key: string; selector: string | null; strategy: string; success: boolean }[]; leftForYou?: string[]; url?: string }>({ type: "rails:fill", values: state.me.fields, learned, files, quiet: true }, fs.tabId);
+    const results = res?.results ?? [];
+    try { await api.fillReport({ url: res?.url ?? fs.url, jobId: state.job?.id, leftForYou: res?.leftForYou, fields: results }); } catch { /* best effort */ }
+    await refreshRows(fs); render();
 
-  // 2. answers you saved before (pronouns, EEO, how-did-you-hear, terms): never sent anywhere
-  const todo = () => state.form!.rows.filter((r) => r.s === "todo" && r.f.kind !== "file");
-  const fromSaved = todo().filter((r) => state.saved[answerKey(r.f.label)] !== undefined);
-  if (fromSaved.length) {
-    state.form.step = "Using your saved answers…"; render();
-    for (const r of fromSaved) { const v = state.saved[answerKey(r.f.label)]!; r.s = "filling"; render(); const a = await relay<{ results?: { id: string; ok: boolean }[] }>({ type: "rails:apply", answers: [{ field: r.f, value: v }] }); r.s = a?.results?.[0]?.ok ? "done" : "left"; r.value = valueText(v); render(); }
-  }
+    // 2. answers you saved before (pronouns, EEO, how-did-you-hear, terms): never sent anywhere
+    const todo = () => fs.rows.filter((r) => r.s === "todo" && r.f.kind !== "file");
+    const fromSaved = todo().filter((r) => state.saved[answerKey(r.f.label)] !== undefined);
+    if (fromSaved.length) {
+      fs.step = "Using your saved answers…"; render();
+      for (const r of fromSaved) { const v = state.saved[answerKey(r.f.label)]!; r.s = "filling"; render(); const a = await relay<{ results?: { id: string; ok: boolean }[] }>({ type: "rails:apply", answers: [{ field: r.f, value: v }] }, fs.tabId); r.s = a?.results?.[0]?.ok ? "done" : "left"; r.value = valueText(v); render(); }
+    }
 
-  // 3. the rest: the server answers from the profile, verbatim options only; EEO never leaves the panel
-  const ask = todo().filter((r) => !r.f.sensitive && !r.f.legal);
-  for (const r of todo().filter((r) => r.f.sensitive)) { r.s = "left"; r.why = "Yours to answer. Tick Remember and it fills next time."; }
-  for (const r of todo().filter((r) => r.f.legal)) { r.s = "left"; r.why = "Read it, then tick it here or on the page."; }
-  if (ask.length) {
-    state.form.step = `Answering ${ask.length} question${ask.length === 1 ? "" : "s"} from your profile…`; render();
-    try {
-      const { answers } = await api.answers({ url: url ?? undefined, company: state.job?.company, title: state.job?.title, questions: ask.map((r) => ({ id: r.f.id, label: r.f.label, kind: r.f.kind, options: r.f.options?.slice(0, 80), required: r.f.required })) });
-      for (const r of ask) {
-        const a = answers.find((x) => x.id === r.f.id);
-        if (!a || a.value == null) { r.s = "left"; r.why = a?.why || "Not in your profile"; render(); continue; }
-        r.s = "filling"; render();
-        const ap = await relay<{ results?: { id: string; ok: boolean }[] }>({ type: "rails:apply", answers: [{ field: r.f, value: a.value }] });
-        if (ap?.results?.[0]?.ok) { r.s = "done"; r.value = valueText(a.value); r.why = a.why; } else { r.s = "failed"; r.why = `Suggested "${valueText(a.value)}" but the page did not take it.`; r.value = valueText(a.value); }
-        render();
-      }
-    } catch (e) { for (const r of ask) if (r.s === "todo") { r.s = "left"; r.why = "Answer service unavailable"; } state.status = `Could not answer questions: ${String((e as Error).message)}`; }
-  }
-  for (const r of state.form.rows) if (r.s === "todo") r.s = "left";
-  await refreshRows();
-  // dropdowns we could not list during the scan: read their options now so the row shows a picker, not a text box
-  const unlisted = state.form.rows.filter((r) => (r.s === "left" || r.s === "failed") && r.f.kind === "combobox" && !r.f.options?.length && !r.f.searchable).slice(0, 12);
-  if (unlisted.length) { state.form.step = "Reading the remaining dropdowns…"; render(); for (const r of unlisted) { const o = await relay<{ options?: string[]; searchable?: boolean }>({ type: "rails:options", field: r.f }); if (o?.ok) { r.f.options = o.options ?? []; if (o.searchable) r.f.searchable = true; } } }
-  state.form.running = false; state.form.step = ""; state.busy = null;
-  const sm = summary(state.form); state.lastFill = { filled: sm.done, attempted: sm.req, left: state.form.rows.filter((r) => r.s === "left").map((r) => r.f.label) };
-  render();
+    // 3. the rest: the server answers from the profile, verbatim options only; EEO never leaves the panel
+    const ask = todo().filter((r) => !r.f.sensitive && !r.f.legal);
+    for (const r of todo().filter((r) => r.f.sensitive)) { r.s = "left"; r.why = "Yours to answer. Tick Remember and it fills next time."; }
+    for (const r of todo().filter((r) => r.f.legal)) { r.s = "left"; r.why = "Read it, then tick it here or on the page."; }
+    if (ask.length) {
+      fs.step = `Answering ${ask.length} question${ask.length === 1 ? "" : "s"} from your profile…`; render();
+      try {
+        const { answers } = await api.answers({ url: fs.url || undefined, company: state.job?.company, title: state.job?.title, questions: ask.map((r) => ({ id: r.f.id, label: r.f.label, kind: r.f.kind, options: r.f.options?.slice(0, 80), required: r.f.required })) });
+        for (const r of ask) {
+          const a = answers.find((x) => x.id === r.f.id);
+          if (!a || a.value == null) { r.s = "left"; r.why = a?.why || "Not in your profile"; render(); continue; }
+          r.s = "filling"; render();
+          const ap = await relay<{ results?: { id: string; ok: boolean }[] }>({ type: "rails:apply", answers: [{ field: r.f, value: a.value }] }, fs.tabId);
+          if (ap?.results?.[0]?.ok) { r.s = "done"; r.value = valueText(a.value); r.why = a.why; } else { r.s = "failed"; r.why = `Suggested "${valueText(a.value)}" but the page did not take it.`; r.value = valueText(a.value); }
+          render();
+        }
+      } catch (e) { for (const r of ask) if (r.s === "todo") { r.s = "left"; r.why = "Answer service unavailable"; } state.status = `Could not answer questions: ${String((e as Error).message)}`; }
+    }
+    for (const r of fs.rows) if (r.s === "todo") r.s = "left";
+    await refreshRows(fs);
+    // dropdowns we could not list during the scan: read their options now so the row shows a picker, not a text box
+    const unlisted = fs.rows.filter((r) => (r.s === "left" || r.s === "failed") && r.f.kind === "combobox" && !r.f.options?.length && !r.f.searchable).slice(0, 12);
+    if (unlisted.length) { fs.step = "Reading the remaining dropdowns…"; render(); for (const r of unlisted) { const o = await relay<{ options?: string[]; searchable?: boolean }>({ type: "rails:options", field: r.f }, fs.tabId); if (o?.ok) { r.f.options = o.options ?? []; if (o.searchable) r.f.searchable = true; } } }
+    const sm = summary(fs); state.lastFill = { filled: sm.done, attempted: sm.req, left: fs.rows.filter((r) => r.s === "left").map((r) => r.f.label) };
+  } finally { finish(); }
 }
 
 async function doScore() {
@@ -298,9 +305,12 @@ async function load() {
   if (!token) { state.me = null; render(); return; }
   try { state.me = await api.me(); state.status = null; }
   catch (e) { state.me = null; state.status = String((e as Error).message) === "not_connected" ? null : "Finish onboarding in Rails first (upload your resume)."; render(); return; }
-  const url = await activeTabUrl();
-  if (url !== state.tabUrl) { state.job = null; state.lastFill = null; state.added = new Set(); state.form = null; }
-  state.tabUrl = url;
+  const tab = await activeTab(); const url = tab.url;
+  if (url !== state.tabUrl) { state.job = null; state.lastFill = null; state.added = new Set(); }
+  if (tab.id != null && state.forms.get(tab.id) && state.forms.get(tab.id)!.url.split("#")[0] !== (url ?? "").split("#")[0] && !state.forms.get(tab.id)!.running) state.forms.delete(tab.id); // the tab moved to another page
+  state.tabId = tab.id; state.tabUrl = url;
+  const elsewhere = [...state.forms.values()].find((f) => f.running && f.tabId !== tab.id);
+  state.status = elsewhere ? `Still filling ${(() => { try { return new URL(elsewhere.url).hostname; } catch { return "the other tab"; } })()} in the background.` : state.status;
   render();
   if (state.tabUrl && /^https?:/.test(state.tabUrl)) { try { state.job = (await api.job(state.tabUrl)).job; } catch { state.job = null; } }
   await loadFiles();

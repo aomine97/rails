@@ -3,7 +3,7 @@ import type { ScannedField } from "../../lib/scan";
 /** The checklist the panel shows while and after autofill: every question on the page, its state, and a control for the ones left. */
 export type RowState = "todo" | "filling" | "done" | "left" | "skip" | "failed";
 export type Row = { f: ScannedField; s: RowState; why?: string; value?: string };
-export type FormState = { rows: Row[]; running: boolean; step: string; url: string };
+export type FormState = { rows: Row[]; running: boolean; step: string; url: string; tabId: number };
 
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 /** Saved answers are keyed by the question text, lower-cased and stripped of punctuation, so the same question on another site matches. */
@@ -26,15 +26,15 @@ const ICON: Record<RowState, string> = {
 function control(r: Row): string {
   const f = r.f; const id = esc(f.id);
   if (f.kind === "file") return `<span class="note">Attach it on the page.</span>`;
-  if (f.kind === "checkbox") return `<button class="btn ghost act" data-id="${id}" data-v="true" style="padding:4px 10px;font-size:11px">Tick it</button>`;
+  if (f.kind === "checkbox") return `<button class="btn ghost sm act" data-id="${id}" data-v="true" >Tick it</button>`;
   const opts = f.options ?? [];
   if (opts.length) {
     const multi = f.kind === "checkboxes";
-    return `<select class="pick" data-id="${id}" ${multi ? "multiple size=4" : ""}><option value="">${multi ? "Pick one or more…" : "Pick an answer…"}</option>${opts.map((o) => `<option value="${esc(o)}" ${r.value && r.value.split(", ").includes(o) ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>${multi ? `<button class="btn ghost act-multi" data-id="${id}" style="padding:4px 10px;font-size:11px">Fill</button>` : ""}`;
+    return `<select class="pick" data-id="${id}" ${multi ? "multiple size=4" : ""}><option value="">${multi ? "Pick one or more…" : "Pick an answer…"}</option>${opts.map((o) => `<option value="${esc(o)}" ${r.value && r.value.split(", ").includes(o) ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>${multi ? `<button class="btn ghost sm act-multi" data-id="${id}" >Fill</button>` : ""}`;
   }
-  if (f.kind === "combobox") return `<div class="row" style="gap:4px"><input class="txt" data-id="${id}" placeholder="${f.searchable ? "Type to search the list, then Enter" : "Type the option, then Enter"}" value="${esc(r.value ?? "")}"><button class="btn ghost act-txt" data-id="${id}" style="padding:4px 10px;font-size:11px">Fill</button></div>`;
+  if (f.kind === "combobox") return `<div class="row" style="gap:4px"><input class="txt" data-id="${id}" placeholder="${f.searchable ? "Type to search the list, then Enter" : "Type the option, then Enter"}" value="${esc(r.value ?? "")}"><button class="btn ghost sm act-txt" data-id="${id}" >Fill</button></div>`;
   const tall = f.kind === "textarea";
-  return `<div class="row" style="gap:4px;align-items:flex-start">${tall ? `<textarea class="txt" data-id="${id}" rows="3" placeholder="Your answer…">${esc(r.value ?? "")}</textarea>` : `<input class="txt" data-id="${id}" placeholder="Your answer…" value="${esc(r.value ?? "")}">`}<button class="btn ghost act-txt" data-id="${id}" style="padding:4px 10px;font-size:11px">Fill</button></div>`;
+  return `<div class="row" style="gap:4px;align-items:flex-start">${tall ? `<textarea class="txt" data-id="${id}" rows="3" placeholder="Your answer…">${esc(r.value ?? "")}</textarea>` : `<input class="txt" data-id="${id}" placeholder="Your answer…" value="${esc(r.value ?? "")}">`}<button class="btn ghost sm act-txt" data-id="${id}" >Fill</button></div>`;
 }
 
 function row(r: Row, open: boolean): string {
@@ -49,14 +49,14 @@ export function renderForm(fs: FormState, expanded: boolean): string {
   const s = summary(fs);
   const required = fs.rows.filter((r) => r.f.required); const optional = fs.rows.filter((r) => !r.f.required);
   const bar = `<div class="bar"><span id="bar-fill" data-w="${s.pct}"></span></div>`;
-  const head = fs.running ? `<span class="ink">${esc(fs.step)}</span><span class="ink">${s.pct}%</span>` : `<span class="ink">${s.done}/${s.req} required filled</span><span class="ink">${s.pct}%</span>`;
+  const head = fs.running ? `<span class="t">${esc(fs.step)}</span><span class="pct">${s.pct}%</span>` : `<span class="t">${s.done}/${s.req} required filled</span><span class="row" style="gap:8px"><span class="pct">${s.pct}%</span><span class="chev">${expanded ? "▾" : "▸"}</span></span>`;
   return `<div class="card" style="padding:0">
-    <div class="row" style="justify-content:space-between;padding:10px 12px 6px;cursor:pointer" id="form-head">${head}</div>
-    <div style="padding:0 12px 8px">${bar}</div>
+    <div class="form-head" id="form-head">${head}</div>
+    <div style="padding:0 14px 10px">${bar}</div>
     ${expanded ? `<div class="q-list">
-      ${required.length ? `<h2 style="padding:4px 12px 0">Required</h2><ul>${required.map((r) => row(r, !fs.running)).join("")}</ul>` : ""}
-      ${optional.length ? `<h2 style="padding:8px 12px 0">Optional</h2><ul>${optional.map((r) => row(r, !fs.running)).join("")}</ul>` : ""}
-      <p class="note" style="padding:6px 12px 10px;margin:0">Pick an answer for anything marked ! and Rails puts it in the form. Pronouns, EEO and "how did you hear" stay on this computer. Review the page, then click its Submit.</p>
+      ${required.length ? `<h2>Required</h2><ul>${required.map((r) => row(r, !fs.running)).join("")}</ul>` : ""}
+      ${optional.length ? `<h2>Optional</h2><ul>${optional.map((r) => row(r, !fs.running)).join("")}</ul>` : ""}
+      <p class="note" style="padding:8px 14px 12px;margin:0">Pick an answer for anything marked ! and Rails puts it in the form. Pronouns, EEO and "how did you hear" stay on this computer. Review the page, then click its Submit.</p>
     </div>` : ""}
   </div>`;
 }

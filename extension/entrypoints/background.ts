@@ -13,7 +13,9 @@ export default defineBackground(() => {
       return true;
     }
     if (msg?.type === "rails:fill" || msg?.type === "rails:scan" || msg?.type === "rails:scan-form" || msg?.type === "rails:apply" || msg?.type === "rails:options") {
-      chrome.tabs.query({ active: true, currentWindow: true }).then(async ([tab]) => {
+      // The panel pins a run to the tab it started on, so switching tabs mid-fill does not redirect the messages.
+      const pick = typeof msg.tabId === "number" ? chrome.tabs.get(msg.tabId).then((t) => [t]).catch(() => []) : chrome.tabs.query({ active: true, currentWindow: true });
+      pick.then(async ([tab]) => {
         if (!tab?.id || !tab.url) return sendResponse({ error: "no_tab" });
         const origin = new URL(tab.url).origin + "/*";
         try {

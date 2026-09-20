@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { formatPay } from "@/lib/match/country";
 import { CanonicalProfile } from "@/lib/schemas/profile";
 import { JobTags } from "@/lib/jobs/tags";
 import { scoreJob } from "@/lib/match/score";
@@ -11,7 +12,7 @@ export const normUrl = (u: string) => { try { const x = new URL(u); x.hash = "";
 export async function findJobByUrl(db: SupabaseClient, raw: string) {
   const url = normUrl(raw);
   const idGuess = url.match(/\/(?:jobs?|posting|postings|req|requisition|opportunities|careers)\/([A-Za-z0-9_-]{4,})/)?.[1] ?? url.match(/[?&]gh_jid=(\d+)/)?.[1] ?? url.match(/\/([A-Za-z0-9_-]{6,})\/?$/)?.[1] ?? null;
-  const sel = "id,title,location,url,apply_url,tags,external_id,companies(name,domain,logo_url)";
+  const sel = "id,title,location,url,apply_url,tags,external_id,posted_at,first_seen_at,source,remote,pay_min,pay_max,pay_period,pay_currency,companies(name,domain,logo_url)";
   const { data: exact } = await db.from("jobs").select(sel).is("closed_at", null).or(`url.eq.${url},apply_url.eq.${url},url.eq.${url}/,apply_url.eq.${url}/`).limit(1);
   if (exact?.[0]) return exact[0];
   if (idGuess) {
@@ -42,6 +43,9 @@ export async function jobInfo(db: SupabaseClient, userId: string, job: NonNullab
   return {
     keywords, titleMatch, yourTitle: me.success ? (me.data.targetRoles[0] ?? me.data.headline ?? me.data.experience[0]?.title ?? null) : null,
     level: tags.success ? tags.data.level : null, field: tags.success ? tags.data.field : null, sub: score?.sub ?? null,
+    postedAt: (job as unknown as { posted_at?: string | null; first_seen_at?: string | null }).posted_at ?? (job as unknown as { first_seen_at?: string | null }).first_seen_at ?? null,
+    source: (job as unknown as { source?: string | null }).source ?? null, remote: (job as unknown as { remote?: boolean | null }).remote ?? null,
+    pay: (() => { const j = job as unknown as { pay_min?: number | null; pay_max?: number | null; pay_period?: string | null; pay_currency?: string | null }; return formatPay(j.pay_min ?? null, j.pay_max ?? null, j.pay_currency ?? "USD", j.pay_period === "hour" ? "hour" : "year"); })(),
     id: job.id, title: job.title, company: (job.companies as unknown as { name: string } | null)?.name ?? "", companyDomain: (job.companies as unknown as { domain?: string | null } | null)?.domain ?? null, companyLogo: (job.companies as unknown as { logo_url?: string | null } | null)?.logo_url ?? null, location: job.location, fit: score?.fit ?? null, band: score?.band ?? null,
     requirements: score?.requirements ?? [], hardBlocks: score?.hardBlocks ?? [], softNotes: score?.softNotes ?? [], tagged: tags.success && !!job.tags,
     resume: resume?.text_content ?? null, resumeScore: resume?.score ?? null, coverLetter: app?.cover_letter ?? null, stage: app?.stage ?? null,
