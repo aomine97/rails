@@ -32,16 +32,17 @@ const okJson = async (res, check) => { if (!res || !res.ok) return false; try { 
 async function probe(name, domain) {
   for (const slug of candidates(name, domain)) {
     let r;
+    // Every check requires at least one posting: SmartRecruiters (and some others) answer 200 with an empty list for ANY slug.
     r = await get(`https://boards-api.greenhouse.io/v1/boards/${slug}/jobs`);
-    if (await okJson(r, (j) => Array.isArray(j.jobs))) return { ats: "greenhouse", slug, careersUrl: `https://job-boards.greenhouse.io/${slug}` };
+    if (await okJson(r, (j) => Array.isArray(j.jobs) && j.jobs.length > 0)) return { ats: "greenhouse", slug, careersUrl: `https://job-boards.greenhouse.io/${slug}` };
     r = await get(`https://api.lever.co/v0/postings/${slug}?mode=json&limit=1`);
-    if (await okJson(r, (j) => Array.isArray(j))) return { ats: "lever", slug, careersUrl: `https://jobs.lever.co/${slug}` };
+    if (await okJson(r, (j) => Array.isArray(j) && j.length > 0)) return { ats: "lever", slug, careersUrl: `https://jobs.lever.co/${slug}` };
     r = await get(`https://api.ashbyhq.com/posting-api/job-board/${slug}`);
-    if (await okJson(r, (j) => Array.isArray(j.jobs))) return { ats: "ashby", slug, careersUrl: `https://jobs.ashbyhq.com/${slug}` };
+    if (await okJson(r, (j) => Array.isArray(j.jobs) && j.jobs.length > 0)) return { ats: "ashby", slug, careersUrl: `https://jobs.ashbyhq.com/${slug}` };
     r = await get(`https://api.smartrecruiters.com/v1/companies/${slug}/postings?limit=1`);
-    if (await okJson(r, (j) => typeof j.totalFound === "number")) return { ats: "smartrecruiters", slug, careersUrl: `https://jobs.smartrecruiters.com/${slug}` };
+    if (await okJson(r, (j) => j.totalFound > 0 && Array.isArray(j.content) && j.content.length > 0)) return { ats: "smartrecruiters", slug, careersUrl: `https://jobs.smartrecruiters.com/${slug}` };
     r = await get(`https://apply.workable.com/api/v3/accounts/${slug}/jobs`, { method: "POST", body: "{}", headers: { "content-type": "application/json" } });
-    if (await okJson(r, (j) => Array.isArray(j.results))) return { ats: "workable", slug, careersUrl: `https://apply.workable.com/${slug}` };
+    if (await okJson(r, (j) => Array.isArray(j.results) && j.results.length > 0)) return { ats: "workable", slug, careersUrl: `https://apply.workable.com/${slug}` };
   }
   for (const pre of ["careers-", "careersus-", "jobs-", ""]) for (const slug of candidates(name, domain).slice(0, 3)) {
     const host = `${pre}${slug}.icims.com`;
@@ -95,9 +96,9 @@ async function crawl(domain) {
 
 async function resolve(c) {
   const domain = domains[c.name] ?? (c.careersUrl ? new URL(c.careersUrl).hostname.replace(/^www\./, "") : null);
+  if (domain) { const viaCrawl = await crawl(domain); if (viaCrawl) return { ...viaCrawl, how: "crawl" }; }
   const viaProbe = await probe(c.name, domain);
   if (viaProbe) return { ...viaProbe, how: "probe" };
-  if (domain) { const viaCrawl = await crawl(domain); if (viaCrawl) return { ...viaCrawl, how: "crawl" }; }
   return null;
 }
 
@@ -126,13 +127,17 @@ console.log(`\nresolved ${changed}/${targets.length}; data/companies.json update
 if (APPLY && changed) {
   const { createClient } = await import("@supabase/supabase-js");
   const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
-  let n = 0;
+  let n = 0, reset = 0;
   for (const [c, r] of results) {
-    if (!r) continue;
+    if (!r) {
+      const { data: row } = await db.from("companies").select("id,ats,slug").eq("name", c.name).limit(1).maybeSingle();
+      if (row && row.ats !== "unknown" && row.ats !== "oracle") { await db.from("companies").update({ ats: "unknown", slug: null, tenant: null, wdn: null, active: false }).eq("id", row.id); reset++; }
+      continue;
+    }
     const patch = { ats: r.ats, slug: r.slug ?? null, tenant: r.tenant ?? null, wdn: r.wdn ?? null, careers_url: r.careersUrl ?? null, active: true };
     const { data: row } = await db.from("companies").select("id").eq("name", c.name).limit(1).maybeSingle();
     const { error } = row ? await db.from("companies").update(patch).eq("id", row.id) : await db.from("companies").insert({ name: c.name, ...patch });
     if (error) console.error(c.name, error.message); else n++;
   }
-  console.log(`DB updated: ${n} companies`);
+  console.log(`DB updated: ${n} companies resolved, ${reset} reset to unknown`);
 }
