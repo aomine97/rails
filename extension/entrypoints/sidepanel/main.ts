@@ -4,8 +4,8 @@ const app = document.getElementById("app")!;
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 const bandColor = (fit: number | null) => (fit == null ? "var(--muted)" : fit >= 85 ? "var(--green)" : fit >= 70 ? "var(--amber)" : "var(--red)");
 
-type State = { me: Me | null; job: JobInfo | null; tabUrl: string | null; status: string | null; needsPermission: string | null; lastFill: { filled: number; attempted: number; left: string[] } | null; scoring: boolean };
-const state: State = { me: null, job: null, tabUrl: null, status: null, needsPermission: null, lastFill: null, scoring: false };
+type State = { me: Me | null; job: JobInfo | null; tabUrl: string | null; status: string | null; needsPermission: string | null; lastFill: { filled: number; attempted: number; left: string[] } | null; scoring: boolean; tailoring: boolean; showResume: boolean };
+const state: State = { me: null, job: null, tabUrl: null, status: null, needsPermission: null, lastFill: null, scoring: false, tailoring: false, showResume: false };
 
 async function activeTabUrl(): Promise<string | null> {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -31,7 +31,9 @@ function render() {
       <div class="row" style="justify-content:space-between"><div><div class="ink">${esc(job.title)}</div><div class="muted">${esc(job.company)}${job.location ? ` · ${esc(job.location)}` : ""}</div></div><div class="fit" style="color:${bandColor(job.fit)}">${job.fit ?? "—"}</div></div>
       ${job.hardBlocks.length ? `<div style="margin-top:6px">${job.hardBlocks.map((b) => `<span class="chip" style="background:var(--red-bg);color:var(--red)">✗ ${esc(b)}</span>`).join(" ")}</div>` : ""}
       ${job.requirements.length ? `<h2 style="margin-top:10px">Requirements</h2><ul>${job.requirements.slice(0, 8).map((r) => `<li class="req"><span class="dot" style="background:${r.status === "met" ? "var(--green)" : r.status === "missing" ? "var(--red)" : "var(--amber)"}"></span><span>${esc(r.text)}${r.evidence ? `<div class="muted">You bring: ${esc(r.evidence)}</div>` : ""}</span></li>`).join("")}</ul>` : ""}
-      <div class="row" style="margin-top:10px"><a class="btn ghost" href="${esc(job.detailUrl)}" target="_blank">Open in Rails ↗</a>${job.resume ? `<button class="btn ghost" id="copy-resume">Copy tailored resume${job.resumeScore != null ? ` (${job.resumeScore}%)` : ""}</button>` : `<a class="btn ghost" href="${esc(job.detailUrl)}/tailor" target="_blank">Tailor resume</a>`}${job.coverLetter ? `<button class="btn ghost" id="copy-letter">Copy cover letter</button>` : ""}</div>
+      <div class="row" style="margin-top:10px"><a class="btn ghost" href="${esc(job.detailUrl)}" target="_blank">Open in Rails ↗</a>${job.resume ? `<button class="btn ghost" id="copy-resume">Copy tailored resume${job.resumeScore != null ? ` (${job.resumeScore}%)` : ""}</button><button class="btn ghost" id="toggle-resume">${state.showResume ? "Hide" : "Show"}</button>` : `<button class="btn secondary" id="tailor" ${state.tailoring || !job.tagged ? "disabled" : ""}>${state.tailoring ? "Tailoring… (about 20 s)" : `Tailor resume${me.plan === "free" ? " · 1 credit" : ""}`}</button>`}${job.coverLetter ? `<button class="btn ghost" id="copy-letter">Copy cover letter</button>` : ""}</div>
+      ${job.resume && state.showResume ? `<pre>${esc(job.resume)}</pre><a class="muted" style="font-size:11px" href="${esc(job.detailUrl)}/tailor/print" target="_blank">Open as PDF ↗</a>` : ""}
+      ${state.status && !state.tailoring ? `<p class="note">${esc(state.status)}</p>` : ""}
     </div>` : `<div class="card"><h2>This page</h2><div class="muted">${state.tabUrl ? "Not a job Rails knows yet. Score it here and it joins your feed; autofill works either way." : "Open a job posting or application form."}</div>${state.tabUrl && /^https?:/.test(state.tabUrl) ? `<button class="btn secondary" style="margin-top:8px" id="score" ${state.scoring ? "disabled" : ""}>${state.scoring ? "Scoring… (about 15 s)" : "Score this job"}</button>` : ""}${state.status && !state.scoring ? `<p class="note">${esc(state.status)}</p>` : ""}</div>`}
     <div class="card">
       <h2>Autofill</h2>
@@ -51,6 +53,24 @@ function render() {
   });
   document.getElementById("fill")?.addEventListener("click", doFill);
   document.getElementById("score")?.addEventListener("click", doScore);
+  document.getElementById("tailor")?.addEventListener("click", doTailor);
+  document.getElementById("toggle-resume")?.addEventListener("click", () => { state.showResume = !state.showResume; render(); });
+}
+
+/** Tailor from the panel: same engine and credit rules as the app. The result stays attached to the job for the app too. */
+async function doTailor() {
+  if (!state.me || !state.job || state.tailoring) return;
+  state.tailoring = true; state.status = null; render();
+  try {
+    const r = await api.tailor(state.job.id);
+    state.job = { ...state.job, resume: r.text, resumeScore: r.coverageAfter }; state.showResume = true;
+    state.status = `Keyword fit ${r.coverageBefore}% → ${r.coverageAfter}%. Copy it into the form or open the PDF.`;
+    try { state.me = await api.me(); } catch { /* credits label refresh is optional */ }
+  } catch (e) {
+    const m = String((e as Error).message);
+    state.status = m.startsWith("locked:") ? `Out of credits; refills in ${m.slice(7)}. Pro removes the limit: ${SITE}/pricing` : m.includes(":") ? m.slice(m.indexOf(":") + 1) : "Tailoring failed. Try again.";
+  }
+  state.tailoring = false; render();
 }
 
 /** Score the current tab: server fetches the posting itself; if that fails (login walls), we send the page text we can see. */

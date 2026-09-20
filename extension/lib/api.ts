@@ -14,7 +14,7 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
   if (!token) throw new Error("not_connected");
   const res = await fetch(`${SITE}${path}`, { ...init, headers: { authorization: `Bearer ${token}`, "content-type": "application/json", ...(init?.headers ?? {}) } });
   if (res.status === 401) { await setToken(null); throw new Error("not_connected"); }
-  if (!res.ok) throw new Error(`${res.status}`);
+  if (!res.ok) { let msg = `${res.status}`; try { const j = await res.json(); if (j?.error === "locked") msg = `locked:${j.refillIn}`; else if (j?.error) msg = `${res.status}:${j.error}`; } catch { /* plain */ } throw new Error(msg); }
   return (await res.json()) as T;
 }
 
@@ -23,5 +23,6 @@ export const api = {
   job: (url: string) => call<{ job: JobInfo | null }>(`/api/ext/job?url=${encodeURIComponent(url)}`),
   learned: (domain: string) => call<{ selectors: Record<string, string[]> }>(`/api/ext/fill?domain=${encodeURIComponent(domain)}`),
   score: (body: { url: string; text?: string; title?: string }) => call<{ job: JobInfo; created: boolean }>("/api/ext/score", { method: "POST", body: JSON.stringify(body) }),
+  tailor: (jobId: string) => call<{ text: string; coverageBefore: number; coverageAfter: number; printUrl: string }>("/api/ext/tailor", { method: "POST", body: JSON.stringify({ jobId }) }),
   fillReport: (body: { url: string; jobId?: string; leftForYou?: string[]; fields: { key: string; selector: string | null; strategy: string; success: boolean }[] }) => call<{ ok: boolean }>("/api/ext/fill", { method: "POST", body: JSON.stringify(body) }),
 };
