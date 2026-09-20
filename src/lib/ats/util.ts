@@ -3,7 +3,7 @@ import { AdapterError, type AtsKind, type FetchLike } from "./types";
 export const UA = "RailsJobs/0.1 (+https://rails.app; jobs@rails.app)";
 
 export async function getJson<T>(ats: AtsKind, company: string, url: string, fetchImpl: FetchLike, init?: RequestInit): Promise<T> {
-  const res = await fetchImpl(url, { signal: AbortSignal.timeout(20_000), ...init, headers: { accept: "application/json", "user-agent": UA, ...(init?.headers ?? {}) } });
+  const res = await fetchImpl(url, { ...init, headers: { accept: "application/json", "user-agent": UA, ...(init?.headers ?? {}) } });
   if (!res.ok) throw new AdapterError(ats, company, `${init?.method ?? "GET"} ${url} -> ${res.status}`, res.status);
   return (await res.json()) as T;
 }
@@ -37,9 +37,3 @@ export function toIso(v: string | number | null | undefined): string | null {
   const d = typeof v === "number" ? new Date(v) : new Date(v);
   return Number.isNaN(d.getTime()) ? null : d.toISOString();
 }
-
-/** Optional cap on postings fetched per company (used by the smoke test). RAILS_MAX_JOBS=25 */
-export const maxJobs = () => Number(process.env.RAILS_MAX_JOBS ?? 0) || Infinity;
-
-/** Smoke-test mode: skip per-posting detail requests. RAILS_LIST_ONLY=1 */
-export const listOnly = () => process.env.RAILS_LIST_ONLY === "1";

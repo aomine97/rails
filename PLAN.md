@@ -3,12 +3,11 @@
 ## STATUS (update at the end of every session — this is the handoff for a new chat)
 - Last session: 2026-09-19. Week 1 backend written and unit-tested (15 tests pass, tsc + eslint clean): schema, companies seed (690), ATS adapters (Greenhouse/Lever/Ashby/SmartRecruiters/Workday/USAJobs), poller/verifier/tagger cron routes, canonical profile schema, scoring engine, geo-gate, shell extension.
 - Next item: Ilyas does the account steps below, then me: "Auth: email + Google" (Week 1) and the Feed UI.
-- DONE 2026-09-20: Supabase project prwzndifucrwldykcqft created, keys in .env.local, migration 0001 applied, 689 companies seeded (507 with feed slugs). Repo pushed to github.com/aomine97/rails.
-- Blocked on (Ilyas, ~20 min):
-  1. Anthropic API key -> .env.local ANTHROPIC_API_KEY (tagger)
-  2. Chrome dev account ($5) -> upload extension-shell zip (see extension-shell/README.md), visibility Unlisted
-  3. Vercel: import aomine97/rails (Hobby), paste .env.local into Environment Variables, deploy. Vercel Hobby crons are daily-only, so hourly poll + 15-min tag run from .github/workflows/cron.yml: add repo secrets APP_URL and CRON_SECRET (Settings -> Secrets and variables -> Actions).
-- Known gaps: `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Tagger prompt untested against the model. Workday detail fetch is ~0.5-1s per posting: poller should fetch details only for NEW postings (todo in ingest.ts). SmartRecruiters same.
+- DONE 2026-09-20: Supabase project prwzndifucrwldykcqft created, keys in .env.local, migration 0001 applied, 689 companies seeded (507 with feed slugs). Repo pushed to github.com/aomine97/rails. Vercel deployed: https://rails-psi.vercel.app (Hobby). Anthropic key + CRON_SECRET set in .env.local and Vercel.
+- Blocked on (Ilyas):
+  1. Chrome dev account ($5) -> upload rails-extension-shell.zip, paste extension-shell/store/LISTING.md, Unlisted
+  2. GitHub repo secrets for the hourly crons: Settings -> Secrets and variables -> Actions -> APP_URL=https://rails-psi.vercel.app, CRON_SECRET=(value in .env.local)
+- Known gaps: `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Tagger prompt untested against the model. Poller is list-only + details for up to 40 new postings per company per run; tag cron backfills the rest (done 2026-09-20).
 - Decisions made: name Rails; tech-only (software, data, cloud, IT, cyber); pricing below; human clicks Submit always; career centers are the B2B channel; no LinkedIn/Indeed scraping; geo-gate CA and NY at signup.
 
 ## Pricing (final)

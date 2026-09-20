@@ -37,9 +37,18 @@ export interface RawJob {
 
 export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 
+export interface FetchOpts {
+  /** skip per-posting detail requests (Workday, SmartRecruiters); descriptions come back null */
+  listOnly?: boolean;
+  /** stop after this many postings */
+  maxJobs?: number;
+}
+
 export interface Adapter {
   kind: AtsKind;
-  fetchJobs(company: CompanyRef, fetchImpl?: FetchLike): Promise<RawJob[]>;
+  fetchJobs(company: CompanyRef, fetchImpl?: FetchLike, opts?: FetchOpts): Promise<RawJob[]>;
+  /** fill description/details for one posting fetched with listOnly (only ATSs that need a second request) */
+  enrich?(company: CompanyRef, job: RawJob, fetchImpl?: FetchLike): Promise<RawJob>;
 }
 
 export class AdapterError extends Error {

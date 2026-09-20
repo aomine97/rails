@@ -2,9 +2,9 @@
 //   POST https://{tenant}.wd{n}.myworkdayjobs.com/wday/cxs/{tenant}/{site}/jobs   {appliedFacets:{}, limit, offset, searchText}
 //   GET  https://{tenant}.wd{n}.myworkdayjobs.com/wday/cxs/{tenant}/{site}{externalPath}
 // Poll politely: one list call + one detail call per new posting, and never more than once an hour per company.
-import type { Adapter, CompanyRef, FetchLike, RawJob } from "./types";
+import type { Adapter, CompanyRef, FetchLike, FetchOpts, RawJob } from "./types";
 import { AdapterError } from "./types";
-import { getJson, htmlToText, isRemote, listOnly, maxJobs } from "./util";
+import { getJson, htmlToText, isRemote } from "./util";
 
 interface WdList { total: number; jobPostings: { title: string; externalPath: string; locationsText?: string; postedOn?: string; bulletFields?: string[] }[] }
 interface WdDetail { jobPostingInfo?: { title?: string; jobDescription?: string; location?: string; additionalLocations?: string[]; postedOn?: string; startDate?: string; timeType?: string; jobReqId?: string; externalUrl?: string; remoteType?: string } }
@@ -21,11 +21,26 @@ export function parsePostedOn(s: string | undefined, now = new Date()): string |
   return null;
 }
 
+const baseOf = (c: CompanyRef) => `https://${c.tenant}.wd${c.wdn}.myworkdayjobs.com/wday/cxs/${c.tenant}/${c.slug}`;
+
+async function detail(c: CompanyRef, externalPath: string, fetchImpl: FetchLike): Promise<WdDetail["jobPostingInfo"]> {
+  return (await getJson<WdDetail>("workday", c.name, `${baseOf(c)}${externalPath}`, fetchImpl)).jobPostingInfo ?? {};
+}
+
 export const workday: Adapter = {
   kind: "workday",
-  async fetchJobs(c: CompanyRef, fetchImpl: FetchLike = fetch): Promise<RawJob[]> {
+  async enrich(c: CompanyRef, job: RawJob, fetchImpl: FetchLike = fetch): Promise<RawJob> {
+    const path = job.url.split(`/${c.slug}`)[1];
+    if (!path) return job;
+    const info = await detail(c, path, fetchImpl);
+    const html = info?.jobDescription ?? null;
+    return { ...job, title: info?.title ?? job.title, location: info?.location ?? job.location, employmentType: info?.timeType ?? job.employmentType,
+      externalId: info?.jobReqId ?? job.externalId, descriptionHtml: html, descriptionText: htmlToText(html),
+      url: info?.externalUrl ?? job.url, applyUrl: info?.externalUrl ?? job.applyUrl, postedAt: parsePostedOn(info?.postedOn) ?? job.postedAt };
+  },
+  async fetchJobs(c: CompanyRef, fetchImpl: FetchLike = fetch, opts?: FetchOpts): Promise<RawJob[]> {
     if (!c.slug || !c.tenant || !c.wdn) throw new AdapterError("workday", c.name, "needs slug (site), tenant and wdn");
-    const base = `https://${c.tenant}.wd${c.wdn}.myworkdayjobs.com/wday/cxs/${c.tenant}/${c.slug}`;
+    const base = baseOf(c);
     const out: RawJob[] = [];
     const limit = 20;
     for (let offset = 0; offset < 1000; offset += limit) {
@@ -34,9 +49,8 @@ export const workday: Adapter = {
         body: JSON.stringify({ appliedFacets: {}, limit, offset, searchText: "" }),
       });
       for (const p of list.jobPostings ?? []) {
-        if (out.length >= maxJobs()) return out;
         let info: WdDetail["jobPostingInfo"] = {};
-        if (!listOnly()) try { info = (await getJson<WdDetail>("workday", c.name, `${base}${p.externalPath}`, fetchImpl)).jobPostingInfo ?? {}; } catch { /* keep list data */ }
+        try { info = (await getJson<WdDetail>("workday", c.name, `${base}${p.externalPath}`, fetchImpl)).jobPostingInfo ?? {}; } catch { /* keep list data */ }
         const id = info?.jobReqId ?? p.externalPath.split("_").pop() ?? p.externalPath;
         const html = info?.jobDescription ?? null;
         const publicUrl = info?.externalUrl ?? `https://${c.tenant}.wd${c.wdn}.myworkdayjobs.com/${c.slug}${p.externalPath}`;
