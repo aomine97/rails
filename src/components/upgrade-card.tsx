@@ -9,7 +9,7 @@ export function UpgradeCard({ reason, vars, student }: { reason: PaywallReason; 
       <div className="font-display text-lg font-extrabold leading-tight">{c.title(vars)}</div>
       <p className={`mt-1 text-[14px] leading-relaxed ${c.hard ? "text-[#C9D3E4]" : "text-text"}`}>{c.body(vars)}</p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <Link href="/pricing" className="rounded-full bg-orange px-4 py-2 text-[13px] font-extrabold text-ink">{c.cta} · ${student ? PRICES.proMonthlyStudent : PRICES.proMonthly}/mo</Link>
+        <Link href={`/pricing?reason=${reason}`} className="rounded-full bg-orange px-4 py-2 text-[13px] font-extrabold text-ink">{c.cta} · ${student ? PRICES.proMonthlyStudent : PRICES.proMonthly}/mo</Link>
         {c.secondary && <span className={`text-[13px] font-semibold ${c.hard ? "text-[#8A99B3]" : "text-muted"}`}>{c.secondary}</span>}
       </div>
     </div>

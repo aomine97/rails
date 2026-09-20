@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { PlanChip } from "./plan-chip";
 
 const NAV: { href: string; label: string; badge?: string; soon?: boolean; icon: string }[] = [
   { href: "/app", label: "Jobs", icon: "M4 6h16M4 12h16M4 18h10" },
@@ -9,6 +10,7 @@ const NAV: { href: string; label: string; badge?: string; soon?: boolean; icon: 
   { href: "/app/coach", label: "Coach", soon: true, icon: "M4 5h16v10H8l-4 4z" },
   { href: "/app/interview", label: "Interview", soon: true, badge: "NEW", icon: "M12 3v10M8 7a4 4 0 008 0M6 21h12" },
   { href: "/app/referrals", label: "Referrals", soon: true, icon: "M16 11a4 4 0 10-8 0M4 21a8 8 0 0116 0" },
+  { href: "/app/billing", label: "Billing", icon: "M3 7h18v10H3zM3 11h18" },
   { href: "/app/settings", label: "Settings", soon: true, icon: "M12 8a4 4 0 100 8 4 4 0 000-8zM3 12h2M19 12h2M12 3v2M12 19v2" },
 ];
 
@@ -26,7 +28,7 @@ export function AppShell({ children, active = "/app", name, credits }: { childre
           </Link>
         ))}
         <div className="mt-auto flex flex-col items-center gap-2 text-[10px] text-[#8A99B3]">
-          {credits != null && <span title="AI credits" className="rounded-full bg-navy-2 px-2 py-0.5 font-mono text-[11px] font-bold text-orange">{credits}</span>}
+          <PlanChip credits={credits} />
           <form action="/auth/signout" method="post"><button className="text-[10px] font-semibold text-[#8A99B3] hover:text-white">Out</button></form>
         </div>
       </aside>
