@@ -39,7 +39,8 @@ export async function POST(req: Request) {
             current_period_end: end.toISOString(), started_at: now, paused_until: null, cancel_at: null, updated_at: now,
           }, { onConflict: "user_id" });
         } else if (customer) {
-          await admin.from("subscriptions").upsert({ user_id: userId, stripe_customer_id: customer, student_price: student, updated_at: now }, { onConflict: "user_id" });
+          const subId = typeof s.subscription === "string" ? s.subscription : s.subscription?.id ?? null;
+          await admin.from("subscriptions").upsert({ user_id: userId, stripe_customer_id: customer, stripe_subscription_id: subId, student_price: student, updated_at: now }, { onConflict: "user_id" });
         }
         await admin.from("billing_events").insert({ user_id: userId, kind: "checkout_completed", plan: s.metadata?.plan ?? null, student, stripe_id: s.id, payload: { amount_total: s.amount_total, mode: s.mode } });
         break;

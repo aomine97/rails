@@ -36,11 +36,15 @@ export async function startCheckout(form: FormData) {
     customer,
     line_items: [{ price: priceIdFor(product), quantity: 1 }],
     allow_promotion_codes: true,
+    billing_address_collection: "auto",
     success_url: `${siteUrl()}/app/billing?welcome=1`,
     cancel_url: `${siteUrl()}/pricing?canceled=1`,
     client_reference_id: user.id,
     metadata: { user_id: user.id, product, plan, student: String(student), reason },
-    ...(PRODUCTS[product].mode === "subscription" ? { subscription_data: { metadata: { user_id: user.id, product, plan, student: String(student) } } } : { payment_intent_data: { metadata: { user_id: user.id, product, plan, student: String(student) } } }),
+    ...(PRODUCTS[product].mode === "subscription"
+      ? { subscription_data: { metadata: { user_id: user.id, product, plan, student: String(student) } } }
+      // One-time pass: create an invoice so the buyer gets a proper receipt/invoice email like subscribers do.
+      : { payment_intent_data: { metadata: { user_id: user.id, product, plan, student: String(student) } }, invoice_creation: { enabled: true, invoice_data: { description: `${PRODUCTS[product].label}: 4 months of Rails Pro`, metadata: { user_id: user.id, product } } } }),
   });
   await admin.from("billing_events").insert({ user_id: user.id, kind: "checkout_started", plan, student, stripe_id: session.id, payload: { reason } });
   if (reason) await admin.from("paywall_events").insert({ user_id: user.id, reason, action: "clicked" });
