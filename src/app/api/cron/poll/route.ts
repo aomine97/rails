@@ -3,7 +3,7 @@ import { cronAuth } from "../_auth";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { dueCompanies, pollCompany } from "@/lib/jobs/ingest";
 
-export const maxDuration = 300; // Vercel: needs Pro for >60s; on Hobby set limit=10 and run every 10 min instead
+export const maxDuration = 300;
 export const dynamic = "force-dynamic";
 
 /** Hourly. Polls up to `limit` companies whose feed is stale, 4 at a time. */

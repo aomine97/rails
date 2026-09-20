@@ -7,7 +7,7 @@
 - Blocked on (Ilyas, ~20 min):
   1. Anthropic API key -> .env.local ANTHROPIC_API_KEY (tagger)
   2. Chrome dev account ($5) -> upload extension-shell zip (see extension-shell/README.md), visibility Unlisted
-  3. Vercel: import aomine97/rails, paste .env.local into Environment Variables, add CRON_SECRET, deploy. Crons then run hourly.
+  3. Vercel: import aomine97/rails (Hobby), paste .env.local into Environment Variables, deploy. Vercel Hobby crons are daily-only, so hourly poll + 15-min tag run from .github/workflows/cron.yml: add repo secrets APP_URL and CRON_SECRET (Settings -> Secrets and variables -> Actions).
 - Known gaps: `npx tsc` reports a LayoutProps error in src/app/layout.tsx (Next 16 typegen; goes away after `next build`/`next dev` once). Tagger prompt untested against the model. Workday detail fetch is ~0.5-1s per posting: poller should fetch details only for NEW postings (todo in ingest.ts). SmartRecruiters same.
 - Decisions made: name Rails; tech-only (software, data, cloud, IT, cyber); pricing below; human clicks Submit always; career centers are the B2B channel; no LinkedIn/Indeed scraping; geo-gate CA and NY at signup.
 
