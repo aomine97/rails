@@ -17,9 +17,12 @@ export function parseJobviteList(slug: string, html: string): { id: string; titl
   const re = new RegExp(`<a[^>]+href=["'](?:https?://jobs\\.jobvite\\.com)?/${slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/job/([A-Za-z0-9]+)[^"']*["'][^>]*>([\\s\\S]*?)</a>([\\s\\S]{0,600}?)(?=<a[^>]+href=|$)`, "gi");
   for (const m of html.matchAll(re)) {
     const id = m[1]; if (seen.has(id)) continue; seen.add(id);
-    const title = htmlToText(m[2]) ?? ""; if (!title) continue;
-    const loc = m[3].match(/jv-job-list-location[^>]*>([\s\S]*?)<\/(?:div|td|span)>/i)?.[1];
-    out.push({ id, title, location: htmlToText(loc ?? "") || null });
+    // Modern Jobvite pages wrap the whole card in the anchor: title, "2 Locations", department, "Job listing"/"Job location" labels.
+    const lines = (htmlToText(m[2].replace(/<\/(?:span|td|th|p|li|div|h[1-6])>/gi, "$&\n")) ?? "").split("\n").map((l) => l.trim()).filter((l) => l && !/^job (listing|location|category|department)$/i.test(l));
+    const title = lines[0] ?? ""; if (!title) continue;
+    const inCard = lines.slice(1).find((l) => /^\d+ locations?$/i.test(l) || /remote|,\s*[A-Z]{2}\b|\b(United States|USA|Canada|UK)\b/i.test(l)) ?? null;
+    const outside = m[3].match(/jv-job-list-location[^>]*>([\s\S]*?)<\/(?:div|td|span)>/i)?.[1];
+    out.push({ id, title, location: inCard ?? (htmlToText(outside ?? "") || null) });
   }
   return out;
 }

@@ -37,19 +37,20 @@ describe("workable", () => {
 
 const JV_LIST = `<table class="jv-job-list"><tr><td class="jv-job-list-name"><a href="/tylertech/job/oGxSjfwZ">Software Engineer I</a></td><td class="jv-job-list-location">Plano, Texas</td></tr>
 <tr><td class="jv-job-list-name"><a href="https://jobs.jobvite.com/tylertech/job/abc123XY?nl=1">Remote QA Analyst</a></td><td class="jv-job-list-location">Remote</td></tr>
-<tr><td><a href="/tylertech/jobs?foo">Search again</a></td></tr></table>`;
+<tr><td><a href="/tylertech/jobs?foo">Search again</a></td></tr></table>
+<a href="/tylertech/job/cardOne1"><div><h4>Data Engineer - Computer Vision</h4><span>2 Locations</span><span>Data Science/Data Engineering</span><span>Job listing</span><span>Job location</span></div></a>`;
 const JV_DETAIL = `<html><body><div class="jv-job-detail-description"><p>Tyler builds public-sector software.</p><ul><li>Java</li><li>SQL</li></ul></div><div class="jv-job-detail-meta">x</div></body></html>`;
 
 describe("jobvite", () => {
   it("parses the listing table", () => {
     const rows = parseJobviteList("tylertech", JV_LIST);
-    expect(rows).toEqual([{ id: "oGxSjfwZ", title: "Software Engineer I", location: "Plano, Texas" }, { id: "abc123XY", title: "Remote QA Analyst", location: "Remote" }]);
+    expect(rows).toEqual([{ id: "oGxSjfwZ", title: "Software Engineer I", location: "Plano, Texas" }, { id: "abc123XY", title: "Remote QA Analyst", location: "Remote" }, { id: "cardOne1", title: "Data Engineer - Computer Vision", location: "2 Locations" }]);
   });
   it("parses the detail block and maps rows", async () => {
     expect(parseJobviteDetail(JV_DETAIL).text).toContain("Java");
     const f = fake({ "https://jobs.jobvite.com/tylertech/jobs": JV_LIST, "https://jobs.jobvite.com/tylertech/job/": JV_DETAIL });
     const jobs = await jobvite.fetchJobs({ name: "Tyler", ats: "jobvite", slug: "tylertech" }, f);
-    expect(jobs).toHaveLength(2);
+    expect(jobs).toHaveLength(3);
     expect(jobs[0]).toMatchObject({ externalId: "oGxSjfwZ", url: "https://jobs.jobvite.com/tylertech/job/oGxSjfwZ", applyUrl: "https://jobs.jobvite.com/tylertech/job/oGxSjfwZ/apply", remote: false });
     expect(jobs[0].descriptionText).toContain("SQL");
     expect(jobs[1].remote).toBe(true);
