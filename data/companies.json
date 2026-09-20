@@ -1196,9 +1196,9 @@
   },
   {
     "name": "Akuna Capital University",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": "https://job-boards.greenhouse.io/embed",
+    "ats": "greenhouse",
+    "slug": "akunacapital",
+    "careersUrl": "https://job-boards.greenhouse.io/akunacapital",
     "sample": "https://www.akunacapital.com/careers/job/8013085/?gh_jid=8013085&utm_source=Simplify&ref=Simplify",
     "roles": 4,
     "tenant": null,
@@ -3596,7 +3596,7 @@
     "locale": null
   },
   {
-    "name": "AtkinsR\u00e9alis",
+    "name": "AtkinsRéalis",
     "ats": "workday",
     "slug": "careers",
     "careersUrl": "https://slihrms.wd3.myworkdayjobs.com",
@@ -5028,9 +5028,9 @@
   },
   {
     "name": "MSA Safety",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": "https://lar-internal-msasafety.icims.com",
+    "ats": "icims",
+    "slug": "careers-msasafety",
+    "careersUrl": "https://careers-msasafety.icims.com",
     "sample": "https://careers.msasafety.com/jobs/9993?icims=1&utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": null,
@@ -5997,9 +5997,9 @@
   },
   {
     "name": "Trillium",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": "https://job-boards.greenhouse.io/embed",
+    "ats": "greenhouse",
+    "slug": "trillium",
+    "careersUrl": "https://job-boards.greenhouse.io/trillium",
     "sample": "https://www.trlm.com/apply/5076003007?gh_jid=5076003007&utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": null,

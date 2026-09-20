@@ -67,10 +67,11 @@ export function ConfirmForm({ initial }: { initial: P }) {
             <input className={input} value={ed.school} placeholder="School" onChange={(ev) => set("education", p.education.map((x, j) => j === i ? { ...x, school: ev.target.value } : x))} />
             <input className={input} value={ed.degree} placeholder="AAS" onChange={(ev) => set("education", p.education.map((x, j) => j === i ? { ...x, degree: ev.target.value } : x))} />
             <input className={input} value={ed.field} placeholder="Field" onChange={(ev) => set("education", p.education.map((x, j) => j === i ? { ...x, field: ev.target.value } : x))} />
-            <input className={input} value={ed.gradYear ?? ""} placeholder="2027" onChange={(ev) => set("education", p.education.map((x, j) => j === i ? { ...x, gradYear: Number(ev.target.value) || null } : x))} />
+            <input className={input} value={ed.startYear ?? ""} placeholder="Start 2025" onChange={(ev) => set("education", p.education.map((x, j) => j === i ? { ...x, startYear: Number(ev.target.value) || null } : x))} />
+            <input className={input} value={ed.gradYear ?? ""} placeholder="Grad 2027" onChange={(ev) => set("education", p.education.map((x, j) => j === i ? { ...x, gradYear: Number(ev.target.value) || null } : x))} />
           </div>
         ))}
-        {p.education.length === 0 && <button type="button" className="mt-3 text-sm font-semibold text-blue" onClick={() => set("education", [{ school: "", degree: "", field: "", gradYear: null, gpa: null, coursework: [], source: "user" }])}>+ Add school</button>}
+        {p.education.length === 0 && <button type="button" className="mt-3 text-sm font-semibold text-blue" onClick={() => set("education", [{ school: "", degree: "", field: "", gradYear: null, startYear: null, gpa: null, coursework: [], source: "user" }])}>+ Add school</button>}
       </section>
 
       <section className={card}>
@@ -92,6 +93,13 @@ export function ConfirmForm({ initial }: { initial: P }) {
       <section className={card}>
         <div className={label}>Facts that filter jobs</div>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Preferred first name</span>
+            <input className={input} value={p.preferredName ?? ""} onChange={(e) => set("preferredName", e.target.value.trim() || null)} placeholder="If different from your legal first name" /></label>
+          <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Mailing address (forms ask; never shown publicly)</span>
+            <div className="grid grid-cols-[1fr_90px] gap-2">
+              <input className={input} value={p.address.street ?? ""} onChange={(e) => set("address", { ...p.address, street: e.target.value.trim() || null })} placeholder="Street" />
+              <input className={input} value={p.address.zip ?? ""} onChange={(e) => set("address", { ...p.address, zip: e.target.value.trim() || null })} placeholder="ZIP" />
+            </div></label>
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Work authorization</span>
             <select className={input} value={p.constraints.workAuthorization} onChange={(e) => set("constraints", { ...p.constraints, workAuthorization: e.target.value as P["constraints"]["workAuthorization"] })}>
               <option value="us_citizen">US citizen</option><option value="permanent_resident">Permanent resident</option><option value="visa_needs_sponsorship">Visa, will need sponsorship</option><option value="visa_no_sponsorship">Visa, no sponsorship needed</option><option value="unknown">Prefer not to say</option>

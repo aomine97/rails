@@ -11,11 +11,11 @@ describe("ym", () => {
 describe("normalizeParsed", () => {
   it("builds a canonical profile with keys, ids, sources and cert-as-skill", () => {
     const p: Parsed = {
-      name: "Maya Patel", email: "MP@email.vccs.edu", phone: null, links: { linkedin: null, github: "github.com/maya", portfolio: null },
+      name: "Maya Patel", email: "MP@email.vccs.edu", phone: null, address: { street: null, city: null, state: null, zip: null }, links: { linkedin: null, github: "github.com/maya", portfolio: null },
       headline: null, targetRoles: ["Software Engineer Intern"],
       skills: [{ name: "Python", level: "strong", evidence: "Built a Flask API" }, { name: "python", level: "familiar", evidence: null }, { name: "Node.js", level: "working", evidence: null }],
       experience: [{ title: "IT Help Desk Student Assistant", org: "NOVA", kind: "job", start: "Aug 2025", end: "Present", bullets: ["Reset 300+ passwords ", ""], skills: ["Active Directory"] }],
-      education: [{ school: "NOVA", degree: "AAS", field: "IST, Cloud Computing", gradYear: 2027, gpa: 3.6, coursework: ["Java Programming"] }],
+      education: [{ school: "NOVA", degree: "AAS", field: "IST, Cloud Computing", gradYear: 2027, startYear: null, gpa: 3.6, coursework: ["Java Programming"] }],
       certifications: [{ name: "AWS Cloud Practitioner", year: 2026 }],
       workAuthorization: "unknown", clearance: "none", locations: ["Annandale, VA"],
     };

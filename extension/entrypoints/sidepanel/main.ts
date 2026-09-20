@@ -4,8 +4,8 @@ const app = document.getElementById("app")!;
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 const bandColor = (fit: number | null) => (fit == null ? "var(--muted)" : fit >= 85 ? "var(--green)" : fit >= 70 ? "var(--amber)" : "var(--red)");
 
-type State = { me: Me | null; job: JobInfo | null; tabUrl: string | null; status: string | null; needsPermission: string | null; lastFill: { filled: number; attempted: number } | null };
-const state: State = { me: null, job: null, tabUrl: null, status: null, needsPermission: null, lastFill: null };
+type State = { me: Me | null; job: JobInfo | null; tabUrl: string | null; status: string | null; needsPermission: string | null; lastFill: { filled: number; attempted: number; left: string[] } | null; scoring: boolean };
+const state: State = { me: null, job: null, tabUrl: null, status: null, needsPermission: null, lastFill: null, scoring: false };
 
 async function activeTabUrl(): Promise<string | null> {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -24,7 +24,7 @@ function render() {
     return;
   }
   const f = me.fields;
-  const fields: [string, unknown][] = [["Name", f.fullName], ["Email", f.email], ["Phone", f.phone], ["LinkedIn", f.linkedin], ["GitHub", f.github], ["Portfolio", f.portfolio], ["City", f.city], ["State", f.state], ["School", f.school], ["Degree", f.degree], ["Major", f.major], ["Grad year", f.gradYear], ["GPA", f.gpa]];
+  const fields: [string, unknown][] = [["Name", f.fullName], ["Preferred", f.preferredName], ["Email", f.email], ["Phone", f.phone], ["LinkedIn", f.linkedin], ["GitHub", f.github], ["Portfolio", f.portfolio], ["City", f.city], ["State", f.state], ["Street", f.street], ["ZIP", f.zip], ["School", f.school], ["Degree", f.degree], ["Major", f.major], ["Start year", f.startYear], ["Grad year", f.gradYear], ["GPA", f.gpa]];
   app.innerHTML = `
     <div class="card"><div class="brand">Rails <small>${esc(me.name ?? me.email)} · ${me.plan === "free" ? `${me.credits} credits` : esc(me.plan.toUpperCase())}</small></div></div>
     ${job ? `<div class="card">
@@ -32,11 +32,11 @@ function render() {
       ${job.hardBlocks.length ? `<div style="margin-top:6px">${job.hardBlocks.map((b) => `<span class="chip" style="background:var(--red-bg);color:var(--red)">✗ ${esc(b)}</span>`).join(" ")}</div>` : ""}
       ${job.requirements.length ? `<h2 style="margin-top:10px">Requirements</h2><ul>${job.requirements.slice(0, 8).map((r) => `<li class="req"><span class="dot" style="background:${r.status === "met" ? "var(--green)" : r.status === "missing" ? "var(--red)" : "var(--amber)"}"></span><span>${esc(r.text)}${r.evidence ? `<div class="muted">You bring: ${esc(r.evidence)}</div>` : ""}</span></li>`).join("")}</ul>` : ""}
       <div class="row" style="margin-top:10px"><a class="btn ghost" href="${esc(job.detailUrl)}" target="_blank">Open in Rails ↗</a>${job.resume ? `<button class="btn ghost" id="copy-resume">Copy tailored resume${job.resumeScore != null ? ` (${job.resumeScore}%)` : ""}</button>` : `<a class="btn ghost" href="${esc(job.detailUrl)}/tailor" target="_blank">Tailor resume</a>`}${job.coverLetter ? `<button class="btn ghost" id="copy-letter">Copy cover letter</button>` : ""}</div>
-    </div>` : `<div class="card"><h2>This page</h2><div class="muted">${state.tabUrl ? "Not a job Rails knows yet. Autofill still works on any application form." : "Open a job posting or application form."}</div>${state.tabUrl ? `<a class="btn ghost" style="margin-top:8px" href="${SITE}/app/paste?url=${encodeURIComponent(state.tabUrl)}" target="_blank">Score it in Rails ↗</a>` : ""}</div>`}
+    </div>` : `<div class="card"><h2>This page</h2><div class="muted">${state.tabUrl ? "Not a job Rails knows yet. Score it here and it joins your feed; autofill works either way." : "Open a job posting or application form."}</div>${state.tabUrl && /^https?:/.test(state.tabUrl) ? `<button class="btn secondary" style="margin-top:8px" id="score" ${state.scoring ? "disabled" : ""}>${state.scoring ? "Scoring… (about 15 s)" : "Score this job"}</button>` : ""}${state.status && !state.scoring ? `<p class="note">${esc(state.status)}</p>` : ""}</div>`}
     <div class="card">
       <h2>Autofill</h2>
       ${state.needsPermission ? `<p>Rails needs permission to read and fill forms on <b>${esc(new URL(state.needsPermission).hostname)}</b>. Nothing is sent anywhere except which fields were filled.</p><button class="btn" id="grant">Allow on this site</button>` : `<button class="btn" id="fill">Fill this page from my profile</button>`}
-      ${state.lastFill ? `<p class="note">Filled ${state.lastFill.filled} of ${state.lastFill.attempted} fields it recognized. Check them, attach your resume, then click the site's Submit.</p>` : `<p class="note">Fills name, contact, links, education and the yes/no work-authorization questions. It never clicks Submit and never uploads a file for you.</p>`}
+      ${state.lastFill ? `<p class="note">Filled ${state.lastFill.filled} of ${state.lastFill.attempted} fields it recognized.${state.lastFill.left.length ? ` Left for you: ${esc(state.lastFill.left.join(" · "))}.` : ""} Check everything, then click the site's Submit.</p>` : `<p class="note">Fills name, contact, links, education and the yes/no work-authorization questions. It never clicks Submit and never uploads a file for you.</p>`}
       ${state.status ? `<p class="note">${esc(state.status)}</p>` : ""}
     </div>
     <div class="card"><h2>Copy a field</h2><ul>${fields.filter(([, v]) => v).map(([k, v]) => `<li class="field"><div><div class="k">${esc(k)}</div><div class="v" title="${esc(v)}">${esc(v)}</div></div><button class="copy" data-v="${esc(v)}">Copy</button></li>`).join("")}</ul></div>
@@ -50,6 +50,20 @@ function render() {
     if (ok) { state.needsPermission = null; await doFill(); } else { state.status = "Permission declined."; render(); }
   });
   document.getElementById("fill")?.addEventListener("click", doFill);
+  document.getElementById("score")?.addEventListener("click", doScore);
+}
+
+/** Score the current tab: server fetches the posting itself; if that fails (login walls), we send the page text we can see. */
+async function doScore() {
+  if (!state.me || !state.tabUrl || state.scoring) return;
+  state.scoring = true; state.status = null; render();
+  try {
+    let text: string | undefined, title: string | undefined;
+    try { const scan = await chrome.runtime.sendMessage({ type: "rails:scan" }) as { ok?: boolean; text?: string; title?: string }; if (scan?.ok) { text = scan.text; title = scan.title; } } catch { /* no permission yet; server fetch may still work */ }
+    const r = await api.score({ url: state.tabUrl, text, title });
+    state.job = r.job; state.status = r.job.tagged ? null : "Saved. The score arrives when the tagger finishes (a few minutes).";
+  } catch (e) { state.status = String((e as Error).message) === "422" ? "Could not read this posting. Allow the site (Autofill below) and try again." : "Scoring failed. Try again in a moment."; }
+  state.scoring = false; render();
 }
 
 async function doFill() {
@@ -58,12 +72,12 @@ async function doFill() {
   const url = await activeTabUrl();
   let learned: Record<string, string[]> = {};
   try { if (url) learned = (await api.learned(new URL(url).hostname)).selectors; } catch { /* optional */ }
-  const res = await chrome.runtime.sendMessage({ type: "rails:fill", values: state.me.fields, learned }) as { ok?: boolean; error?: string; origin?: string; results?: { key: string; selector: string | null; strategy: string; success: boolean }[]; url?: string };
+  const res = await chrome.runtime.sendMessage({ type: "rails:fill", values: state.me.fields, learned }) as { ok?: boolean; error?: string; origin?: string; results?: { key: string; selector: string | null; strategy: string; success: boolean }[]; leftForYou?: string[]; url?: string };
   if (res?.error === "needs_permission") { state.needsPermission = res.origin ?? null; state.status = null; render(); return; }
   if (!res?.ok) { state.status = res?.error === "no_tab" ? "No active tab." : "Could not reach this page. Reload it and try again."; render(); return; }
   const results = res.results ?? [];
-  state.lastFill = { filled: results.filter((r) => r.success).length, attempted: results.length }; state.status = null; render();
-  try { await api.fillReport({ url: res.url ?? url ?? "", jobId: state.job?.id, fields: results }); } catch { /* telemetry is best effort */ }
+  state.lastFill = { filled: results.filter((r) => r.success).length, attempted: results.length, left: res.leftForYou ?? [] }; state.status = null; render();
+  try { await api.fillReport({ url: res.url ?? url ?? "", jobId: state.job?.id, leftForYou: res.leftForYou, fields: results }); } catch { /* telemetry is best effort */ }
 }
 
 async function load() {

@@ -33,6 +33,7 @@ export const Education = z.object({
   degree: z.string(),            // "AAS", "AS", "BS", "Certificate"
   field: z.string(),             // "Information Systems Technology, Cloud Computing"
   gradYear: z.number().int().nullable(),
+  startYear: z.number().int().nullable().default(null),
   gpa: z.number().nullable(),
   coursework: z.array(z.string()).default([]),
   source: Source,
@@ -59,6 +60,8 @@ export const CanonicalProfile = z.object({
   name: z.string(),
   email: z.string().email(),
   phone: z.string().nullable(),
+  preferredName: z.string().nullable().default(null),
+  address: z.object({ street: z.string().nullable(), city: z.string().nullable(), state: z.string().nullable(), zip: z.string().nullable() }).default({ street: null, city: null, state: null, zip: null }),
   links: z.object({ linkedin: z.string().nullable(), github: z.string().nullable(), portfolio: z.string().nullable() }),
   headline: z.string().nullable(),
   targetRoles: z.array(z.string()).default([]), // "Software Engineer Intern", "Cloud Support"

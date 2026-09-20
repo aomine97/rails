@@ -4,7 +4,7 @@ import type { CanonicalProfile } from "../../schemas/profile";
 import type { JobTags } from "../../jobs/tags";
 
 const profile: CanonicalProfile = {
-  version: 1, name: "Maya Patel", email: "maya@example.edu", phone: null,
+  version: 1, name: "Maya Patel", email: "maya@example.edu", phone: null, preferredName: null, address: { street: null, city: null, state: null, zip: null },
   links: { linkedin: null, github: "github.com/maya", portfolio: null },
   headline: "Cloud computing student, NOVA", targetRoles: ["Software Engineer Intern", "Cloud Support"],
   skills: [
@@ -16,7 +16,7 @@ const profile: CanonicalProfile = {
     { id: "e1", title: "IT Help Desk Intern", org: "Inova", kind: "internship", start: "2026-06", end: "2026-08", bullets: ["Resolved 300+ tickets in ServiceNow"], skills: ["servicenow"], source: "resume" },
     { id: "e2", title: "Server", org: "Wildfire", kind: "job", start: "2025-01", end: null, bullets: [], skills: [], source: "resume" },
   ],
-  education: [{ school: "NOVA", degree: "AAS", field: "Information Systems Technology, Cloud Computing", gradYear: 2028, gpa: 3.6, coursework: ["Java Programming", "Networking"], source: "resume" }],
+  education: [{ school: "NOVA", degree: "AAS", field: "Information Systems Technology, Cloud Computing", gradYear: 2028, startYear: null, gpa: 3.6, coursework: ["Java Programming", "Networking"], source: "resume" }],
   certifications: [{ name: "AWS Cloud Practitioner", key: "aws-ccp", year: 2026, source: "resume" }],
   constraints: { workAuthorization: "us_citizen", clearance: "none", workCountries: [], locations: ["McLean, VA"], maxCommuteMiles: 30, remoteOk: true, employmentTypes: ["internship", "new_grad", "entry"], earliestStart: null, minPayHourly: null },
 };

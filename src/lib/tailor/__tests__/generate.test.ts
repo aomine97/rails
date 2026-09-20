@@ -4,7 +4,7 @@ import type { CanonicalProfile } from "../../schemas/profile";
 import type { JobTags } from "../../jobs/tags";
 
 const profile: CanonicalProfile = {
-  version: 1, name: "Maya", email: "m@x.edu", phone: null, links: { linkedin: null, github: null, portfolio: null }, headline: "IT student", targetRoles: [],
+  version: 1, name: "Maya", email: "m@x.edu", phone: null, preferredName: null, address: { street: null, city: null, state: null, zip: null }, links: { linkedin: null, github: null, portfolio: null }, headline: "IT student", targetRoles: [],
   skills: [{ name: "Python", key: "python", level: "strong", source: "resume" }, { name: "AWS", key: "aws", level: "working", source: "user" }],
   experience: [{ id: "e1", title: "Help Desk", org: "NOVA", kind: "job", start: "2025-08", end: null, bullets: ["Resolved 300 tickets in ServiceNow", "Imaged lab machines"], skills: [], source: "resume" }],
   education: [], certifications: [],

@@ -6,11 +6,11 @@ import type { CanonicalProfile } from "../../schemas/profile";
 import type { FeedJobRow } from "../../match/feed";
 
 const profile: CanonicalProfile = {
-  version: 1, name: "Maya Patel", email: "maya@example.edu", phone: null, links: { linkedin: null, github: null, portfolio: null },
+  version: 1, name: "Maya Patel", email: "maya@example.edu", phone: null, preferredName: null, address: { street: null, city: null, state: null, zip: null }, links: { linkedin: null, github: null, portfolio: null },
   headline: "Cloud student", targetRoles: ["Software Engineer Intern"],
   skills: [{ name: "Python", key: "python", level: "strong", source: "resume" }, { name: "SQL", key: "sql", level: "working", source: "resume" }, { name: "AWS", key: "aws", level: "working", source: "resume" }],
   experience: [{ id: "e1", title: "IT Intern", org: "Inova", kind: "internship", start: "2026-06", end: "2026-08", bullets: ["Resolved 300 tickets"], skills: ["python"], source: "resume" }],
-  education: [{ school: "NOVA", degree: "AAS", field: "IST", gradYear: 2028, gpa: null, coursework: [], source: "resume" }], certifications: [],
+  education: [{ school: "NOVA", degree: "AAS", field: "IST", gradYear: 2028, startYear: null, gpa: null, coursework: [], source: "resume" }], certifications: [],
   constraints: { workAuthorization: "us_citizen", clearance: "none", workCountries: [], locations: ["McLean, VA"], maxCommuteMiles: null, remoteOk: true, employmentTypes: ["internship", "new_grad", "entry"], earliestStart: null, minPayHourly: null },
 };
 const tags = (over: Record<string, unknown> = {}) => ({ level: "internship", field: "software", requiredSkills: ["python", "sql"], preferredSkills: ["aws"], requirements: [], minDegree: "unknown", yearsMin: 0, clearanceRequired: "none", usCitizenRequired: null, sponsorship: "unknown", remote: "hybrid", employmentType: "internship", payMinHourly: null, payMaxHourly: null, hasOnlineAssessment: null, summary: "Build things.", relocationOffered: null, country: "US", ...over });

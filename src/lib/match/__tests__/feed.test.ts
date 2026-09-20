@@ -3,8 +3,8 @@ import { buildFeed, type FeedJobRow } from "../feed";
 import type { CanonicalProfile } from "../../schemas/profile";
 
 const profile: CanonicalProfile = {
-  version: 1, name: "M", email: "m@x.edu", phone: null, links: { linkedin: null, github: null, portfolio: null }, headline: "software", targetRoles: ["Software Engineer Intern"],
-  skills: [{ name: "Python", key: "python", level: "strong", source: "resume" }], experience: [], education: [{ school: "NOVA", degree: "AAS", field: "IST", gradYear: 2027, gpa: null, coursework: [], source: "resume" }], certifications: [],
+  version: 1, name: "M", email: "m@x.edu", phone: null, preferredName: null, address: { street: null, city: null, state: null, zip: null }, links: { linkedin: null, github: null, portfolio: null }, headline: "software", targetRoles: ["Software Engineer Intern"],
+  skills: [{ name: "Python", key: "python", level: "strong", source: "resume" }], experience: [], education: [{ school: "NOVA", degree: "AAS", field: "IST", gradYear: 2027, startYear: null, gpa: null, coursework: [], source: "resume" }], certifications: [],
   constraints: { workAuthorization: "us_citizen", clearance: "none", locations: [], workCountries: [], maxCommuteMiles: null, remoteOk: true, employmentTypes: ["internship", "new_grad"], earliestStart: null, minPayHourly: null },
 };
 const base = { location: "McLean, VA", remote: false, url: "u", apply_url: "a", posted_at: "2026-09-19T00:00:00Z", first_seen_at: new Date().toISOString(), pay_min: null, pay_max: null, pay_period: null, companies: { name: "Acme", ats: "lever" } };

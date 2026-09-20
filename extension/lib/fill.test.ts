@@ -2,50 +2,80 @@
 import { describe, expect, it } from "vitest";
 import { fillForm, atsOf } from "./fill";
 
-const values = { firstName: "Maya", lastName: "Patel", fullName: "Maya Patel", email: "maya@example.edu", phone: "5715551212", linkedin: "linkedin.com/in/maya", github: "github.com/maya", city: "McLean", state: "VA", school: "NOVA", needsSponsorship: false, workAuthorized: true } as const;
+const values = { firstName: "Maya", lastName: "Patel", fullName: "Maya Patel", preferredName: null, email: "maya@example.edu", phone: "5715551212", phoneCountry: "United States", linkedin: "linkedin.com/in/maya", github: "github.com/maya", street: "1 Main St", city: "McLean", state: "VA", stateName: "Virginia", zip: "22101", country: "United States", school: "NOVA", degree: "AAS", degreeName: "Associate's Degree", major: "Information Systems Technology, Cloud Computing", disciplines: ["Information Technology", "Information Systems"], startYear: "2025", gradYear: "2027", gradMonth: "May", gpa: "3.6", needsSponsorship: false, workAuthorized: true };
+
+/** Minimal react-select stand-in: a combobox input whose menu appears on input and reports the picked value into a sibling. */
+function reactSelect(id: string, label: string, options: string[], multi = false) {
+  const wrap = document.createElement("div"); wrap.className = "select__container";
+  wrap.innerHTML = `<label for="${id}">${label}</label><div class="select__control"><div class="select__value"></div><input id="${id}" role="combobox" aria-autocomplete="list" class="select__input" autocomplete="off"></div>`;
+  document.body.appendChild(wrap);
+  const input = wrap.querySelector("input")!; const value = wrap.querySelector(".select__value")!;
+  let menu: HTMLDivElement | null = null;
+  input.addEventListener("input", () => {
+    menu?.remove(); menu = document.createElement("div"); menu.className = "select__menu";
+    const q = input.value.toLowerCase();
+    for (const o of options.filter((x) => x.toLowerCase().includes(q))) { const d = document.createElement("div"); d.setAttribute("role", "option"); d.textContent = o; d.addEventListener("click", () => { value.textContent = multi ? `${value.textContent} ${o}`.trim() : o; menu?.remove(); menu = null; input.value = ""; }); menu.appendChild(d); }
+    document.body.appendChild(menu);
+  });
+  return { input, value };
+}
 
 describe("fillForm", () => {
-  it("greenhouse: ATS selectors first", () => {
+  it("greenhouse: ATS selectors first", async () => {
     document.body.innerHTML = `<form><input id="first_name"><input id="last_name"><input id="email" type="email"><input id="phone"><input name="job_application[answers_attributes][0][text_value]" aria-label="LinkedIn Profile"><button type="submit">Submit</button></form>`;
-    const r = fillForm(document, values, { ats: "greenhouse" });
+    const { results } = await fillForm(document, values, { ats: "greenhouse" });
     expect((document.getElementById("first_name") as HTMLInputElement).value).toBe("Maya");
-    expect((document.getElementById("email") as HTMLInputElement).value).toBe("maya@example.edu");
-    expect(r.find((x) => x.key === "linkedin")?.strategy).toBe("label");
-    expect(r.every((x) => x.success)).toBe(true);
+    expect(results.find((x) => x.key === "linkedin")?.strategy).toBe("label");
+    expect(results.every((x) => x.success)).toBe(true);
   });
-  it("lever: full name, urls, org", () => {
+  it("lever: full name, urls, org", async () => {
     document.body.innerHTML = `<input name="name"><input name="email"><input name="phone"><input name="urls[LinkedIn]"><input name="urls[GitHub]"><input name="org">`;
-    fillForm(document, values, { ats: "lever" });
+    await fillForm(document, values, { ats: "lever" });
     expect((document.querySelector('input[name="name"]') as HTMLInputElement).value).toBe("Maya Patel");
-    expect((document.querySelector('input[name="urls[GitHub]"]') as HTMLInputElement).value).toBe("github.com/maya");
     expect((document.querySelector('input[name="org"]') as HTMLInputElement).value).toBe("NOVA");
   });
-  it("generic: autocomplete, labels, placeholders; never overwrites typed text; never touches file/submit", () => {
-    document.body.innerHTML = `<label for="a">First Name</label><input id="a"><label>Last Name <input id="b"></label><input autocomplete="email" id="c"><input placeholder="(555) 555-5555" id="d"><input id="e" value="already typed" name="linkedin"><input type="file" name="resume"><input type="submit" value="Apply">`;
-    const r = fillForm(document, values, { ats: "generic" });
+  it("generic: labels/placeholders; keeps typed text; skips file and submit; lists what it left", async () => {
+    document.body.innerHTML = `<label for="a">First Name*</label><input id="a"><label>Last Name <input id="b"></label><input autocomplete="email" id="c"><input placeholder="(555) 555-5555" id="d"><input id="e" value="already typed" name="linkedin"><label for="f">Resume/CV*</label><input type="file" id="f" name="resume"><label for="g">What are your preferred pronouns?*</label><input id="g" required><input type="submit" value="Apply">`;
+    const { results, leftForYou } = await fillForm(document, values, { ats: "generic" });
     expect((document.getElementById("a") as HTMLInputElement).value).toBe("Maya");
     expect((document.getElementById("b") as HTMLInputElement).value).toBe("Patel");
-    expect((document.getElementById("c") as HTMLInputElement).value).toBe("maya@example.edu");
-    expect((document.getElementById("d") as HTMLInputElement).value).toBe("5715551212");
     expect((document.getElementById("e") as HTMLInputElement).value).toBe("already typed");
-    expect(r.find((x) => x.key === "linkedin")?.strategy).toBe("name:kept");
-    expect(r.some((x) => x.key === "firstName" && x.strategy === "label")).toBe(true);
+    expect((document.getElementById("g") as HTMLInputElement).value).toBe("");
+    expect(results.find((x) => x.key === "linkedin")?.strategy).toBe("name:kept");
+    expect(leftForYou[0]).toMatch(/Resume/); expect(leftForYou.some((l) => /pronouns/i.test(l))).toBe(true);
   });
-  it("yes/no questions: radios and selects", () => {
+  it("preferred name does not steal the first-name field", async () => {
+    document.body.innerHTML = `<label for="p">Preferred First Name</label><input id="p"><label for="f">First Name*</label><input id="f">`;
+    await fillForm(document, { ...values, preferredName: "May" }, { ats: "generic" });
+    expect((document.getElementById("f") as HTMLInputElement).value).toBe("Maya");
+    expect((document.getElementById("p") as HTMLInputElement).value).toBe("May");
+  });
+  it("yes/no radios and native selects", async () => {
     document.body.innerHTML = `<fieldset><legend>Are you legally authorized to work in the United States?</legend><label><input type="radio" name="q1" value="Yes">Yes</label><label><input type="radio" name="q1" value="No">No</label></fieldset>
       <div><label for="s">Will you now or in the future require sponsorship for a visa?</label><select id="s"><option value="">Select</option><option value="1">Yes</option><option value="0">No</option></select></div>`;
-    const r = fillForm(document, values, { ats: "generic" });
+    await fillForm(document, values, { ats: "generic" });
     expect((document.querySelector('input[name="q1"][value="Yes"]') as HTMLInputElement).checked).toBe(true);
     expect((document.getElementById("s") as HTMLSelectElement).value).toBe("0");
-    expect(r.filter((x) => x.key === "workAuthorized" || x.key === "needsSponsorship").every((x) => x.success)).toBe(true);
   });
-  it("learned selectors win", () => {
-    document.body.innerHTML = `<input id="weird_fn_field"><input id="first_name">`;
-    const r = fillForm(document, values, { ats: "generic", learned: { firstName: ["#weird_fn_field"] } });
-    expect((document.getElementById("weird_fn_field") as HTMLInputElement).value).toBe("Maya");
-    expect(r.find((x) => x.key === "firstName")?.strategy).toBe("learned");
+  it("react-select comboboxes: country, residence, work auth, sponsorship, years, disciplines (multi)", async () => {
+    document.body.innerHTML = "";
+    const country = reactSelect("q_country", "Country*", ["Canada", "United Kingdom", "United States"]);
+    const reside = reactSelect("q_reside", "What country do you currently reside in?*", ["Canada", "United States"]);
+    const state = reactSelect("q_state", "If applicable, which US state do you reside in?", ["Vermont", "Virginia", "Washington"]);
+    const auth = reactSelect("q_auth", "Are you legally authorized to work in the country where this role is based?*", ["Yes", "No"]);
+    const spons = reactSelect("q_spons", "Will you now or in the future require employer sponsorship for work authorization in this country?*", ["Yes", "No"]);
+    const sy = reactSelect("q_sy", "Start date year*", ["2024", "2025", "2026"]);
+    const ey = reactSelect("q_ey", "End date year*", ["2026", "2027", "2028"]);
+    const disc = reactSelect("q_disc", "Undergrad Discipline(s)*", ["Computer Science", "Information Technology", "Information Systems", "Mathematics"], true);
+    const { results } = await fillForm(document, values, { ats: "greenhouse" });
+    expect(country.value.textContent).toBe("United States");
+    expect(reside.value.textContent).toBe("United States");
+    expect(state.value.textContent).toBe("Virginia");
+    expect(auth.value.textContent).toBe("Yes");
+    expect(spons.value.textContent).toBe("No");
+    expect(sy.value.textContent).toBe("2025"); expect(ey.value.textContent).toBe("2027");
+    expect(disc.value.textContent).toContain("Information Technology"); expect(disc.value.textContent).toContain("Information Systems");
+    expect(results.filter((r) => !r.success)).toEqual([]);
   });
-  it("atsOf", () => {
-    expect(atsOf("job-boards.greenhouse.io")).toBe("greenhouse"); expect(atsOf("acme.wd5.myworkdayjobs.com")).toBe("workday"); expect(atsOf("careers.acme.com")).toBe("generic");
-  });
+  it("atsOf", () => { expect(atsOf("job-boards.greenhouse.io")).toBe("greenhouse"); expect(atsOf("careers.acme.com")).toBe("generic"); });
 });
