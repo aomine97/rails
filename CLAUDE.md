@@ -1,6 +1,6 @@
 # Rails
 
-Tech jobs, nationwide first and international as data allows, for students and early-career-to-senior engineers. Jobright-class product (matched jobs with explained fit scores, tailored resumes, autofill, Autopilot with a human Submit, tracker, Coach), first users are NOVA / Mason students; nothing in the product assumes a region ("near me" comes from the user's own profile). Mockups: claude.ai/artifact/HhFu37rm9qU3itRdaRvfuC (17 screens).
+STEM jobs (software, data, cloud, IT, cyber, product, electrical/mechanical/civil/chemical engineering, biotech, science, math/stats) plus nursing and allied health; nothing else ever reaches a feed (tags.field = "other" is filtered out). Nationwide first and international as data allows, for students and early-career-to-senior engineers. Jobright-class product (matched jobs with explained fit scores, tailored resumes, autofill, Autopilot with a human Submit, tracker, Coach), first users are NOVA / Mason students; nothing in the product assumes a region ("near me" comes from the user's own profile). Mockups: claude.ai/artifact/HhFu37rm9qU3itRdaRvfuC (17 screens).
 Read PLAN.md at the start of every session and work the next unchecked item only.
 
 ## Stack

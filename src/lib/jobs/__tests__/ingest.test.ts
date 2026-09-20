@@ -48,10 +48,14 @@ describe("pollCompany", () => {
 
 import { pretag } from "../tags";
 describe("pretag", () => {
-  it("skips the model for senior and non-tech titles only", () => {
+  it("skips the model for senior and non-STEM titles only", () => {
     expect(pretag("Senior Software Engineer")?.level).toBe("senior");
     expect(pretag("Director, Engineering")?.level).toBe("senior");
-    expect(pretag("Registered Nurse")?.field).toBe("other");
+    expect(pretag("Registered Nurse")).toBe(null);            // nursing is in scope now
+    expect(pretag("Mechanical Engineer I")).toBe(null);
+    expect(pretag("Sales Engineer")).toBe(null);
+    expect(pretag("Retail Sales Associate")?.field).toBe("other");
+    expect(pretag("Barista")?.field).toBe("other");
     expect(pretag("Software Engineer Intern")).toBe(null);
     expect(pretag("Senior Intern Program - Software")).toBe(null);
     expect(pretag("IT Support Technician")).toBe(null);

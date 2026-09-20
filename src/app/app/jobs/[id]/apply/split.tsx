@@ -3,20 +3,16 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-/** Opens the ATS in a window on the right half of the screen; this tab shows the apply companion on the left. */
+/** Opens the ATS in a normal tab next to this one. Not a popup: Chrome gives popup windows no side panel, so the Rails extension could not run there. */
 export function openAts(url: string) {
-  const w = window.screen.availWidth, h = window.screen.availHeight;
-  const atsW = Math.max(700, Math.round(w * 0.56));
-  const win = window.open(url, "rails-ats", `popup=yes,width=${atsW},height=${h},left=${w - atsW},top=0`);
-  try { window.resizeTo(w - atsW, h); window.moveTo(0, 0); } catch { /* browsers ignore this for non-popups; fine */ }
-  return win;
+  return window.open(url, "_blank", "noopener");
 }
 
 export function SplitApplyButton({ jobId, url, applied }: { jobId: string; url: string; applied: boolean }) {
   const router = useRouter();
   if (applied) return <span className="rounded-full bg-green-chip px-3 py-2 text-[13px] font-bold text-green-chip-text">Applied ✓</span>;
   return (
-    <button type="button" onClick={() => { openAts(url); router.push(`/app/jobs/${jobId}/apply`); }} className="rounded-full bg-orange px-4 py-2 text-[13px] font-extrabold text-ink" title="Opens the application next to your checklist and tailored resume">
+    <button type="button" onClick={() => { openAts(url); router.push(`/app/jobs/${jobId}/apply`); }} className="rounded-full bg-orange px-4 py-2 text-[13px] font-extrabold text-ink" title="Opens the application in a new tab; keep this tab for the checklist and tailored resume, and use the Rails extension over there">
       Apply now
     </button>
   );

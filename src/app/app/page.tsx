@@ -9,11 +9,12 @@ import { addSkillToProfile, hideJob, likeJob } from "./actions";
 import { ApplyButton } from "./apply-button";
 import { CompanyLogo } from "@/components/company-logo";
 import { COUNTRY_CHIPS } from "@/lib/match/country";
+import { FeedFilters } from "./filters";
 import { upNext, type TrackedApp } from "@/lib/tracker/stages";
 
 const PAGE = 25;
-const FIELDS = [["software", "Software"], ["data", "Data"], ["cloud", "Cloud"], ["it_support", "IT support"], ["cyber", "Cyber"], ["product", "Product"]] as const;
-const LEVELS = [["internship", "Internship"], ["new_grad", "New grad"], ["entry", "Entry level"], ["mid", "Mid"], ["senior", "Senior"]] as const;
+const FIELDS = [["software", "Software"], ["data", "Data"], ["cloud", "Cloud"], ["it_support", "IT support"], ["cyber", "Cyber"], ["product", "Product"], ["electrical", "Electrical"], ["mechanical", "Mechanical"], ["civil", "Civil"], ["chemical", "Chemical"], ["biotech", "Biotech"], ["science", "Science"], ["math", "Math & stats"], ["nursing", "Nursing"], ["healthcare", "Healthcare"]] as const;
+const LEVELS = [["internship", "Internship"], ["new_grad", "New Grad"], ["entry", "Entry Level"], ["mid", "Mid-Level"], ["senior", "Senior"]] as const;
 const WHERE = [["near", "Near me"], ["us", "US"], ["remote", "Remote"], ...COUNTRY_CHIPS, ["anywhere", "Anywhere"]] as [string, string][];
 
 type SP = { tab?: string; field?: string; level?: string; where?: string; sort?: string; q?: string; page?: string };
@@ -72,13 +73,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
           </Link>
         )}
 
-        <div className="flex flex-wrap items-center gap-2 px-6 pt-3 text-xs font-semibold">
-          {LEVELS.map(([k, l]) => <Link key={k} href={href({ level: sp.level === k ? "" : k, page: "1" })} className={`rounded-full border px-3 py-1.5 ${sp.level === k ? "border-ink bg-ink text-white" : "border-line bg-surface text-text"}`}>{l}</Link>)}
-          <span className="mx-1 h-5 w-px bg-line" />
-          {FIELDS.map(([k, l]) => <Link key={k} href={href({ field: sp.field === k ? "" : k, page: "1" })} className={`rounded-full border px-3 py-1.5 ${sp.field === k ? "border-ink bg-ink text-white" : "border-line bg-surface text-text"}`}>{l}</Link>)}
-          <span className="mx-1 h-5 w-px bg-line" />
-          {WHERE.map(([k, l]) => <Link key={k} href={href({ where: k, page: "1" })} title={k === "near" ? `Based on your profile: ${me.constraints.locations.join(", ") || "add a location on your profile"}` : undefined} className={`rounded-full border px-3 py-1.5 ${(sp.where ?? "us") === k ? "border-ink bg-ink text-white" : "border-line bg-surface text-text"}`}>{l}</Link>)}
-        </div>
+        <FeedFilters levels={LEVELS} fields={FIELDS} where={WHERE} current={{ level: sp.level, field: sp.field, where: sp.where }} base={{ tab: sp.tab, q: sp.q, sort: sp.sort }} />
 
         <div className="flex items-center justify-between px-6 pb-2 pt-3 text-[13px] text-text">
           <div><span className="font-bold text-ink">{items.length.toLocaleString()} results</span> for your profile · <span className="font-semibold text-blue">{feed.newToday} new since yesterday</span> · all verified live</div>

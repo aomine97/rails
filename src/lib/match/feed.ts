@@ -39,6 +39,7 @@ export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: Feed
     const tags = t.data;
     const type = LEVEL_TO_TYPE[tags.level];
     if (wants.size && !wants.has(type) && !(tags.employmentType === "part_time" && wants.has("part_time")) && !(tags.employmentType === "contract" && wants.has("contract"))) continue;
+    if (tags.field === "other") continue; // STEM + nursing only; everything else stays out of every feed
     if (f.field && tags.field !== f.field) continue;
     if (f.level && tags.level !== f.level) continue;
     const region = regionOf(job.location, tags.country, job.remote ?? (tags.remote === "remote"));

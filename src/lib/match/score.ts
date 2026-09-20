@@ -29,6 +29,15 @@ const FIELD_HINTS: Record<JobTags["field"], string[]> = {
   it_support: ["help desk", "it support", "desktop", "service desk", "technician", "networking", "systems administrator"],
   cyber: ["security", "cyber", "soc", "security+", "incident", "vulnerability", "siem"],
   product: ["product", "pm", "roadmap", "ux"],
+  electrical: ["electrical", "electronics", "embedded", "hardware", "circuit", "fpga", "pcb", "signal", "power systems", "verilog"],
+  mechanical: ["mechanical", "manufacturing", "robotics", "aerospace", "cad", "solidworks", "thermal", "hvac design", "automotive"],
+  civil: ["civil", "structural", "environmental", "construction", "transportation", "geotechnical", "autocad", "surveying"],
+  chemical: ["chemical", "process engineer", "materials", "polymer", "petroleum", "refin"],
+  biotech: ["biology", "biomedical", "biotech", "pharma", "bioinformatics", "genetic", "molecular", "cell culture", "pcr"],
+  science: ["physics", "chemistry", "geology", "research", "scientist", "laboratory", "lab"],
+  math: ["mathematics", "statistics", "actuarial", "quant", "operations research", "probability", "r programming"],
+  nursing: ["nurse", "nursing", "rn", "lpn", "cna", "patient", "clinical", "bsn", "adn", "bedside"],
+  healthcare: ["medical", "clinical", "patient", "radiology", "pharmacy", "therapy", "emt", "paramedic", "phlebotomy", "sonography", "health"],
   other: [],
 };
 
