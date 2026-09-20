@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 /** Daily. Re-checks open postings not verified in 24h by URL; 404/410 or a redirect to a search page => closed. */
 export async function GET(req: Request) {
-  const denied = cronAuth(req); if (denied) return denied;
+  const denied = await cronAuth(req); if (denied) return denied;
   const db = supabaseAdmin();
   const cutoff = new Date(Date.now() - 24 * 3600_000).toISOString();
   const { data: jobs, error } = await db.from("jobs").select("id,url").is("closed_at", null)

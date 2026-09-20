@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 /** Nightly: ?max=3000 submits one batch of the newest untagged jobs. ?collect=1 only collects. Collection also runs inside /api/cron/tag. */
 export async function GET(req: Request) {
-  const denied = cronAuth(req); if (denied) return denied;
+  const denied = await cronAuth(req); if (denied) return denied;
   const db = supabaseAdmin();
   const url = new URL(req.url);
   const collected = await collectTagBatches(db, 120_000);

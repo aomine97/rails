@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 /** Every 10 min. (0) collects finished nightly batches, (a) fills in descriptions the poller skipped, (b) tags untagged open jobs online and writes job_skills. */
 export async function GET(req: Request) {
-  const denied = cronAuth(req); if (denied) return denied;
+  const denied = await cronAuth(req); if (denied) return denied;
   const db = supabaseAdmin();
   const started = Date.now();
   const budgetMs = 200_000; // stay well under maxDuration

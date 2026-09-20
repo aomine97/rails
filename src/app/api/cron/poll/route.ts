@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 /** Hourly. Polls up to `limit` companies whose feed is stale, 4 at a time. */
 export async function GET(req: Request) {
-  const denied = cronAuth(req); if (denied) return denied;
+  const denied = await cronAuth(req); if (denied) return denied;
   const url = new URL(req.url);
   const limit = Number(url.searchParams.get("limit") ?? 40);
   const db = supabaseAdmin();
