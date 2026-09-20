@@ -20,3 +20,6 @@ create index if not exists autopilot_queue_user_night on public.autopilot_queue 
 alter table public.profiles
   add column if not exists autopilot_enabled boolean not null default true,
   add column if not exists autopilot_min_fit int not null default 80;
+
+-- Nightly prep, 06:30 UTC (02:30 ET): after the 07:00 tag batch would be too late for morning; picks run on jobs tagged so far.
+select cron.schedule('rails-autopilot', '30 6 * * *', $$select public.call_cron('/api/cron/autopilot')$$);
