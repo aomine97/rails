@@ -31,7 +31,8 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
   const score = tags.success ? scoreJob(me.data, tags.data, { title: job.title, location: job.location }) : null;
   const why = tags.success && score ? explainScore(me.data, tags.data, score) : null;
   const pay = tags.success ? payLabel(tags.data, job as unknown as FeedJobRow) : null;
-  const posted = job.posted_at ? Math.max(0, Math.floor((Date.now() - new Date(job.posted_at).getTime()) / 86_400_000)) : null;
+  const nowMs = new Date().getTime();
+  const posted = job.posted_at ? Math.max(0, Math.floor((nowMs - new Date(job.posted_at).getTime()) / 86_400_000)) : null;
 
   // similar: same field, same level, best fit, not this one
   let similar: ReturnType<typeof buildFeed>["items"] = [];
@@ -107,7 +108,7 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
           <section className="rounded-2xl border border-line bg-surface p-6">
             <h2 className="font-display text-lg font-extrabold">The posting</h2>
             <div className="mt-3 flex flex-col gap-3 text-[14px] leading-relaxed text-text">
-              {paragraphs.length ? paragraphs.map((p: string, i: number) => <p key={i} className="whitespace-pre-line">{p}</p>) : <p className="text-muted">We haven't pulled the full text for this one yet. <a href={job.url} target="_blank" rel="noopener" className="font-semibold text-blue">Read it on the company site ↗</a></p>}
+              {paragraphs.length ? paragraphs.map((p: string, i: number) => <p key={i} className="whitespace-pre-line">{p}</p>) : <p className="text-muted">We haven&apos;t pulled the full text for this one yet. <a href={job.url} target="_blank" rel="noopener" className="font-semibold text-blue">Read it on the company site ↗</a></p>}
             </div>
           </section>
         </div>
@@ -136,7 +137,7 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
               <div className="mt-4 rounded-xl bg-ink p-3 text-white">
                 <div className="text-[13px] font-bold">Tailor my resume for this</div>
                 <div className="mt-0.5 text-[12px] text-[#C9D3E4]">Rewrites your bullets toward what this posting asks for, from your profile only. Shows the fit before and after.</div>
-                <button disabled className="mt-2 w-full rounded-lg bg-orange px-3 py-2 text-[13px] font-extrabold text-ink opacity-70">Coming next · 1 credit</button>
+                <Link href={`/app/jobs/${job.id}/tailor`} className="mt-2 block w-full rounded-lg bg-orange px-3 py-2 text-center text-[13px] font-extrabold text-ink">Tailor · 1 credit</Link>
               </div>
             </div>
           ) : (
