@@ -2,21 +2,27 @@
 import { describe, expect, it } from "vitest";
 import { fillForm, atsOf } from "./fill";
 
-const values = { firstName: "Maya", lastName: "Patel", fullName: "Maya Patel", preferredName: null, email: "maya@example.edu", phone: "5715551212", phoneCountry: "United States", linkedin: "linkedin.com/in/maya", github: "github.com/maya", street: "1 Main St", city: "McLean", state: "VA", stateName: "Virginia", zip: "22101", country: "United States", school: "NOVA", degree: "AAS", degreeName: "Associate's Degree", major: "Information Systems Technology, Cloud Computing", disciplines: ["Information Technology", "Information Systems"], startYear: "2025", gradYear: "2027", gradMonth: "May", gpa: "3.6", needsSponsorship: false, workAuthorized: true };
+const values = { firstName: "Maya", lastName: "Patel", fullName: "Maya Patel", preferredName: null, email: "maya@example.edu", phone: "5715551212", phoneCountry: "United States", linkedin: "linkedin.com/in/maya", github: "github.com/maya", street: "1 Main St", city: "McLean", state: "VA", stateName: "Virginia", zip: "22101", country: "United States", school: "Northern Virginia Community College", degree: "AAS", degreeName: "Associate's Degree", major: "Information Systems Technology, Cloud Computing", disciplines: ["Information Technology", "Information Systems"], startYear: "2025", gradYear: "2027", gradMonth: "May", gpa: "3.6", needsSponsorship: false, workAuthorized: true };
 
-/** Minimal react-select stand-in: a combobox input whose menu appears on input and reports the picked value into a sibling. */
+/** react-select stand-in matching what Greenhouse actually does: opens on a full click of the control, options live in a listbox
+ *  referenced by aria-controls, typing filters (async-style), option click selects and shows a .select__single-value. */
 function reactSelect(id: string, label: string, options: string[], multi = false) {
   const wrap = document.createElement("div"); wrap.className = "select__container";
-  wrap.innerHTML = `<label for="${id}">${label}</label><div class="select__control"><div class="select__value"></div><input id="${id}" role="combobox" aria-autocomplete="list" class="select__input" autocomplete="off"></div>`;
+  wrap.innerHTML = `<label for="${id}">${label}</label><div class="select__control"><div class="select__value-container"><div class="select__input-container"><input id="${id}" role="combobox" aria-autocomplete="list" aria-expanded="false" class="select__input" autocomplete="off"></div></div></div>`;
   document.body.appendChild(wrap);
-  const input = wrap.querySelector("input")!; const value = wrap.querySelector(".select__value")!;
-  let menu: HTMLDivElement | null = null;
-  input.addEventListener("input", () => {
+  const input = wrap.querySelector("input")!; const control = wrap.querySelector(".select__control")!; const vc = wrap.querySelector(".select__value-container")!;
+  let menu: HTMLDivElement | null = null; let open = false; let query = "";
+  const value = { textContent: "" };
+  const renderMenu = () => {
     menu?.remove(); menu = document.createElement("div"); menu.className = "select__menu";
-    const q = input.value.toLowerCase();
-    for (const o of options.filter((x) => x.toLowerCase().includes(q))) { const d = document.createElement("div"); d.setAttribute("role", "option"); d.textContent = o; d.addEventListener("click", () => { value.textContent = multi ? `${value.textContent} ${o}`.trim() : o; menu?.remove(); menu = null; input.value = ""; }); menu.appendChild(d); }
-    document.body.appendChild(menu);
-  });
+    const lb = document.createElement("div"); lb.setAttribute("role", "listbox"); lb.id = `react-select-${id}-listbox`; menu.appendChild(lb);
+    for (const o of options.filter((x) => !query || x.toLowerCase().includes(query.toLowerCase()))) { const d = document.createElement("div"); d.setAttribute("role", "option"); d.className = "select__option"; d.textContent = o; d.addEventListener("click", () => { value.textContent = multi ? `${value.textContent} ${o}`.trim() : o; const sv = vc.querySelector(".select__single-value") ?? vc.appendChild(Object.assign(document.createElement("div"), { className: "select__single-value" })); sv.textContent = value.textContent; close(); }); lb.appendChild(d); }
+    wrap.appendChild(menu); input.setAttribute("aria-controls", lb.id); input.setAttribute("aria-expanded", "true"); open = true;
+  };
+  const close = () => { menu?.remove(); menu = null; open = false; input.removeAttribute("aria-controls"); input.setAttribute("aria-expanded", "false"); query = ""; };
+  control.addEventListener("click", () => (open ? close() : renderMenu()));
+  input.addEventListener("input", () => { query = input.value; renderMenu(); });
+  input.addEventListener("keydown", (e) => { if ((e as KeyboardEvent).key === "Escape") close(); });
   return { input, value };
 }
 
@@ -32,7 +38,7 @@ describe("fillForm", () => {
     document.body.innerHTML = `<input name="name"><input name="email"><input name="phone"><input name="urls[LinkedIn]"><input name="urls[GitHub]"><input name="org">`;
     await fillForm(document, values, { ats: "lever" });
     expect((document.querySelector('input[name="name"]') as HTMLInputElement).value).toBe("Maya Patel");
-    expect((document.querySelector('input[name="org"]') as HTMLInputElement).value).toBe("NOVA");
+    expect((document.querySelector('input[name="org"]') as HTMLInputElement).value).toBe("Northern Virginia Community College");
   });
   it("generic: labels/placeholders; keeps typed text; skips file and submit; lists what it left", async () => {
     document.body.innerHTML = `<label for="a">First Name*</label><input id="a"><label>Last Name <input id="b"></label><input autocomplete="email" id="c"><input placeholder="(555) 555-5555" id="d"><input id="e" value="already typed" name="linkedin"><label for="f">Resume/CV*</label><input type="file" id="f" name="resume"><label for="g">What are your preferred pronouns?*</label><input id="g" required><input type="submit" value="Apply">`;
@@ -57,6 +63,15 @@ describe("fillForm", () => {
     expect((document.querySelector('input[name="q1"][value="Yes"]') as HTMLInputElement).checked).toBe(true);
     expect((document.getElementById("s") as HTMLSelectElement).value).toBe("0");
   });
+  it("checkbox groups and number inputs: disciplines as checkboxes, start/end year as inputs, expected graduation date", async () => {
+    document.body.innerHTML = `<label for="sy">Start date year*</label><input type="number" id="sy"><label for="ey">End date year*</label><input type="number" id="ey">
+      <div><label><input type="checkbox" id="c1">Computer Science</label><label><input type="checkbox" id="c2">Information Technology</label><label><input type="checkbox" id="c3">Information Systems</label></div>`;
+    const gd = reactSelect("q_gd", "Please re-confirm your expected graduation date*", ["December 2026", "May 2027", "December 2027"]);
+    await fillForm(document, { ...values, gradDate: "May 2027" }, { ats: "greenhouse" });
+    expect((document.getElementById("sy") as HTMLInputElement).value).toBe("2025"); expect((document.getElementById("ey") as HTMLInputElement).value).toBe("2027");
+    expect((document.getElementById("c1") as HTMLInputElement).checked).toBe(false); expect((document.getElementById("c2") as HTMLInputElement).checked).toBe(true); expect((document.getElementById("c3") as HTMLInputElement).checked).toBe(true);
+    expect(gd.value.textContent).toBe("May 2027");
+  });
   it("react-select comboboxes: country, residence, work auth, sponsorship, years, disciplines (multi)", async () => {
     document.body.innerHTML = "";
     const country = reactSelect("q_country", "Country*", ["Canada", "United Kingdom", "United States"]);
@@ -66,6 +81,7 @@ describe("fillForm", () => {
     const spons = reactSelect("q_spons", "Will you now or in the future require employer sponsorship for work authorization in this country?*", ["Yes", "No"]);
     const sy = reactSelect("q_sy", "Start date year*", ["2024", "2025", "2026"]);
     const ey = reactSelect("q_ey", "End date year*", ["2026", "2027", "2028"]);
+    const school = reactSelect("q_school", "School*", ["Northern Virginia Community College", "North Carolina State University", "NOVA Southeastern"]);
     const disc = reactSelect("q_disc", "Undergrad Discipline(s)*", ["Computer Science", "Information Technology", "Information Systems", "Mathematics"], true);
     const { results } = await fillForm(document, values, { ats: "greenhouse" });
     expect(country.value.textContent).toBe("United States");
@@ -74,9 +90,15 @@ describe("fillForm", () => {
     expect(auth.value.textContent).toBe("Yes");
     expect(spons.value.textContent).toBe("No");
     expect(sy.value.textContent).toBe("2025"); expect(ey.value.textContent).toBe("2027");
+    expect(school.value.textContent).toBe("Northern Virginia Community College");
     expect(disc.value.textContent).toContain("Information Technology"); expect(disc.value.textContent).toContain("Information Systems");
+    // long-sentence yes/no answers, like Greenhouse renders them
+    document.body.innerHTML = "";
+    const auth2 = reactSelect("q_auth2", "Are you legally authorized to work in the country where this role is based?*", ["Yes, I am authorized to work in this country", "No, I am not authorized"]);
+    await fillForm(document, values, { ats: "greenhouse" });
+    expect(auth2.value.textContent).toMatch(/^Yes/);
     expect(results.filter((r) => !r.success)).toEqual([]);
-  });
+  }, 30000);
   it("atsOf", () => { expect(atsOf("job-boards.greenhouse.io")).toBe("greenhouse"); expect(atsOf("careers.acme.com")).toBe("generic"); });
 });
 

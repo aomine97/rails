@@ -4,7 +4,7 @@
  * Handles native inputs/selects, radios, and combobox widgets (react-select on Greenhouse: type, wait for the menu, click the option).
  * Never touches submit buttons, file inputs, consent checkboxes, or EEO/self-identification questions.
  */
-export type FieldKey = "firstName" | "lastName" | "fullName" | "preferredName" | "email" | "phone" | "phoneCountry" | "linkedin" | "github" | "portfolio" | "street" | "city" | "state" | "zip" | "country" | "residenceCountry" | "residenceState" | "school" | "degree" | "major" | "disciplines" | "startYear" | "gradYear" | "gradMonth" | "gpa" | "workAuthorized" | "needsSponsorship";
+export type FieldKey = "firstName" | "lastName" | "fullName" | "preferredName" | "email" | "phone" | "phoneCountry" | "linkedin" | "github" | "portfolio" | "street" | "city" | "state" | "zip" | "country" | "residenceCountry" | "residenceState" | "school" | "degree" | "major" | "disciplines" | "startYear" | "gradYear" | "gradDate" | "gradMonth" | "gpa" | "workAuthorized" | "needsSponsorship";
 export type Values = Record<string, string | boolean | string[] | null | undefined>;
 export type FillResult = { key: FieldKey; selector: string | null; strategy: string; success: boolean };
 export type FillReport = { results: FillResult[]; leftForYou: string[] };
@@ -34,8 +34,9 @@ const RULES: Rule[] = [
   { key: "degree", from: "degreeName", names: /degree/i, label: /^degree/i },
   { key: "major", names: /major|field[_-]?of[_-]?study|discipline/i, label: /^major|field of study|^discipline/i, not: /undergrad|multiple|select all/i },
   { key: "disciplines", names: /discipline/i, label: /undergrad discipline|discipline\(s\)/i, select: true, multi: true },
-  { key: "startYear", names: /start[_-]?(date[_-]?)?year|start[_-]?year/i, label: /start (date )?year/i, select: true },
-  { key: "gradYear", names: /end[_-]?(date[_-]?)?year|grad(uation)?[_-]?year|end[_-]?year/i, label: /end (date )?year|graduation year|expected graduation/i, select: true },
+  { key: "startYear", names: /start[_-]?(date[_-]?)?year|start[_-]?year/i, label: /start (date )?year/i },
+  { key: "gradYear", names: /end[_-]?(date[_-]?)?year|grad(uation)?[_-]?year|end[_-]?year/i, label: /end (date )?year|graduation year/i },
+  { key: "gradDate", from: "gradDate", names: /grad(uation)?[_-]?date/i, label: /expected graduation date|graduation date/i, select: true },
   { key: "gradMonth", names: /end[_-]?(date[_-]?)?month|grad(uation)?[_-]?month/i, label: /end (date )?month|graduation month/i, select: true },
   { key: "gpa", names: /gpa/i, label: /gpa|grade point/i },
   { key: "workAuthorized", names: /authori[sz]ed|work[_-]?auth|eligib/i, label: /legally authori[sz]ed|authori[sz]ed to work|eligible to work/i, select: true },
@@ -119,32 +120,66 @@ export function setValue(el: El, value: string | boolean): boolean {
   return el.value === String(value);
 }
 
-/** react-select and friends: type into the combobox, wait for the listbox, click the best option. */
-async function pickCombobox(input: HTMLInputElement, want: string, root: Document | ShadowRoot): Promise<boolean> {
-  const proto = HTMLInputElement.prototype; const setter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
-  input.focus(); input.dispatchEvent(new Event("focus", { bubbles: true }));
-  input.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-  const typed = want.length > 12 ? want.slice(0, 12) : want;
-  if (setter) setter.call(input, typed); else input.value = typed;
-  input.dispatchEvent(new Event("input", { bubbles: true }));
-  const w = want.toLowerCase();
-  for (let i = 0; i < 12; i++) {
-    await sleep(60);
-    const options = [...(root.querySelectorAll('[role="option"], .select__option, [class*="option" i][id*="option" i]'))] as HTMLElement[];
-    if (!options.length) continue;
-    const texts = options.map((o) => clean(o.textContent).toLowerCase());
-    let idx = texts.findIndex((t) => t === w);
-    if (idx < 0) idx = texts.findIndex((t) => t.startsWith(w));
-    if (idx < 0) idx = texts.findIndex((t) => w.length > 2 && t.includes(w));
-    if (idx < 0 && /^(yes|no)$/.test(w)) idx = texts.findIndex((t) => t.startsWith(w));
-    if (idx < 0) { input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); return false; }
-    const o = options[idx]!;
-    o.dispatchEvent(new MouseEvent("mousedown", { bubbles: true })); o.dispatchEvent(new MouseEvent("mouseup", { bubbles: true })); o.click();
-    await sleep(40);
-    return true;
+const mouse = (type: string, t: Element) => t.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, button: 0 }));
+const clickLike = (t: Element) => { mouse("mousedown", t); mouse("mouseup", t); mouse("click", t); };
+const controlOf = (input: HTMLInputElement): Element => input.closest(".select__control, [class*='control' i], [class*='select' i]") ?? input.parentElement ?? input;
+function listboxFor(input: HTMLInputElement, root: Document | ShadowRoot): HTMLElement[] {
+  const id = input.getAttribute("aria-controls") ?? input.getAttribute("aria-owns");
+  const lb = id ? (root as Document).getElementById?.(id) ?? document.getElementById(id) : null;
+  if (lb) return [...lb.querySelectorAll<HTMLElement>('[role="option"]')];
+  const menu = controlOf(input).parentElement?.querySelector(".select__menu, [class*='menu' i]");
+  if (menu) return [...menu.querySelectorAll<HTMLElement>('[role="option"], .select__option')];
+  return [...root.querySelectorAll<HTMLElement>('[role="option"]')].filter((o) => !/iti__/.test(o.className)); // never the phone flag list
+}
+const shownValue = (input: HTMLInputElement) => clean(controlOf(input).querySelector(".select__single-value, .select__multi-value, [class*='single-value' i]")?.textContent);
+function bestOption(options: HTMLElement[], want: string): HTMLElement | null {
+  const w = want.toLowerCase().trim(); const texts = options.map((o) => clean(o.textContent).toLowerCase());
+  let idx = texts.findIndex((t) => t === w);
+  if (idx < 0 && /^(yes|no)$/.test(w)) idx = texts.findIndex((t) => new RegExp(`^${w}\\b`).test(t));
+  if (idx < 0) idx = texts.findIndex((t) => t.startsWith(w));
+  if (idx < 0 && w.length > 2) idx = texts.findIndex((t) => t.includes(w));
+  if (idx < 0 && w.includes(" ")) { const words = w.split(/\s+/).filter((x) => x.length > 2); idx = texts.findIndex((t) => words.every((x) => t.includes(x))); }
+  return idx >= 0 ? options[idx]! : null;
+}
+
+/** react-select and friends. Returns true when the control shows the chosen value. Bounded to ~6 s so a slow server-side search cannot hang the fill. */
+async function pickCombobox(input: HTMLInputElement, want: string, root: Document | ShadowRoot, opts: { type?: boolean; budgetMs?: number } = {}): Promise<boolean> {
+  const ctl = controlOf(input); const t0 = Date.now(); const budget = opts.budgetMs ?? 6000;
+  const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+  input.focus(); clickLike(ctl);
+  await sleep(120);
+  let options = listboxFor(input, root);
+  // static lists: pick straight from what opened; typing first narrows lists that are searchable
+  let hit = options.length ? bestOption(options, want) : null;
+  if (!hit) {
+    const typed = opts.type === false ? "" : want;
+    if (typed) { if (setter) setter.call(input, typed); else input.value = typed; input.dispatchEvent(new Event("input", { bubbles: true })); }
+    while (Date.now() - t0 < budget) {
+      await sleep(250);
+      options = listboxFor(input, root).filter((o) => !/^(loading|no options)/i.test(clean(o.textContent)));
+      if (options.length) { hit = bestOption(options, want); if (hit) break; }
+      const menuText = clean(ctl.parentElement?.querySelector(".select__menu")?.textContent);
+      if (/no options/i.test(menuText)) break;
+    }
   }
-  input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-  return false;
+  if (!hit) { input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); mouse("mousedown", document.body); return false; }
+  clickLike(hit);
+  await sleep(120);
+  const shown = shownValue(input);
+  return !!shown || input.getAttribute("aria-expanded") === "false";
+}
+
+/** Checkbox groups (Greenhouse multi-select questions): tick the boxes whose label matches each wanted value. */
+function tickBoxes(root: Document | ShadowRoot, wanted: string[]): { el: HTMLInputElement; ok: boolean }[] {
+  const out: { el: HTMLInputElement; ok: boolean }[] = [];
+  const boxes = [...root.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+  for (const w of wanted) {
+    const lw = w.toLowerCase();
+    const box = boxes.find((b) => clean(labelTextFor(b, root)).toLowerCase() === lw) ?? boxes.find((b) => clean(labelTextFor(b, root)).toLowerCase().startsWith(lw));
+    if (box && !box.checked) { box.click(); out.push({ el: box, ok: box.checked }); }
+    else if (box) out.push({ el: box, ok: true });
+  }
+  return out;
 }
 
 function cssPath(el: Element): string | null {
@@ -171,11 +206,14 @@ export async function fillForm(root: Document | ShadowRoot, values: Values, opts
     // multi-select (disciplines): pick each value
     if (Array.isArray(v)) {
       if (!isCombobox(el)) { const ok = el instanceof HTMLSelectElement ? v.map((x) => setValue(el, x)).some(Boolean) : false; results.push({ key: rule.key, selector: cssPath(el), strategy, success: ok }); return true; }
-      let any = false; for (const x of v) any = (await pickCombobox(el as HTMLInputElement, x, root)) || any;
+      let any = false; for (const x of v) any = (await pickCombobox(el as HTMLInputElement, x, root, { budgetMs: 3000 })) || any;
       results.push({ key: rule.key, selector: cssPath(el), strategy, success: any }); return true;
     }
     const text = asText(v)!;
-    if (isCombobox(el)) { const ok = await pickCombobox(el as HTMLInputElement, text, root); results.push({ key: rule.key, selector: cssPath(el), strategy: `${strategy}:combo`, success: ok }); return true; }
+    if (isCombobox(el)) {
+      const ok = await pickCombobox(el as HTMLInputElement, text, root, { type: rule.key !== "workAuthorized" && rule.key !== "needsSponsorship", budgetMs: rule.key === "school" ? 6000 : 4000 });
+      results.push({ key: rule.key, selector: cssPath(el), strategy: `${strategy}:combo`, success: ok }); return true;
+    }
     if (el instanceof HTMLInputElement && (el.type === "checkbox" || el.type === "radio")) { used.delete(el); return false; }
     if (el instanceof HTMLSelectElement) { const ok = setValue(el, text); results.push({ key: rule.key, selector: cssPath(el), strategy, success: ok }); return true; }
     if (el.value && el.value.trim() && el.value.trim() !== text) { results.push({ key: rule.key, selector: cssPath(el), strategy: `${strategy}:kept`, success: true }); return true; } // never overwrite what the user typed
@@ -199,6 +237,11 @@ export async function fillForm(root: Document | ShadowRoot, values: Values, opts
   for (const rule of RULES) {
     const v = valueFor(rule); if (v == null || v === "" || (Array.isArray(v) && !v.length)) continue;
     if (typeof v === "boolean") { const r = yesNoRadios(rule, v); if (r) { results.push(r); continue; } }
+    if (Array.isArray(v) && rule.multi) {
+      // checkbox groups first (Greenhouse renders multi-select questions as checkboxes)
+      const ticked = tickBoxes(root, v);
+      if (ticked.length) { for (const t of ticked) used.add(t.el); results.push({ key: rule.key, selector: cssPath(ticked[0]!.el), strategy: "checkbox", success: ticked.some((t) => t.ok) }); continue; }
+    }
     let done = false;
     for (const sel of opts.learned?.[rule.key] ?? []) { const el = root.querySelector(sel); if (isFillable(el) && (await apply(el, rule, "learned"))) { done = true; break; } }
     if (done) continue;

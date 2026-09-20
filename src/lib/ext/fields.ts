@@ -27,7 +27,7 @@ export type FillFields = {
   firstName: string; lastName: string; fullName: string; preferredName: string | null; email: string; phone: string | null; phoneCountry: string;
   linkedin: string | null; github: string | null; portfolio: string | null;
   street: string | null; city: string | null; state: string | null; stateName: string | null; zip: string | null; country: string;
-  school: string | null; degree: string | null; degreeName: string | null; major: string | null; disciplines: string[]; startYear: string | null; gradYear: string | null; gradMonth: string | null; gpa: string | null;
+  school: string | null; degree: string | null; degreeName: string | null; major: string | null; disciplines: string[]; startYear: string | null; gradYear: string | null; gradMonth: string | null; gradDate: string | null; gpa: string | null;
   workAuthorized: boolean | null; needsSponsorship: boolean | null;
   headline: string | null; summary: string | null;
 };
@@ -49,7 +49,7 @@ export function fillFields(p: CanonicalProfile): FillFields {
     linkedin: p.links.linkedin, github: p.links.github, portfolio: p.links.portfolio,
     street: p.address.street, city, state, stateName: state ? STATE_NAMES[state] : null, zip: p.address.zip, country: "United States",
     school: edu?.school ?? null, degree: edu?.degree ?? null, degreeName: DEGREE_NAMES[deg] ?? edu?.degree ?? null, major: edu?.field ?? null, disciplines: disciplinesFor(edu?.field),
-    startYear: edu?.startYear ? String(edu.startYear) : null, gradYear: edu?.gradYear ? String(edu.gradYear) : null, gradMonth: edu?.gradYear ? "May" : null, gpa: edu?.gpa != null ? String(edu.gpa) : null,
+    startYear: edu?.startYear ? String(edu.startYear) : null, gradYear: edu?.gradYear ? String(edu.gradYear) : null, gradMonth: edu?.gradYear ? "May" : null, gradDate: edu?.gradYear ? `May ${edu.gradYear}` : null, gpa: edu?.gpa != null ? String(edu.gpa) : null,
     workAuthorized: wa === "unknown" ? null : true, // every listed status can work now; sponsorship is the separate question
     needsSponsorship: wa === "unknown" ? null : wa === "visa_needs_sponsorship",
     headline: p.headline, summary: null,
