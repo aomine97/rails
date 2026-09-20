@@ -1,4 +1,4 @@
-# Vercel Hobby only allows daily crons, so GitHub Actions calls the hourly/10-min jobs.
+# Vercel Hobby only allows daily crons, so GitHub Actions calls the hourly/15-min jobs.
 # Repo secrets needed: APP_URL (https://<project>.vercel.app), CRON_SECRET (same value as in Vercel env).
 name: cron
 on:
@@ -11,9 +11,13 @@ jobs:
     if: github.event.schedule == '5 * * * *' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - run: curl -fsS --max-time 300 -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" "${{ secrets.APP_URL }}/api/cron/poll?limit=40"
+      - name: poll feeds
+        run: |
+          curl -fsS --max-time 300 -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" "${{ secrets.APP_URL }}/api/cron/poll?limit=40"
   tag:
     if: github.event.schedule == '*/15 * * * *' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - run: curl -fsS --max-time 300 -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" "${{ secrets.APP_URL }}/api/cron/tag"
+      - name: enrich + tag
+        run: |
+          curl -fsS --max-time 300 -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" "${{ secrets.APP_URL }}/api/cron/tag"
