@@ -4,18 +4,21 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { tagJob } from "@/lib/jobs/tagger";
 import { pretag } from "@/lib/jobs/tags";
 import { adapters, type RawJob } from "@/lib/ats";
+import { applyTags } from "@/lib/jobs/apply-tags";
+import { collectTagBatches } from "@/lib/jobs/batch";
 
 export const maxDuration = 300;
 export const dynamic = "force-dynamic";
 
-/** Every 15 min. (a) fills in descriptions the poller skipped, (b) tags untagged open jobs and writes job_skills. */
+/** Every 10 min. (0) collects finished nightly batches, (a) fills in descriptions the poller skipped, (b) tags untagged open jobs online and writes job_skills. */
 export async function GET(req: Request) {
   const denied = cronAuth(req); if (denied) return denied;
   const db = supabaseAdmin();
   const started = Date.now();
   const budgetMs = 200_000; // stay well under maxDuration
   const url = new URL(req.url);
-  const enrichN = Number(url.searchParams.get("enrich") ?? 32), tagN = Number(url.searchParams.get("tag") ?? 48);
+  const enrichN = Number(url.searchParams.get("enrich") ?? 32), tagN = Number(url.searchParams.get("tag") ?? 96);
+  const collected = await collectTagBatches(db, 60_000).catch((e) => [{ id: "error", status: String((e as Error).message).slice(0, 200), tagged: 0, failed: 0, done: false }]);
   // (0) pre-tag: titles that are clearly senior/management or clearly not tech get a stub tag with no model call
   const { data: raw } = await db.from("jobs").select("id,title").is("tagged_at", null).is("closed_at", null).order("first_seen_at", { ascending: false }).limit(400);
   let pretagged = 0;
@@ -40,21 +43,19 @@ export async function GET(req: Request) {
     } catch { await db.from("jobs").update({ description_text: "" }).eq("id", j.id); }
   }
   const { data: jobs, error } = await db.from("jobs").select("id,title,location,description_text,companies(name)")
-    .is("tagged_at", null).is("closed_at", null).not("description_text", "is", null).neq("description_text", "").order("first_seen_at", { ascending: false }).limit(tagN);
+    .is("tagged_at", null).is("closed_at", null).is("tag_batch_id", null).not("description_text", "is", null).neq("description_text", "").order("first_seen_at", { ascending: false }).limit(tagN);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   let tagged = 0, failed = 0; let firstError: string | null = null;
   const one = async (j: NonNullable<typeof jobs>[number]) => {
     try {
       const company = (j as unknown as { companies: { name: string } | null }).companies?.name ?? "";
       const tags = await tagJob({ title: j.title, company, location: j.location, descriptionText: j.description_text! });
-      await db.from("jobs").update({ tags, tagged_at: new Date().toISOString(), remote: tags.remote === "unknown" ? undefined : tags.remote === "remote" }).eq("id", j.id);
-      const skills = [...tags.requiredSkills.map((k) => ({ job_id: j.id, skill_key: k, required: true })), ...tags.preferredSkills.map((k) => ({ job_id: j.id, skill_key: k, required: false }))];
-      if (skills.length) await db.from("job_skills").upsert(skills, { onConflict: "job_id,skill_key" });
+      await applyTags(db, j.id, tags);
       tagged++;
     } catch (e) { failed++; firstError ??= String((e as Error).message).slice(0, 300); }
   };
-  for (let i = 0; i < (jobs ?? []).length && Date.now() - started < budgetMs; i += 4) {
-    await Promise.all(jobs!.slice(i, i + 4).map(one));
+  for (let i = 0; i < (jobs ?? []).length && Date.now() - started < budgetMs; i += 6) {
+    await Promise.all(jobs!.slice(i, i + 6).map(one));
   }
-  return NextResponse.json({ pretagged, enriched: enrichedCount, tagged, failed, firstError, ms: Date.now() - started });
+  return NextResponse.json({ collected, pretagged, enriched: enrichedCount, tagged, failed, firstError, ms: Date.now() - started });
 }
