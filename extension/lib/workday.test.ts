@@ -92,5 +92,13 @@ describe("workday", () => {
     expect(await wdListbox("degree", "Associate's Degree")).toBe(true);
     expect(document.querySelector('[data-automation-id="degree"]')!.textContent).toBe("Associate's");
   });
+  it("controls that are not on the page never become rows (Vanguard has no preferred name, skills or websites section)", async () => {
+    document.body.innerHTML = `<input data-automation-id="legalNameSection_firstName"><input data-automation-id="email">`;
+    const rep = await wdFillInfo(me, {});
+    expect(rep.map((r) => r.key)).toEqual(["firstName", "email"]);
+    document.body.innerHTML = `<div data-automation-id="educationSection"></div>`;
+    const rep2 = await wdFillExperience(me, []);
+    expect(rep2.some((r) => /skills|websites|linkedin|resume/.test(r.key))).toBe(false);
+  });
   it("reads Workday validation errors", () => { document.body.innerHTML = `<div data-automation-id="errorMessage">Phone Number is required.</div>`; expect(wdErrors()).toEqual(["Phone Number is required."]); });
 });

@@ -80,11 +80,13 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
     let rep: WdReport = [];
     const files = input.files.map((f) => ({ kind: f.kind, file: new File([f.bytes], f.name, { type: f.type }) }));
     try {
-      if (step.key === "info") rep = await wdFillInfo(input.me, await loadSaved());
-      else if (step.key === "experience") rep = await wdFillExperience(input.me, files);
-      else if (step.key === "disclosures") rep = await wdFillDisclosures(await loadSaved());
-      else if (step.key === "account") rep = await fillAccount(input.me.fields.email as string, fs);
-      else if (step.key === "start") { const r = files.find((x) => x.kind === "resume"); const inp = document.querySelector<HTMLInputElement>('input[data-automation-id="file-upload-input-ref"], input[type="file"]'); if (r && inp) { try { const dt = new DataTransfer(); dt.items.add(r.file); inp.files = dt.files; inp.dispatchEvent(new Event("change", { bubbles: true })); rep = [{ key: "resume", success: true, label: `Resume uploaded for Workday's own parser: ${r.file.name}` }]; } catch { /* left */ } } }
+      // Decide by what is on the page, not by the step label: tenants rename and reorder steps.
+      const has = (id: string) => !!document.querySelector(`[data-automation-id="${id}"]`);
+      if (has("legalNameSection_firstName") || has("addressSection_addressLine1") || has("phone-number")) rep = rep.concat(await wdFillInfo(input.me, await loadSaved()));
+      if (has("workExperienceSection") || has("educationSection") || has("skillsSection") || has("file-upload-input-ref")) rep = rep.concat(await wdFillExperience(input.me, files));
+      if (has("gender") || has("ethnicityDropdown") || has("veteranStatus") || has("hispanicOrLatino")) rep = rep.concat(await wdFillDisclosures(await loadSaved()));
+      if (accountForm().mode) rep = rep.concat(await fillAccount(input.me.fields.email as string, fs));
+      else if (step.key === "start") { const r = files.find((x) => x.kind === "resume"); const inp = document.querySelector<HTMLInputElement>('input[data-automation-id="file-upload-input-ref"], input[type="file"]'); if (r && inp && !rep.some((x) => x.key === "resume")) { try { const dt = new DataTransfer(); dt.items.add(r.file); inp.files = dt.files; inp.dispatchEvent(new Event("change", { bubbles: true })); rep = [{ key: "resume", success: true, label: `Resume uploaded for Workday's own parser: ${r.file.name}` }]; } catch { /* left */ } } }
     } catch (e) { fs.error = `Workday step failed: ${String((e as Error).message)}`; }
     for (const r of rep) fs.rows.unshift({ f: { id: `wd:${r.key}`, label: r.label, kind: "text", required: true, filled: r.success, sensitive: false, conditional: false }, s: r.success ? "done" : "left", why: r.success ? undefined : "Set this one on the page." });
     emit();

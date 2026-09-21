@@ -27,9 +27,10 @@ const matches = (t: string, w: string) => { const a = norm(t), b = norm(w); if (
 const degreeGuesses = (name: string | null | undefined, code: string | null | undefined) => [...new Set([name, name?.replace(/\s+degree$/i, ""), name?.split(/[\s']/)[0], code].filter((x): x is string => !!x))];
 
 /** Text input by automation id (or within a row). */
-export function wdText(id: string, value: string | null | undefined, root: ParentNode = document): boolean {
+export type Tri = boolean | null; // null = that control is not on this page, so it is not the user's problem
+export function wdText(id: string, value: string | null | undefined, root: ParentNode = document): Tri {
+  const el = inputOf(byAuto(id, root)); if (!el) return null;
   if (value == null || value === "") return false;
-  const el = inputOf(byAuto(id, root)); if (!el) return false;
   if (el.value && el.value.trim() && el.value.trim() !== value) return true; // never overwrite what the user typed
   return setValue(el, value);
 }
@@ -37,9 +38,9 @@ export function wdText(id: string, value: string | null | undefined, root: Paren
 /** Workday dropdown: <button aria-haspopup="listbox"> that opens a ul[role=listbox] in a portal. Long lists (states, countries) are
  *  virtualized, so when the option is not in the DOM we type-ahead (Workday moves the highlight as you type) and press Enter. */
 export const listboxOptions = () => [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li, [data-automation-id="promptOption"]')].filter((o) => !o.closest("#rails-drawer-host"));
-export async function wdListbox(id: string, want: string | null | undefined, root: ParentNode = document, budgetMs = 3000): Promise<boolean> {
+export async function wdListbox(id: string, want: string | null | undefined, root: ParentNode = document, budgetMs = 3000): Promise<Tri> {
+  const btn = (byAuto(id, root) ?? root.querySelector(`[data-automation-id="${id}"] button`)) as HTMLElement | null; if (!btn) return null;
   if (want == null || want === "") return false;
-  const btn = (byAuto(id, root) ?? root.querySelector(`[data-automation-id="${id}"] button`)) as HTMLElement | null; if (!btn) return false;
   if (matches(btn.textContent ?? "", want)) return true;
   const open = async () => { if (listboxOptions().length) return; btn.focus(); clickLike(btn); const t0 = Date.now(); while (Date.now() - t0 < budgetMs && !listboxOptions().length) await sleep(120); if (!listboxOptions().length) { pressKey(btn, "Enter"); await sleep(250); } };
   await open();
@@ -61,9 +62,9 @@ export async function wdListbox(id: string, want: string | null | undefined, roo
 }
 
 /** Search-as-you-type multi/single select (school, field of study, country phone code, skills): type, wait for promptOption, pick, verify the chip. */
-export async function wdSearch(id: string, want: string | null | undefined, root: ParentNode = document, budgetMs = 6000): Promise<boolean> {
+export async function wdSearch(id: string, want: string | null | undefined, root: ParentNode = document, budgetMs = 6000): Promise<Tri> {
+  const box = byAuto(id, root); const input = inputOf(box) ?? (box?.matches("input") ? (box as HTMLInputElement) : null); if (!input) return null;
   if (want == null || want === "") return false;
-  const box = byAuto(id, root); const input = inputOf(box) ?? (box?.matches("input") ? (box as HTMLInputElement) : null); if (!input) return false;
   const chips = () => [...(box?.parentElement?.querySelectorAll('[data-automation-id="selectedItem"], [data-automation-id="selectedItemList"] li') ?? [])].map((c) => norm(c.textContent));
   if (chips().some((c) => matches(c, want))) return true;
   input.focus(); setValue(input, want); input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
@@ -76,10 +77,11 @@ export async function wdSearch(id: string, want: string | null | undefined, root
 }
 
 /** Split date: <prefix>-dateSectionMonth-input / -dateSectionYear-input (spinbuttons that take typed digits). ym = "2025-08" or "2027". */
-export function wdDate(prefix: string, ym: string | null | undefined, root: ParentNode = document): boolean {
+export function wdDate(prefix: string, ym: string | null | undefined, root: ParentNode = document): Tri {
+  const yEl = inputOf(byAuto(`${prefix}-dateSectionYear-input`, root)); const mEl = inputOf(byAuto(`${prefix}-dateSectionMonth-input`, root));
+  if (!yEl && !mEl) return null;
   if (!ym) return false;
   const [y, m] = ym.split("-");
-  const yEl = inputOf(byAuto(`${prefix}-dateSectionYear-input`, root)); const mEl = inputOf(byAuto(`${prefix}-dateSectionMonth-input`, root));
   let ok = false;
   const type = (el: HTMLInputElement | HTMLTextAreaElement | null, v: string) => { if (!el) return false; el.focus(); el.dispatchEvent(new KeyboardEvent("keydown", { key: "a", ctrlKey: true, bubbles: true })); const r = setValue(el, v); el.dispatchEvent(new KeyboardEvent("keyup", { key: v.slice(-1), bubbles: true })); el.blur(); return r; };
   if (mEl && m) ok = type(mEl, String(Number(m))) || ok;
@@ -87,12 +89,12 @@ export function wdDate(prefix: string, ym: string | null | undefined, root: Pare
   return ok;
 }
 
-export function wdCheckbox(id: string, want: boolean, root: ParentNode = document): boolean {
-  const el = inputOf(byAuto(id, root)) as HTMLInputElement | null; if (!el || el.type !== "checkbox") return false;
+export function wdCheckbox(id: string, want: boolean, root: ParentNode = document): Tri {
+  const el = inputOf(byAuto(id, root)) as HTMLInputElement | null; if (!el || el.type !== "checkbox") return null;
   if (el.checked !== want) el.click(); return el.checked === want;
 }
-export function wdRadio(id: string, want: string, root: ParentNode = document): boolean {
-  const group = byAuto(id, root); if (!group) return false;
+export function wdRadio(id: string, want: string, root: ParentNode = document): Tri {
+  const group = byAuto(id, root); if (!group) return null;
   const radios = [...group.querySelectorAll<HTMLInputElement>('input[type="radio"]')];
   const hit = radios.find((r) => matches(r.closest("label")?.textContent ?? group.querySelector(`label[for="${r.id}"]`)?.textContent ?? "", want) || matches(r.value, want));
   if (!hit) return false; if (!hit.checked) hit.click(); return hit.checked;
@@ -110,13 +112,14 @@ export async function wdEnsureRows(sectionId: string, rowPrefix: string, n: numb
 }
 
 export type WdReport = { key: string; success: boolean; label: string }[];
-const push = (rep: WdReport, key: string, ok: boolean, label: string) => { rep.push({ key, success: ok, label }); };
+/** Only controls that exist on this page become rows; a tenant that has no "preferred name" field never shows one to fill. */
+const push = (rep: WdReport, key: string, ok: Tri, label: string) => { if (ok !== null) rep.push({ key, success: ok, label }); };
 
 /** My Information page. */
 export async function wdFillInfo(me: Me, saved: Record<string, unknown>): Promise<WdReport> {
   const f = me.fields as Values; const rep: WdReport = [];
   const src = (saved["how did you hear about us"] as string) ?? (saved["how did you hear about this job"] as string) ?? (saved["source"] as string) ?? null;
-  let srcOk = false; for (const want of [src, "Job Board", "Online Job Board", "Company Website", "Other"].filter(Boolean) as string[]) { if (await wdSearch("sourceSection", want, document, 2500) || await wdListbox("sourceSection", want)) { srcOk = true; break; } }
+  let srcOk: Tri = null; for (const want of [src, "Job Board", "Online Job Board", "Company Website", "Other"].filter(Boolean) as string[]) { const a = await wdSearch("sourceSection", want, document, 2500); const b = a === true ? true : await wdListbox("sourceSection", want); if (a === null && b === null) { srcOk = null; break; } srcOk = a === true || b === true; if (srcOk) break; }
   push(rep, "sourceSection", srcOk, "How did you hear about us");
   push(rep, "country", await wdListbox("countryDropdown", "United States of America"), "Country");
   push(rep, "firstName", wdText("legalNameSection_firstName", f.firstName as string), "Legal first name");
@@ -128,7 +131,7 @@ export async function wdFillInfo(me: Me, saved: Record<string, unknown>): Promis
   push(rep, "zip", wdText("addressSection_postalCode", f.zip as string), "Postal code");
   push(rep, "email", wdText("email", f.email as string), "Email");
   push(rep, "phoneType", await wdListbox("phone-device-type", "Mobile"), "Phone device type");
-  push(rep, "phoneCountry", await wdSearch("countryPhoneCode", "United States of America (+1)", document, 4000) || await wdListbox("countryPhoneCode", "United States of America"), "Phone country code");
+  { const a = await wdSearch("countryPhoneCode", "United States of America (+1)", document, 4000); push(rep, "phoneCountry", a === true ? true : a === null ? await wdListbox("countryPhoneCode", "United States of America") : (await wdListbox("countryPhoneCode", "United States of America")) === true, "Phone country code"); }
   push(rep, "phone", wdText("phone-number", String(f.phone ?? "").replace(/\D/g, "")), "Phone number");
   const orgs = (me.experience ?? []).map((e) => norm(e.org));
   const company = norm(document.title).split(/[|–-]/)[0] ?? "";
@@ -144,7 +147,7 @@ export async function wdFillExperience(me: Me, files: { kind: string; file: File
     const rows = await wdEnsureRows("workExperienceSection", "workExperience", jobs.length);
     for (let i = 0; i < rows.length; i++) {
       const r = rows[i]!, j = jobs[i]!;
-      let ok = wdText("jobTitle", j.title, r); ok = wdText("company", j.org, r) || ok;
+      let ok: Tri = wdText("jobTitle", j.title, r); const co = wdText("company", j.org, r); ok = ok === null && co === null ? null : !!ok || !!co;
       wdText("location", (f.city as string) ?? "", r);
       if (j.current) wdCheckbox("currentlyWorkHere", true, r);
       wdDate("startDate", j.start, r); if (!j.current) wdDate("endDate", j.end, r);
@@ -157,7 +160,7 @@ export async function wdFillExperience(me: Me, files: { kind: string; file: File
     const rows = await wdEnsureRows("educationSection", "education", edus.length);
     for (let i = 0; i < rows.length; i++) {
       const r = rows[i]!, e = edus[i]!;
-      const school = await wdSearch("school", e.school, r) || wdText("schoolName", e.school, r);
+      const s1 = await wdSearch("school", e.school, r); const school: Tri = s1 === true ? true : s1 === null ? wdText("schoolName", e.school, r) : (wdText("schoolName", e.school, r) === true);
       for (const g of degreeGuesses(e.degreeName, e.degree)) if (await wdListbox("degree", g, r)) break;
       if (e.field) await wdSearch("fieldOfStudy", e.field, r, 5000);
       if (e.gpa != null) wdText("gpa", String(e.gpa), r);
@@ -170,6 +173,7 @@ export async function wdFillExperience(me: Me, files: { kind: string; file: File
   const sites = [f.linkedin, f.github, f.portfolio].filter(Boolean) as string[];
   if (sites.length && byAuto("websiteSection")) { const rows = await wdEnsureRows("websiteSection", "website", sites.length); rows.forEach((r, i) => wdText("website", sites[i]!, r)); push(rep, "websites", rows.length > 0, "Websites"); }
   if (f.linkedin) push(rep, "linkedin", wdText("linkedinQuestion", f.linkedin as string), "LinkedIn");
+  if (byAuto("skillsSection") === null && byAuto("websiteSection") === null && !jobs.length && !edus.length) return rep;
   const resume = files.find((x) => x.kind === "resume");
   if (resume) { const input = document.querySelector<HTMLInputElement>('input[data-automation-id="file-upload-input-ref"], input[type="file"]'); if (input) { try { const dt = new DataTransfer(); dt.items.add(resume.file); input.files = dt.files; input.dispatchEvent(new Event("change", { bubbles: true })); push(rep, "resume", true, `Resume: ${resume.file.name}`); } catch { push(rep, "resume", false, "Resume"); } } }
   return rep;
