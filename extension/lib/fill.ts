@@ -4,7 +4,7 @@
  * Handles native inputs/selects, radios, and combobox widgets (react-select on Greenhouse: type, wait for the menu, click the option).
  * Never touches submit buttons, file inputs, consent checkboxes, or EEO/self-identification questions.
  */
-export type FieldKey = "firstName" | "lastName" | "fullName" | "preferredName" | "email" | "phone" | "phoneCountry" | "linkedin" | "github" | "portfolio" | "street" | "city" | "state" | "zip" | "country" | "residenceCountry" | "residenceState" | "school" | "degree" | "major" | "disciplines" | "startYear" | "gradYear" | "gradDate" | "gradMonth" | "gpa" | "workAuthorized" | "needsSponsorship";
+export type FieldKey = "firstName" | "lastName" | "fullName" | "preferredName" | "email" | "phone" | "phoneCountry" | "linkedin" | "github" | "portfolio" | "street" | "city" | "state" | "zip" | "country" | "residenceCountry" | "residenceState" | "school" | "degree" | "major" | "disciplines" | "startYear" | "gradYear" | "gradDate" | "gradMonth" | "gpa" | "workAuthorized" | "needsSponsorship" | "desiredPay" | "earliestStart" | "willRelocate" | "coverLetterText" | "currentCompany" | "currentTitle" | "yearsExperience" | "summary";
 export type Values = Record<string, string | boolean | string[] | null | undefined>;
 export type FillResult = { key: FieldKey; selector: string | null; strategy: string; success: boolean };
 export type FillReport = { results: FillResult[]; leftForYou: string[] };
@@ -41,10 +41,18 @@ const RULES: Rule[] = [
   { key: "gpa", names: /gpa/i, label: /gpa|grade point/i },
   { key: "workAuthorized", names: /authori[sz]ed|work[_-]?auth|eligib/i, label: /legally authori[sz]ed|authori[sz]ed to work|eligible to work/i, select: true },
   { key: "needsSponsorship", names: /sponsor/i, label: /sponsorship|require .*visa|need .*visa/i, select: true },
+  { key: "desiredPay", names: /salary|compensation|desired[_-]?pay|expected[_-]?pay|pay[_-]?expect/i, label: /desired (salary|pay|compensation)|salary (expectation|requirement)|expected (salary|compensation)|compensation expectation|hourly rate/i },
+  { key: "earliestStart", names: /start[_-]?date|available|availability|earliest/i, label: /(earliest|available|availability|when can you) .*start|start date\*?$|date available/i, not: /year|month|end/i },
+  { key: "willRelocate", names: /relocat/i, label: /willing to relocate|open to relocat|relocate/i, select: true },
+  { key: "coverLetterText", names: /cover[_-]?letter/i, label: /cover letter/i },
+  { key: "currentCompany", autocomplete: ["organization"], names: /current[_-]?(company|employer)|^company$|^employer$|organization/i, label: /current (company|employer)|^company\*?$|^employer\*?$|most recent employer/i },
+  { key: "currentTitle", autocomplete: ["organization-title"], names: /current[_-]?(title|position|role)|job[_-]?title/i, label: /current (title|position|role)|^(job )?title\*?$|most recent title/i },
+  { key: "yearsExperience", names: /years[_-]?(of[_-]?)?exp/i, label: /years of (relevant |professional |work )?experience/i },
+  { key: "summary", names: /summary|about[_-]?you|bio/i, label: /^summary|tell us about yourself|about you/i },
 ];
 
 /** Questions the extension deliberately leaves alone. Reported back so the user knows what to do by hand. */
-export const LEAVE_ALONE = /pronoun|gender|hispanic|latino|race|ethnicit|veteran|disabilit|self-identif|terms|privacy|consent|agree|how did you hear|referr|salary|compensation|cover letter|resume|cv\b|attach/i;
+export const LEAVE_ALONE = /pronoun|gender|hispanic|latino|race|ethnicit|veteran|disabilit|self-identif|terms|privacy|consent|agree|how did you hear|referr|resume|cv\b|attach/i;
 
 export const ATS_SELECTORS: Record<string, Partial<Record<FieldKey, string[]>>> = {
   greenhouse: { firstName: ["#first_name"], lastName: ["#last_name"], email: ["#email"], phone: ["#phone"], linkedin: ['input[name*="linkedin" i]', '[id*="linkedin" i]'], github: ['input[name*="github" i]'], portfolio: ['input[name*="website" i]'] },

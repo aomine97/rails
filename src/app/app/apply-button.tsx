@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { openAts } from "./jobs/[id]/apply/split";
+import { APPLY_CLS } from "./jobs/[id]/apply/split";
 
-/** Feed card Apply: ATS opens in a window on the right, this tab becomes the apply companion (checklist, copy fields, tailored resume, "Submitted it?"). */
+/** Feed card Apply: a real link to the ATS in a new tab; this tab moves to the apply companion (checklist, copy fields, tailored resume, "Submitted it?"). */
 export function ApplyButton({ jobId, url, applied }: { jobId: string; url: string; title?: string; company?: string; applied: boolean }) {
   const router = useRouter();
-  if (applied) return <span className="rounded-full bg-green-chip px-3 py-2 text-[13px] font-bold text-green-chip-text">Applied ✓</span>;
-  return <button type="button" onClick={() => { openAts(url); router.push(`/app/jobs/${jobId}/apply`); }} className="rounded-full bg-orange px-5 py-2.5 text-[13px] font-extrabold text-ink shadow-[0_4px_14px_rgba(255,138,61,0.35)] hover:brightness-105">Apply with Autofill</button>;
+  if (applied) return <span className="inline-flex h-10 items-center rounded-xl bg-green-chip px-4 text-[13px] font-bold text-green-chip-text">Applied ✓</span>;
+  return <a href={url} target="_blank" rel="noopener noreferrer" onClick={() => setTimeout(() => router.push(`/app/jobs/${jobId}/apply`), 50)} className={`${APPLY_CLS} h-10 px-4 text-[13px]`}>Apply with Autofill ↗</a>;
 }

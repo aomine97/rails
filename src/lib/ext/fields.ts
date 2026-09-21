@@ -30,6 +30,7 @@ export type FillFields = {
   school: string | null; degree: string | null; degreeName: string | null; major: string | null; disciplines: string[]; startYear: string | null; gradYear: string | null; gradMonth: string | null; gradDate: string | null; gpa: string | null;
   workAuthorized: boolean | null; needsSponsorship: boolean | null;
   headline: string | null; summary: string | null;
+  desiredPay: string | null; earliestStart: string | null; willRelocate: boolean | null; currentCompany: string | null; currentTitle: string | null; yearsExperience: string | null;
 };
 
 const DEGREE_NAMES: Record<string, string> = { AAS: "Associate's Degree", AS: "Associate's Degree", AA: "Associate's Degree", BS: "Bachelor's Degree", BA: "Bachelor's Degree", BAS: "Bachelor's Degree", BSC: "Bachelor's Degree", MS: "Master's Degree", MA: "Master's Degree", MBA: "Master's Degree", PHD: "Doctorate" };
@@ -43,6 +44,7 @@ export function fillFields(p: CanonicalProfile): FillFields {
   const state = STATE_NAMES[stateRaw] ? stateRaw : null;
   const edu = p.education[0];
   const wa = p.constraints.workAuthorization;
+  const current = p.experience.find((e) => (e.kind === "job" || e.kind === "internship") && !e.end) ?? p.experience.find((e) => e.kind === "job" || e.kind === "internship") ?? null;
   const deg = (edu?.degree ?? "").replace(/[.\s]/g, "").toUpperCase();
   return {
     firstName: parts[0] ?? "", lastName: parts.slice(1).join(" ") || "", fullName: p.name, preferredName: p.preferredName, email: p.email, phone: p.phone, phoneCountry: "United States",
@@ -52,6 +54,11 @@ export function fillFields(p: CanonicalProfile): FillFields {
     startYear: edu?.startYear ? String(edu.startYear) : null, gradYear: edu?.gradYear ? String(edu.gradYear) : null, gradMonth: edu?.gradYear ? "May" : null, gradDate: edu?.gradYear ? `May ${edu.gradYear}` : null, gpa: edu?.gpa != null ? String(edu.gpa) : null,
     workAuthorized: wa === "unknown" ? null : true, // every listed status can work now; sponsorship is the separate question
     needsSponsorship: wa === "unknown" ? null : wa === "visa_needs_sponsorship",
-    headline: p.headline, summary: null,
+    headline: p.headline, summary: null, // "tell us about yourself" goes to the answer model, which writes it from the whole profile
+    desiredPay: p.constraints.minPayHourly ? `$${Math.round(p.constraints.minPayHourly)}/hour` : null,
+    earliestStart: p.constraints.earliestStart ?? "Immediately",
+    willRelocate: p.constraints.locations.length > 1 || p.constraints.locations.some((l) => /anywhere|open|relocat/i.test(l)) ? true : p.constraints.locations.length ? false : null,
+    currentCompany: current?.org ?? null, currentTitle: current?.title ?? null,
+    yearsExperience: (() => { const ms = p.experience.filter((e) => e.kind === "job" || e.kind === "internship").reduce((acc, e) => { if (!e.start) return acc; const a = new Date(`${e.start}-01`).getTime(); const b = e.end ? new Date(`${e.end}-01`).getTime() : Date.now(); return acc + Math.max(0, b - a); }, 0); const y = ms / (365.25 * 86400000); return y >= 1 ? String(Math.floor(y)) : y > 0 ? "1" : "0"; })(),
   };
 }

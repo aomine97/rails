@@ -20,7 +20,7 @@ export const ANSWERS_SYSTEM = `You fill job-application questions for a candidat
 - Work authorization: us_citizen and permanent_resident -> authorized Yes, sponsorship No. visa_needs_sponsorship -> authorized Yes (if the question is "now"), sponsorship Yes. visa_no_sponsorship -> authorized Yes, sponsorship No. unknown -> null.
 - Dates: graduation is May of gradYear unless the profile says otherwise. Start dates: earliestStart, else "Immediately" style options when present.
 - Location questions: use the address / locations. Relocation and remote: from constraints (remoteOk, locations); "Yes" to relocate only if locations include more than one metro or the profile says so; else null.
-- Free-text "why do you want to work here" / essays: null.
+- "Why this company / why this role / what interests you" and similar short essays: write 40-80 plain words in first person from the profile's real experience, skills and target roles plus the posting's title and company. No flattery, no invented facts, no "passionate". Longer essays (specific projects, situational questions) that the profile cannot answer: null.
 - Short factual text (years of experience with X, a URL, a school name, a number) may be written from the profile.
 - Keep why under 12 words. Return only JSON: {"answers":[{"id","value","why"}]}.`;
 

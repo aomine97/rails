@@ -72,7 +72,7 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
 
   // 1. rules + files
   set("Filling your details…");
-  const ats = atsOf(location.hostname); const values = input.me.fields as Values;
+  const ats = atsOf(location.hostname); const values = { ...(input.me.fields as Values), coverLetterText: input.job?.coverLetter ?? null };
   let results: FillResult[] = []; let left: string[] = [];
   for (const r of allRoots()) { const rep = await fillForm(r, values, { ats, learned: input.learned }); results = results.concat(rep.results); left = left.concat(rep.leftForYou); }
   for (const f of input.files) { const file = new File([f.bytes], f.name, { type: f.type }); for (const r of allRoots()) { const a = attachFile(r, f.kind, file); if (a.success) { results.push({ key: (f.kind === "resume" ? "resumeFile" : "letterFile") as unknown as FillResult["key"], selector: a.selector, strategy: "file", success: true }); break; } } }

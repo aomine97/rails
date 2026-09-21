@@ -4,7 +4,8 @@ import { Wordmark } from "@/components/ui";
 import { CanonicalProfile } from "@/lib/schemas/profile";
 import { ConfirmForm } from "./confirm-form";
 
-export default async function ConfirmPage() {
+export default async function ConfirmPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+  const { next } = await searchParams;
   const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=/onboarding/confirm");
@@ -24,7 +25,7 @@ export default async function ConfirmPage() {
         </ol>
         <h1 className="mt-5 font-display text-[28px] font-extrabold leading-tight tracking-tight text-ink">Confirm your facts.</h1>
         <p className="prose-measure mt-2 text-[15px] leading-relaxed text-text">Everything Rails read off your resume. Fix what&apos;s wrong, add what&apos;s missing. Anything here counts as yours and is what every tailored resume can draw on.</p>
-        <div className="mt-6"><ConfirmForm initial={parsed.data} /></div>
+        <div className="mt-6"><ConfirmForm initial={parsed.data} next={next} /></div>
       </section>
     </main>
   );

@@ -26,7 +26,7 @@ export default async function ResumePage() {
       <div className="pb-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div><h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Resume score</h1><p className="mt-1 max-w-2xl text-[14px] leading-relaxed text-text">How your base resume reads as a document, before any job. Instant, explainable, and the fixes are ranked by how many points each is worth.</p></div>
-          <Link href="/onboarding/confirm" className="rounded-full border border-line bg-surface px-4 py-2 text-[13px] font-semibold text-ink">Edit my profile</Link>
+          <Link href="/onboarding/confirm?next=/app/resume" className="inline-flex h-10 items-center rounded-xl border border-line bg-surface px-4 text-[13px] font-bold text-ink hover:border-ink">Edit my profile</Link>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr]">
           <div className="flex flex-col gap-4">
@@ -60,7 +60,7 @@ export default async function ResumePage() {
                   ))}
                 </ol>
               )}
-              <Link href="/onboarding/confirm" className="mt-4 inline-block rounded-full bg-orange px-4 py-2 text-[13px] font-extrabold text-ink">Fix these on my profile</Link>
+              <Link href="/onboarding/confirm?next=/app/resume" className="mt-4 inline-flex h-11 items-center rounded-xl bg-orange px-5 text-[14px] font-extrabold text-ink shadow-[var(--shadow-cta)]">Fix these on my profile → re-score</Link>
             </div>
             <div className="rounded-2xl border border-line bg-surface p-5">
               <div className="text-[11px] font-bold uppercase tracking-wide text-muted">Tailored versions</div>

@@ -55,5 +55,6 @@ export async function confirmProfile(_prev: ConfirmState, form: FormData): Promi
   const { data: cur } = await admin.from("profiles").select("canonical_version").eq("id", user.id).single();
   const { error } = await admin.from("profiles").update({ canonical: p, canonical_version: (cur?.canonical_version ?? 0) + 1, full_name: p.name, onboarding_done: true }).eq("id", user.id);
   if (error) return { error: error.message };
-  redirect("/app");
+  // Came from "Fix these on my profile" (resume score) or a job page: go straight back; the score recomputes on load.
+  const next = String(form.get("next") ?? ""); redirect(/^\/app(\/|$)/.test(next) ? next : "/app");
 }

@@ -16,7 +16,7 @@ function L({ t, children, className = "" }: { t: string; children: React.ReactNo
   return <label className={`flex flex-col gap-1.5 ${className}`}><span className="text-[12.5px] font-semibold text-ink">{t}</span>{children}</label>;
 }
 
-export function ConfirmForm({ initial }: { initial: P }) {
+export function ConfirmForm({ initial, next }: { initial: P; next?: string }) {
   const [p, setP] = useState<P>(initial);
   const [state, action, pending] = useActionState<ConfirmState, FormData>(confirmProfile, {});
   const set = <K extends keyof P>(k: K, v: P[K]) => setP({ ...p, [k]: v });
@@ -36,6 +36,7 @@ export function ConfirmForm({ initial }: { initial: P }) {
   return (
     <form action={action} className="flex flex-col gap-5">
       <input type="hidden" name="profile" value={JSON.stringify(p)} />
+      {next && <input type="hidden" name="next" value={next} />}
       <FormError message={state.error} />
 
       <section className={card}>
@@ -143,7 +144,7 @@ export function ConfirmForm({ initial }: { initial: P }) {
       </section>
 
       <label className="flex items-start gap-2 text-sm text-text"><input type="checkbox" name="attest" className="mt-1" /> I confirm everything here is true and mine.</label>
-      <PrimaryButton pending={pending}>Confirm → my feed</PrimaryButton>
+      <PrimaryButton pending={pending}>{next?.includes("/resume") ? "Confirm → re-score my resume" : "Confirm → my feed"}</PrimaryButton>
     </form>
   );
 }
