@@ -1,0 +1,1613 @@
+{
+ "_note": "STEM + nursing employers to resolve with scripts/discover-companies.mjs (crawl for ATS links). field is a hint for the tagger stoplist, not a filter.",
+ "companies": [
+  {
+   "name": "Jacobs",
+   "domain": "jacobs.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "AECOM",
+   "domain": "aecom.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Bechtel",
+   "domain": "bechtel.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Kiewit",
+   "domain": "kiewit.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Fluor",
+   "domain": "fluor.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Burns & McDonnell",
+   "domain": "burnsmcd.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Black & Veatch",
+   "domain": "bv.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "WSP",
+   "domain": "wsp.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "HDR",
+   "domain": "hdrinc.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Kimley-Horn",
+   "domain": "kimley-horn.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Stantec",
+   "domain": "stantec.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Parsons",
+   "domain": "parsons.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Turner Construction",
+   "domain": "turnerconstruction.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Skanska",
+   "domain": "skanska.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Clark Construction",
+   "domain": "clarkconstruction.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Whiting-Turner",
+   "domain": "whiting-turner.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Gilbane",
+   "domain": "gilbaneco.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Dewberry",
+   "domain": "dewberry.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Gannett Fleming",
+   "domain": "gannettfleming.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Arcadis",
+   "domain": "arcadis.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Tetra Tech",
+   "domain": "tetratech.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Michael Baker International",
+   "domain": "mbakerintl.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Caterpillar",
+   "domain": "caterpillar.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "John Deere",
+   "domain": "deere.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Cummins",
+   "domain": "cummins.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "General Motors",
+   "domain": "gm.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Ford",
+   "domain": "ford.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Stellantis",
+   "domain": "stellantis.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Honda",
+   "domain": "honda.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Toyota",
+   "domain": "toyota.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "GE Aerospace",
+   "domain": "geaerospace.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "GE Vernova",
+   "domain": "gevernova.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Honeywell",
+   "domain": "honeywell.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Emerson",
+   "domain": "emerson.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Rockwell Automation",
+   "domain": "rockwellautomation.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Siemens",
+   "domain": "siemens.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Schneider Electric",
+   "domain": "se.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Eaton",
+   "domain": "eaton.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Carrier",
+   "domain": "carrier.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Trane Technologies",
+   "domain": "tranetechnologies.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Johnson Controls",
+   "domain": "johnsoncontrols.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Whirlpool",
+   "domain": "whirlpoolcorp.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Dow",
+   "domain": "dow.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "DuPont",
+   "domain": "dupont.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "3M",
+   "domain": "3m.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Corning",
+   "domain": "corning.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "PPG",
+   "domain": "ppg.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Eastman",
+   "domain": "eastman.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Celanese",
+   "domain": "celanese.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Air Products",
+   "domain": "airproducts.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Linde",
+   "domain": "linde.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "ExxonMobil",
+   "domain": "exxonmobil.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Chevron",
+   "domain": "chevron.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Phillips 66",
+   "domain": "phillips66.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Dominion Energy",
+   "domain": "dominionenergy.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Duke Energy",
+   "domain": "duke-energy.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "NextEra Energy",
+   "domain": "nexteraenergy.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Southern Company",
+   "domain": "southerncompany.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Exelon",
+   "domain": "exeloncorp.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Northrop Grumman",
+   "domain": "northropgrumman.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "L3Harris",
+   "domain": "l3harris.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "BAE Systems",
+   "domain": "baesystems.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "General Dynamics",
+   "domain": "gd.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Huntington Ingalls",
+   "domain": "hii.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Textron",
+   "domain": "textron.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Collins Aerospace",
+   "domain": "collinsaerospace.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Pratt & Whitney",
+   "domain": "prattwhitney.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Blue Origin",
+   "domain": "blueorigin.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Rocket Lab",
+   "domain": "rocketlabusa.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Relativity Space",
+   "domain": "relativityspace.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Analog Devices",
+   "domain": "analog.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Microchip",
+   "domain": "microchip.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "ON Semiconductor",
+   "domain": "onsemi.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Skyworks",
+   "domain": "skyworksinc.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Lam Research",
+   "domain": "lamresearch.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Applied Materials",
+   "domain": "appliedmaterials.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "KLA",
+   "domain": "kla.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Western Digital",
+   "domain": "westerndigital.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Seagate",
+   "domain": "seagate.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Garmin",
+   "domain": "garmin.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Bose",
+   "domain": "bose.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "iRobot",
+   "domain": "irobot.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Boston Dynamics",
+   "domain": "bostondynamics.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Tesla",
+   "domain": "tesla.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": true
+  },
+  {
+   "name": "Lucid Motors",
+   "domain": "lucidmotors.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Ford Pro",
+   "domain": "ford.com",
+   "field": "engineering (civil/mech/EE/chem)",
+   "known": false
+  },
+  {
+   "name": "Pfizer",
+   "domain": "pfizer.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Merck",
+   "domain": "merck.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Johnson & Johnson",
+   "domain": "jnj.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Amgen",
+   "domain": "amgen.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Gilead",
+   "domain": "gilead.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Regeneron",
+   "domain": "regeneron.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Moderna",
+   "domain": "modernatx.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Genentech",
+   "domain": "gene.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "AbbVie",
+   "domain": "abbvie.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Eli Lilly",
+   "domain": "lilly.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Bristol Myers Squibb",
+   "domain": "bms.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Vertex",
+   "domain": "vrtx.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Biogen",
+   "domain": "biogen.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Thermo Fisher Scientific",
+   "domain": "thermofisher.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Danaher",
+   "domain": "danaher.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Illumina",
+   "domain": "illumina.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Agilent",
+   "domain": "agilent.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Bio-Rad",
+   "domain": "bio-rad.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Charles River Laboratories",
+   "domain": "criver.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "IQVIA",
+   "domain": "iqvia.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Labcorp",
+   "domain": "labcorp.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Quest Diagnostics",
+   "domain": "questdiagnostics.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Novartis",
+   "domain": "novartis.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "AstraZeneca",
+   "domain": "astrazeneca.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "GSK",
+   "domain": "gsk.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Sanofi",
+   "domain": "sanofi.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Takeda",
+   "domain": "takeda.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Bayer",
+   "domain": "bayer.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Medtronic",
+   "domain": "medtronic.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Boston Scientific",
+   "domain": "bostonscientific.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Stryker",
+   "domain": "stryker.com",
+   "field": "biotech / pharma / science",
+   "known": true
+  },
+  {
+   "name": "Abbott",
+   "domain": "abbott.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Becton Dickinson",
+   "domain": "bd.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Edwards Lifesciences",
+   "domain": "edwards.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Intuitive",
+   "domain": "intuitive.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Zimmer Biomet",
+   "domain": "zimmerbiomet.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Ginkgo Bioworks",
+   "domain": "ginkgobioworks.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "10x Genomics",
+   "domain": "10xgenomics.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Twist Bioscience",
+   "domain": "twistbioscience.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Recursion",
+   "domain": "recursion.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Tempus",
+   "domain": "tempus.com",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Battelle",
+   "domain": "battelle.org",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "NIH",
+   "domain": "nih.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Argonne National Laboratory",
+   "domain": "anl.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Oak Ridge National Laboratory",
+   "domain": "ornl.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Lawrence Livermore National Laboratory",
+   "domain": "llnl.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Los Alamos National Laboratory",
+   "domain": "lanl.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Sandia National Laboratories",
+   "domain": "sandia.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "NIST",
+   "domain": "nist.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Brookhaven National Laboratory",
+   "domain": "bnl.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Pacific Northwest National Laboratory",
+   "domain": "pnnl.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "NREL",
+   "domain": "nrel.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Idaho National Laboratory",
+   "domain": "inl.gov",
+   "field": "biotech / pharma / science",
+   "known": false
+  },
+  {
+   "name": "Milliman",
+   "domain": "milliman.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Aon",
+   "domain": "aon.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "WTW",
+   "domain": "wtwco.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Mercer",
+   "domain": "mercer.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Travelers",
+   "domain": "travelers.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Liberty Mutual",
+   "domain": "libertymutual.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Prudential",
+   "domain": "prudential.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "MetLife",
+   "domain": "metlife.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Aflac",
+   "domain": "aflac.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Nationwide",
+   "domain": "nationwide.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "State Farm",
+   "domain": "statefarm.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Allstate",
+   "domain": "allstate.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Progressive",
+   "domain": "progressive.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "USAA",
+   "domain": "usaa.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "GEICO",
+   "domain": "geico.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Cigna",
+   "domain": "cigna.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "UnitedHealth Group",
+   "domain": "unitedhealthgroup.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Humana",
+   "domain": "humana.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Elevance Health",
+   "domain": "elevancehealth.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "New York Life",
+   "domain": "newyorklife.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "MassMutual",
+   "domain": "massmutual.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Northwestern Mutual",
+   "domain": "northwesternmutual.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Lincoln Financial",
+   "domain": "lfg.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Principal",
+   "domain": "principal.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Fidelity",
+   "domain": "fidelity.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Vanguard",
+   "domain": "vanguard.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "BlackRock",
+   "domain": "blackrock.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "T. Rowe Price",
+   "domain": "troweprice.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Charles Schwab",
+   "domain": "schwab.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Freddie Mac",
+   "domain": "freddiemac.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Fannie Mae",
+   "domain": "fanniemae.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "Federal Reserve Board",
+   "domain": "federalreserve.gov",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "FINRA",
+   "domain": "finra.org",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "RAND",
+   "domain": "rand.org",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Mathematica",
+   "domain": "mathematica.org",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Westat",
+   "domain": "westat.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Nielsen",
+   "domain": "nielsen.com",
+   "field": "math / stats / actuarial / quant",
+   "known": false
+  },
+  {
+   "name": "Gallup",
+   "domain": "gallup.com",
+   "field": "math / stats / actuarial / quant",
+   "known": true
+  },
+  {
+   "name": "HCA Healthcare",
+   "domain": "hcahealthcare.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Inova",
+   "domain": "inova.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Kaiser Permanente",
+   "domain": "kaiserpermanente.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Mayo Clinic",
+   "domain": "mayoclinic.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Cleveland Clinic",
+   "domain": "clevelandclinic.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Johns Hopkins Medicine",
+   "domain": "hopkinsmedicine.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "MedStar Health",
+   "domain": "medstarhealth.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Sentara",
+   "domain": "sentara.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "UVA Health",
+   "domain": "uvahealth.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "VCU Health",
+   "domain": "vcuhealth.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "CommonSpirit Health",
+   "domain": "commonspirit.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Ascension",
+   "domain": "ascension.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Providence",
+   "domain": "providence.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Banner Health",
+   "domain": "bannerhealth.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Northwell Health",
+   "domain": "northwell.edu",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "NYU Langone",
+   "domain": "nyulangone.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Mass General Brigham",
+   "domain": "massgeneralbrigham.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Stanford Health Care",
+   "domain": "stanfordhealthcare.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "UCSF Health",
+   "domain": "ucsfhealth.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Duke Health",
+   "domain": "dukehealth.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Atrium Health",
+   "domain": "atriumhealth.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Advocate Health",
+   "domain": "advocatehealth.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Intermountain Health",
+   "domain": "intermountainhealthcare.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Geisinger",
+   "domain": "geisinger.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Mount Sinai",
+   "domain": "mountsinai.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Penn Medicine",
+   "domain": "pennmedicine.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Children's National",
+   "domain": "childrensnational.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Children's Hospital of Philadelphia",
+   "domain": "chop.edu",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Cedars-Sinai",
+   "domain": "cedars-sinai.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "UPMC",
+   "domain": "upmc.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Baylor Scott & White",
+   "domain": "bswhealth.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Houston Methodist",
+   "domain": "houstonmethodist.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Memorial Sloan Kettering",
+   "domain": "mskcc.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "MD Anderson",
+   "domain": "mdanderson.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Sutter Health",
+   "domain": "sutterhealth.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Novant Health",
+   "domain": "novanthealth.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Valley Health",
+   "domain": "valleyhealthlink.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Mary Washington Healthcare",
+   "domain": "marywashingtonhealthcare.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Bon Secours",
+   "domain": "bonsecours.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Adventist HealthCare",
+   "domain": "adventisthealthcare.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Holy Cross Health",
+   "domain": "holycrosshealth.org",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "George Washington University Hospital",
+   "domain": "gwhospital.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Department of Veterans Affairs",
+   "domain": "va.gov",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "DaVita",
+   "domain": "davita.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Fresenius",
+   "domain": "freseniusmedicalcare.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Encompass Health",
+   "domain": "encompasshealth.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Select Medical",
+   "domain": "selectmedical.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Tenet Healthcare",
+   "domain": "tenethealth.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Universal Health Services",
+   "domain": "uhs.com",
+   "field": "nursing / healthcare",
+   "known": true
+  },
+  {
+   "name": "Community Health Systems",
+   "domain": "chs.net",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "CVS Health",
+   "domain": "cvshealth.com",
+   "field": "nursing / healthcare",
+   "known": false
+  },
+  {
+   "name": "Walgreens",
+   "domain": "walgreens.com",
+   "field": "nursing / healthcare",
+   "known": true
+  },
+  {
+   "name": "Deloitte",
+   "domain": "deloitte.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "EY",
+   "domain": "ey.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "PwC",
+   "domain": "pwc.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "KPMG",
+   "domain": "kpmg.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "McKinsey",
+   "domain": "mckinsey.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "BCG",
+   "domain": "bcg.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Bain",
+   "domain": "bain.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Guidehouse",
+   "domain": "guidehouse.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "ICF",
+   "domain": "icf.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Peraton",
+   "domain": "peraton.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "ManTech",
+   "domain": "mantech.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "Amentum",
+   "domain": "amentum.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "KBR",
+   "domain": "kbr.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "Maximus",
+   "domain": "maximus.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Walmart",
+   "domain": "walmart.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "Target",
+   "domain": "target.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "Home Depot",
+   "domain": "homedepot.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Lowe's",
+   "domain": "lowes.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "Costco",
+   "domain": "costco.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Kroger",
+   "domain": "kroger.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "FedEx",
+   "domain": "fedex.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "UPS",
+   "domain": "ups.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Delta Air Lines",
+   "domain": "delta.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "United Airlines",
+   "domain": "united.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "American Airlines",
+   "domain": "aa.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Marriott",
+   "domain": "marriott.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "Hilton",
+   "domain": "hilton.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "Disney",
+   "domain": "disney.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Comcast",
+   "domain": "comcastcorporation.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Verizon",
+   "domain": "verizon.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "AT&T",
+   "domain": "att.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "T-Mobile",
+   "domain": "t-mobile.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Nike",
+   "domain": "nike.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "Procter & Gamble",
+   "domain": "pg.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": true
+  },
+  {
+   "name": "PepsiCo",
+   "domain": "pepsico.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Coca-Cola",
+   "domain": "coca-colacompany.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Mars",
+   "domain": "mars.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "General Mills",
+   "domain": "generalmills.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  },
+  {
+   "name": "Anheuser-Busch",
+   "domain": "anheuser-busch.com",
+   "field": "data / software adjacent (non-tech industries)",
+   "known": false
+  }
+ ]
+}
