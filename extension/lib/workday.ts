@@ -1,7 +1,7 @@
 /** Workday: one adapter for every tenant. Workday stamps each control with data-automation-id and the ids are the same on
  *  Nvidia, Lockheed, Capital One, Salesforce, ... The apply flow is a multi-step SPA: My Information -> My Experience ->
  *  Application Questions -> Voluntary Disclosures -> Self Identify -> Review. This file fills one step; the runner is told which. */
-import { clean, sleep, setValue, mouse, clickLike, type Values } from "./fill";
+import { clean, sleep, setValue, mouse, clickLike, typeKeys, pressKey, type Values } from "./fill";
 import type { Me, MeExperience, MeEducation } from "./api";
 
 export const isWorkday = (host = location.hostname) => /myworkdayjobs\.com$|myworkdaysite\.com$|myworkday\.com$/.test(host);
@@ -34,17 +34,30 @@ export function wdText(id: string, value: string | null | undefined, root: Paren
   return setValue(el, value);
 }
 
-/** Workday dropdown: <button aria-haspopup="listbox"> that opens a ul[role=listbox] in a portal. */
+/** Workday dropdown: <button aria-haspopup="listbox"> that opens a ul[role=listbox] in a portal. Long lists (states, countries) are
+ *  virtualized, so when the option is not in the DOM we type-ahead (Workday moves the highlight as you type) and press Enter. */
+export const listboxOptions = () => [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li, [data-automation-id="promptOption"]')].filter((o) => !o.closest("#rails-drawer-host"));
 export async function wdListbox(id: string, want: string | null | undefined, root: ParentNode = document, budgetMs = 3000): Promise<boolean> {
   if (want == null || want === "") return false;
   const btn = (byAuto(id, root) ?? root.querySelector(`[data-automation-id="${id}"] button`)) as HTMLElement | null; if (!btn) return false;
   if (matches(btn.textContent ?? "", want)) return true;
-  clickLike(btn); const t0 = Date.now(); let opts: HTMLElement[] = [];
-  while (Date.now() - t0 < budgetMs) { await sleep(120); opts = [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li, [data-automation-id="promptOption"]')]; if (opts.length) break; }
-  const hit = opts.find((o) => norm(o.textContent) === norm(want)) ?? opts.find((o) => matches(o.textContent ?? "", want));
-  if (!hit) { btn.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); return false; }
+  const open = async () => { if (listboxOptions().length) return; btn.focus(); clickLike(btn); const t0 = Date.now(); while (Date.now() - t0 < budgetMs && !listboxOptions().length) await sleep(120); if (!listboxOptions().length) { pressKey(btn, "Enter"); await sleep(250); } };
+  await open();
+  let opts = listboxOptions();
+  let hit = opts.find((o) => norm(o.textContent) === norm(want)) ?? opts.find((o) => matches(o.textContent ?? "", want));
+  if (!hit && opts.length) {
+    // type-ahead on the open list, then read again
+    const target = (document.activeElement as HTMLElement | null) ?? btn;
+    typeKeys(target, want.slice(0, 6)); await sleep(350);
+    opts = listboxOptions(); hit = opts.find((o) => norm(o.textContent) === norm(want)) ?? opts.find((o) => matches(o.textContent ?? "", want)) ?? opts.find((o) => o.getAttribute("aria-selected") === "true" && matches(o.textContent ?? "", want));
+    if (!hit) { const focused = opts.find((o) => o.getAttribute("aria-selected") === "true" || o.matches(":focus, [data-focused='true'], .focused")); if (focused && matches(focused.textContent ?? "", want.slice(0, 4))) hit = focused; }
+  }
+  if (!hit) { pressKey(btn, "Escape"); mouse("mousedown", document.body); return false; }
   clickLike(hit); await sleep(150);
-  return matches(btn.textContent ?? "", want) || !document.querySelector('[role="listbox"]');
+  if (matches(btn.textContent ?? "", want)) return true;
+  // some tenants select on Enter rather than click
+  if (listboxOptions().length) { pressKey(hit, "Enter"); await sleep(200); }
+  return matches(btn.textContent ?? "", want) || !listboxOptions().length;
 }
 
 /** Search-as-you-type multi/single select (school, field of study, country phone code, skills): type, wait for promptOption, pick, verify the chip. */

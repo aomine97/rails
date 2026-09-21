@@ -132,7 +132,12 @@ export function setValue(el: El, value: string | boolean): boolean {
 }
 
 export const mouse = (type: string, t: Element) => t.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, button: 0 }));
-export const clickLike = (t: Element) => { mouse("mousedown", t); mouse("mouseup", t); mouse("click", t); };
+const pointer = (type: string, t: Element) => { try { t.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true, button: 0, pointerId: 1, pointerType: "mouse", isPrimary: true })); } catch { /* jsdom */ } };
+/** The full sequence a real click produces; React/Workday/react-select listen on different ones. */
+export const clickLike = (t: Element) => { pointer("pointerdown", t); mouse("mousedown", t); pointer("pointerup", t); mouse("mouseup", t); mouse("click", t); };
+/** Type into a focused widget the way a keyboard does (Workday listboxes and searches react to keydown, not to value). */
+export const typeKeys = (t: Element, text: string) => { for (const ch of text) { t.dispatchEvent(new KeyboardEvent("keydown", { key: ch, bubbles: true })); t.dispatchEvent(new KeyboardEvent("keypress", { key: ch, bubbles: true })); t.dispatchEvent(new KeyboardEvent("keyup", { key: ch, bubbles: true })); } };
+export const pressKey = (t: Element, key: string) => { t.dispatchEvent(new KeyboardEvent("keydown", { key, code: key, bubbles: true })); t.dispatchEvent(new KeyboardEvent("keyup", { key, code: key, bubbles: true })); };
 export const controlOf = (input: HTMLInputElement): Element => input.closest(".select__control, [class*='__control' i], [class*='-control' i]") ?? input.closest("[class*='select' i]:not([class*='input' i])") ?? input.parentElement ?? input;
 /** The container that holds both the control and the menu: react-select's outer div. */
 export const containerOf = (input: HTMLInputElement): Element => input.closest(".select__container, [class*='__container' i]:not([class*='input' i]):not([class*='value' i])") ?? controlOf(input).parentElement ?? controlOf(input);

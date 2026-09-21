@@ -1,4 +1,4 @@
-import { clean, isCombobox, isFillable, controlOf, shownValue, clickLike, mouse, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
+import { clean, isCombobox, isFillable, controlOf, shownValue, clickLike, mouse, typeKeys, pressKey, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
 
 /** Everything the form asks, as the panel's checklist sees it. Built once per page; ids are stable data attributes. */
 export type Kind = "text" | "textarea" | "number" | "date" | "select" | "combobox" | "listbox" | "radio" | "checkbox" | "checkboxes" | "file";
@@ -128,12 +128,17 @@ export async function applyAnswer(root: Document | ShadowRoot, field: ScannedFie
       return any;
     }
     case "listbox": {
-      const btn = el; if (matches(clean(btn.textContent), wantList[0]!)) return true;
-      clickLike(btn); const t0 = Date.now(); let opts: HTMLElement[] = [];
-      while (Date.now() - t0 < 3000) { await sleep(120); opts = [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li')]; if (opts.length) break; }
-      const hit = opts.find((o) => clean(o.textContent).toLowerCase() === wantList[0]!.toLowerCase()) ?? opts.find((o) => matches(clean(o.textContent), wantList[0]!));
-      if (!hit) { btn.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); return false; }
-      clickLike(hit); await sleep(150); return matches(clean(btn.textContent), wantList[0]!) || !document.querySelector('[role="listbox"]');
+      const btn = el; const want = wantList[0]!; if (matches(clean(btn.textContent), want)) return true;
+      const opts = () => [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li, [data-automation-id="promptOption"]')].filter((o) => !o.closest("#rails-drawer-host"));
+      btn.focus(); clickLike(btn); const t0 = Date.now(); while (Date.now() - t0 < 3000 && !opts().length) await sleep(120);
+      if (!opts().length) { pressKey(btn, "Enter"); await sleep(250); }
+      let list = opts(); let hit = list.find((o) => clean(o.textContent).toLowerCase() === want.toLowerCase()) ?? list.find((o) => matches(clean(o.textContent), want));
+      if (!hit && list.length) { typeKeys((document.activeElement as HTMLElement | null) ?? btn, want.slice(0, 6)); await sleep(350); list = opts(); hit = list.find((o) => clean(o.textContent).toLowerCase() === want.toLowerCase()) ?? list.find((o) => matches(clean(o.textContent), want)); }
+      if (!hit) { pressKey(btn, "Escape"); return false; }
+      clickLike(hit); await sleep(150);
+      if (matches(clean(btn.textContent), want)) return true;
+      if (opts().length) { pressKey(hit, "Enter"); await sleep(200); }
+      return matches(clean(btn.textContent), want) || !opts().length;
     }
     case "checkbox": { const want = typeof value === "boolean" ? value : /^(yes|true|1|agree|accept)$/i.test(String(value)); return setValue(el as HTMLInputElement, want); }
     case "select": return wantList.map((w) => setValue(el as HTMLSelectElement, w)).some(Boolean);
