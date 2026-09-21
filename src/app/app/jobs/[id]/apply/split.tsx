@@ -10,10 +10,10 @@ export function openAts(url: string) {
 
 export function SplitApplyButton({ jobId, url, applied }: { jobId: string; url: string; applied: boolean }) {
   const router = useRouter();
-  if (applied) return <span className="rounded-full bg-green-chip px-3 py-2 text-[13px] font-bold text-green-chip-text">Applied ✓</span>;
+  if (applied) return <span className="inline-flex h-11 items-center rounded-xl bg-green-chip px-4 text-[14px] font-bold text-green-chip-text">Applied ✓</span>;
   return (
-    <button type="button" onClick={() => { openAts(url); router.push(`/app/jobs/${jobId}/apply`); }} className="rounded-full bg-orange px-4 py-2 text-[13px] font-extrabold text-ink" title="Opens the application in a new tab; keep this tab for the checklist and tailored resume, and use the Rails extension over there">
-      Apply now
+    <button type="button" onClick={() => { openAts(url); router.push(`/app/jobs/${jobId}/apply`); }} className="inline-flex h-11 items-center rounded-xl bg-orange px-5 text-[14px] font-extrabold text-ink shadow-[var(--shadow-cta)] hover:brightness-105" title="Opens the application in a new tab; keep this tab for the checklist and tailored resume, and use the Rails extension over there">
+      Apply with Autofill
     </button>
   );
 }
