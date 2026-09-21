@@ -7,5 +7,5 @@ import { openAts } from "./jobs/[id]/apply/split";
 export function ApplyButton({ jobId, url, applied }: { jobId: string; url: string; title?: string; company?: string; applied: boolean }) {
   const router = useRouter();
   if (applied) return <span className="rounded-full bg-green-chip px-3 py-2 text-[13px] font-bold text-green-chip-text">Applied ✓</span>;
-  return <button type="button" onClick={() => { openAts(url); router.push(`/app/jobs/${jobId}/apply`); }} className="rounded-full bg-orange px-4 py-2 text-[13px] font-extrabold text-ink">Apply now</button>;
+  return <button type="button" onClick={() => { openAts(url); router.push(`/app/jobs/${jobId}/apply`); }} className="rounded-full bg-orange px-5 py-2.5 text-[13px] font-extrabold text-ink shadow-[0_4px_14px_rgba(255,138,61,0.35)] hover:brightness-105">Apply with Autofill</button>;
 }

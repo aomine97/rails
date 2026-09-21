@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { supabaseServer } from "@/lib/supabase/server";
 import { AppShell } from "@/components/app-shell";
-import { MatchPanel } from "@/components/match-panel";
+import { MatchSide, levelLabel } from "@/components/match-panel";
 import { CanonicalProfile } from "@/lib/schemas/profile";
 import { ageLabel, buildFeed, payLabel, type FeedJobRow } from "@/lib/match/feed";
 import { addSkillToProfile, hideJob, likeJob } from "./actions";
@@ -34,7 +34,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   const me = parsed.data;
 
   const [{ data: rows }, { data: marks }, { data: apps }] = await Promise.all([
-    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats,domain,logo_url,tier)")
+    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats,domain,logo_url,tier,industry,size)")
       .is("closed_at", null).not("tagged_at", "is", null).order("first_seen_at", { ascending: false }).limit(3000),
     supabase.from("matches").select("job_id,liked,hidden").eq("user_id", user.id),
     supabase.from("applications").select("id,job_id,title,company_name,url,stage,applied_at,last_activity_at,next_action,next_action_at,notes,created_at").eq("user_id", user.id).order("last_activity_at", { ascending: false }),
@@ -104,55 +104,63 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
               const pay = payLabel(tags, job);
               const company = job.companies?.name ?? "";
               const summary = tags.summary || (job.description_text ? job.description_text.replace(/\s+/g, " ").slice(0, 220).replace(/\s\S*$/, "") + "…" : "");
-              const reqLines = tags.requirements.filter((r) => r.required).slice(0, 2);
               const gaps = [...score.missingRequired, ...score.missingPreferred].slice(0, 4);
+              const co = job.companies as (typeof job.companies & { tier?: number | null; industry?: string | null; size?: string | null }) | null;
+              const empType = tags.employmentType === "internship" ? "Internship" : tags.employmentType === "full_time" ? "Full-time" : tags.employmentType === "part_time" ? "Part-time" : tags.employmentType === "contract" ? "Contract" : null;
+              const workMode = tags.remote === "remote" ? "Remote" : tags.remote === "hybrid" ? "Hybrid" : tags.remote === "onsite" ? "Onsite" : null;
+              const facts = [
+                ...(tags.sponsorship === "yes" ? [{ ok: true, text: "Sponsorship offered" }] : tags.sponsorship === "no" ? [{ ok: false, text: "No sponsorship" }] : []),
+                ...(tags.clearanceRequired !== "none" && tags.clearanceRequired !== "unknown" ? [{ ok: false, text: `${tags.clearanceRequired.replace("_", " ")} clearance` }] : []),
+                ...(tags.relocationOffered ? [{ ok: true, text: "Relocation offered" }] : []),
+                ...(tags.hasOnlineAssessment ? [{ ok: true, text: "Online assessment first" }] : []),
+                ...(score.hardBlocks.map((b) => ({ ok: false, text: b }))),
+              ].slice(0, 4);
               return (
-                <li key={job.id} className="grid grid-cols-1 gap-4 rounded-2xl border border-line bg-surface p-4 shadow-[0_1px_2px_rgba(11,27,58,0.04)] md:grid-cols-[1fr_300px]">
-                  <div className="flex min-w-0 flex-col gap-2">
-                    <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
-                      {isNew && <span className="rounded bg-ink px-1.5 py-0.5 text-white">New</span>}
-                      <span className="rounded bg-blue-chip px-1.5 py-0.5 text-blue-chip-text">{tags.level.replace("_", " ")}</span>
-                      {tags.remote !== "unknown" && <span className="rounded bg-light px-1.5 py-0.5 text-text">{tags.remote}</span>}
-                      {tags.clearanceRequired !== "none" && tags.clearanceRequired !== "unknown" && <span className="rounded bg-amber-chip px-1.5 py-0.5 text-amber-chip-text">{tags.clearanceRequired.replace("_", " ")} clearance</span>}
-                      {tags.hasOnlineAssessment && <span className="rounded bg-light px-1.5 py-0.5 text-text">OA first</span>}
-                      <span className="text-muted">{ageLabel(ageDays)}</span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <CompanyLogo name={company} domain={job.companies?.domain} logo={job.companies?.logo_url} />
-                      <div className="min-w-0">
-                        <Link href={`/app/jobs/${job.id}`} className="font-display text-[17px] font-extrabold leading-tight tracking-tight text-ink hover:text-blue">{job.title}</Link>
-                        <div className="text-sm text-text">{company}{job.location ? ` · ${job.location}` : ""}{otherLocations.length ? ` · +${otherLocations.length} more ${otherLocations.length === 1 ? "city" : "cities"}` : ""}{pay ? ` · ${pay}` : ""}{tags.relocationOffered ? " · relocation offered" : ""}</div>
+                <li key={job.id} className="grid grid-cols-1 gap-4 rounded-2xl border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(11,27,58,0.04),0_8px_24px_rgba(11,27,58,0.04)] md:grid-cols-[1fr_250px]">
+                  <div className="flex min-w-0 flex-col gap-3">
+                    <div className="flex items-start gap-4">
+                      <CompanyLogo name={company} domain={co?.domain} logo={co?.logo_url} size={56} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-semibold">
+                          <span className="rounded-md bg-green-chip px-2 py-0.5 text-green-chip-text">{ageLabel(ageDays)}</span>
+                          {isNew && <span className="rounded-md bg-ink px-2 py-0.5 text-white">New</span>}
+                          {co?.tier === 1 && <span className="rounded-md bg-amber-chip px-2 py-0.5 text-amber-chip-text">★ Top company</span>}
+                          {score.matchedSkills.length >= 3 && <span className="rounded-md bg-blue-chip px-2 py-0.5 text-blue-chip-text">{score.matchedSkills.length} skills match</span>}
+                        </div>
+                        <Link href={`/app/jobs/${job.id}`} className="mt-1.5 block font-display text-[21px] font-extrabold leading-tight tracking-tight text-ink hover:text-blue">{job.title}</Link>
+                        <div className="mt-0.5 text-[14px] text-text"><span className="font-semibold text-ink">{company}</span>{co?.industry ? <span className="text-muted"> / {co.industry}</span> : null}{co?.size ? <span className="text-muted"> · {co.size} employees</span> : null}</div>
                       </div>
                     </div>
-                    {summary && <p className="text-[13px] leading-relaxed text-text">{summary}</p>}
-                    {reqLines.length > 0 && <ul className="text-[12px] leading-relaxed text-muted">{reqLines.map((r) => <li key={r.text}>· {r.text}</li>)}</ul>}
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 border-t border-line pt-3 text-[13.5px] text-text sm:grid-cols-3">
+                      <span className="flex items-center gap-2"><Ico d="M12 21s-7-5.5-7-11a7 7 0 1 1 14 0c0 5.5-7 11-7 11z M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />{job.location ?? (tags.remote === "remote" ? "Remote" : "Location TBD")}{otherLocations.length ? <span className="text-muted"> +{otherLocations.length}</span> : null}</span>
+                      {empType && <span className="flex items-center gap-2"><Ico d="M12 8v4l3 2 M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />{empType}</span>}
+                      {pay ? <span className="flex items-center gap-2 font-semibold text-ink"><Ico d="M12 1v22 M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />{pay}</span> : null}
+                      {workMode && <span className="flex items-center gap-2"><Ico d="M3 10.5 12 3l9 7.5 M5 9.5V21h14V9.5" />{workMode}</span>}
+                      {tags.level !== "unknown" && <span className="flex items-center gap-2"><Ico d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 17l-6.5 4 2-7.5L2 9h7z" />{levelLabel(tags.level)}</span>}
+                      {tags.yearsMin != null && <span className="flex items-center gap-2"><Ico d="M3 5h18v16H3z M3 10h18 M8 3v4 M16 3v4" />{tags.yearsMin}+ years exp</span>}
+                    </div>
+                    {summary && <p className="line-clamp-2 text-[13px] leading-relaxed text-text">{summary}</p>}
                     <div className="flex flex-wrap items-center gap-1.5 text-[12px] font-semibold">
-                      {score.matchedSkills.length > 0 && <span className="text-muted">You bring:</span>}
                       {score.matchedSkills.slice(0, 5).map((k) => <span key={k} className="rounded-md bg-green-chip px-2 py-1 text-green-chip-text">✓ {k}</span>)}
-                      {score.hardBlocks.map((b) => <span key={b} className="rounded-md bg-red-chip px-2 py-1 text-red-chip-text">✗ {b}</span>)}
+                      {gaps.slice(0, 4).map((k) => (
+                        <form key={k} action={addSkillToProfile}><input type="hidden" name="skill" value={k} />
+                          <button title={`Add ${k} to your profile if you actually have it`} className="rounded-md border border-dashed border-line-strong bg-surface px-2 py-1 text-text hover:border-ink hover:text-ink">+ {k}</button></form>
+                      ))}
                       {score.softNotes.map((b) => <span key={b} className="rounded-md bg-amber-chip px-2 py-1 text-amber-chip-text">! {b}</span>)}
                     </div>
-                    {gaps.length > 0 && (
-                      <div className="flex flex-wrap items-center gap-1.5 text-[12px] font-semibold">
-                        <span className="text-muted">They also want:</span>
-                        {gaps.map((k) => (
-                          <form key={k} action={addSkillToProfile}><input type="hidden" name="skill" value={k} />
-                            <button title={`Add ${k} to your profile if you have it`} className="rounded-md border border-dashed border-line-strong bg-surface px-2 py-1 text-text hover:border-ink hover:text-ink">+ {k}</button></form>
-                        ))}
-                        <span className="text-[11px] text-dim">click to add one you actually have</span>
+                    <div className="mt-auto flex items-center gap-2 border-t border-line pt-3">
+                      <span className="text-[12px] text-muted">via {ATS_LABEL[job.companies?.ats ?? ""] ?? job.companies?.ats}</span>
+                      <div className="ml-auto flex items-center gap-2">
+                        <form action={hideJob}><input type="hidden" name="jobId" value={job.id} /><input type="hidden" name="fit" value={score.fit} /><input type="hidden" name="band" value={score.band} /><input type="hidden" name="hidden" value={tab === "hidden" ? "0" : "1"} />
+                          <button title={tab === "hidden" ? "Unhide" : "Hide"} aria-label={tab === "hidden" ? "Unhide" : "Hide"} className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-muted hover:border-ink hover:text-ink">{tab === "hidden" ? "↺" : "⊘"}</button></form>
+                        <form action={likeJob}><input type="hidden" name="jobId" value={job.id} /><input type="hidden" name="fit" value={score.fit} /><input type="hidden" name="band" value={score.band} /><input type="hidden" name="liked" value={liked.has(job.id) ? "0" : "1"} />
+                          <button title={liked.has(job.id) ? "Unlike" : "Like"} aria-label="Like" className={`flex h-10 w-10 items-center justify-center rounded-full border text-[16px] ${liked.has(job.id) ? "border-ink bg-ink text-white" : "border-line text-muted hover:border-ink hover:text-ink"}`}>{liked.has(job.id) ? "♥" : "♡"}</button></form>
+                        <Link href={`/app/jobs/${job.id}`} className="rounded-full border border-line px-4 py-2.5 text-[13px] font-bold text-ink hover:border-ink">Details</Link>
+                        <ApplyButton jobId={job.id} url={job.apply_url} title={job.title} company={company} applied={appliedIds.has(job.id)} />
                       </div>
-                    )}
-                    <div className="mt-auto flex items-center gap-2 pt-1">
-                      <ApplyButton jobId={job.id} url={job.apply_url} title={job.title} company={company} applied={appliedIds.has(job.id)} />
-                      <form action={likeJob}><input type="hidden" name="jobId" value={job.id} /><input type="hidden" name="fit" value={score.fit} /><input type="hidden" name="band" value={score.band} /><input type="hidden" name="liked" value={liked.has(job.id) ? "0" : "1"} />
-                        <button className={`rounded-full border px-3 py-2 text-[13px] font-semibold ${liked.has(job.id) ? "border-ink bg-ink text-white" : "border-line text-text"}`}>{liked.has(job.id) ? "Liked" : "Like"}</button></form>
-                      <form action={hideJob}><input type="hidden" name="jobId" value={job.id} /><input type="hidden" name="fit" value={score.fit} /><input type="hidden" name="band" value={score.band} /><input type="hidden" name="hidden" value={tab === "hidden" ? "0" : "1"} />
-                        <button className="rounded-full px-3 py-2 text-[13px] font-semibold text-muted hover:text-ink">{tab === "hidden" ? "Unhide" : "Hide"}</button></form>
-                      <Link href={`/app/jobs/${job.id}`} className="rounded-full border border-line px-3 py-2 text-[13px] font-semibold text-text">Details</Link>
-                      <span className="ml-auto text-[11px] text-dim">{job.companies?.ats}</span>
                     </div>
                   </div>
-                  <MatchPanel score={score} compact />
+                  <MatchSide score={score} facts={facts} />
                 </li>
               );
             })}
@@ -168,6 +176,11 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
       </div>
     </AppShell>
   );
+}
+
+const ATS_LABEL: Record<string, string> = { greenhouse: "Greenhouse", lever: "Lever", ashby: "Ashby", smartrecruiters: "SmartRecruiters", workday: "Workday", usajobs: "USAJobs", icims: "iCIMS", oracle: "Oracle", workable: "Workable", jobvite: "Jobvite", taleo: "Taleo", paste: "your paste" };
+function Ico({ d }: { d: string }) {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-muted" aria-hidden="true"><path d={d} /></svg>;
 }
 
 function Empty({ title, body }: { title: string; body: string }) {
