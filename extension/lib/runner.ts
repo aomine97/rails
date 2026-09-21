@@ -126,7 +126,7 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
         if (!a || a.value == null) { r.s = "left"; r.why = a?.why || "Not in your profile"; emit(); continue; }
         r.s = "filling"; emit();
         const ok = await applyAnswer(rootOf(r.f.id), r.f, a.value).catch(() => false);
-        if (ok) { r.s = "done"; r.value = valueText(a.value); r.why = a.why; } else { r.s = "failed"; r.why = `Suggested "${valueText(a.value)}" but the page did not take it.`; r.value = valueText(a.value); }
+        if (ok) { r.s = "done"; r.value = valueText(a.value); r.why = a.assumed ? `Assumed ${valueText(a.value)} because your profile shows nothing else. Change it below if that's wrong.` : a.why; r.assumed = !!a.assumed; } else { r.s = "failed"; r.why = `Suggested "${valueText(a.value)}" but the page did not take it.`; r.value = valueText(a.value); }
         emit();
       }
     } catch (e) { for (const r of ask) if (r.s === "todo") { r.s = "left"; r.why = "Answer service unavailable"; } fs.error = `Could not answer questions: ${String((e as Error).message)}`; }

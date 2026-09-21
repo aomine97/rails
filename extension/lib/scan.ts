@@ -118,7 +118,7 @@ export async function readComboOptions(root: Document | ShadowRoot, field: Scann
 export async function applyAnswer(root: Document | ShadowRoot, field: ScannedField, value: string | string[] | boolean): Promise<boolean> {
   const el = byId(root, field.id); if (!el) return false;
   const wantList = Array.isArray(value) ? value : [typeof value === "boolean" ? (value ? "Yes" : "No") : value];
-  const matches = (labelText: string, w: string) => { const a = labelText.toLowerCase().trim(), b = w.toLowerCase().trim(); return a === b || a.startsWith(b) || (b.length > 3 && a.includes(b)) || (/^(yes|no)$/.test(b) && new RegExp(`^${b}\\b`).test(a)); };
+  const matches = (labelText: string, w: string) => { const a = labelText.toLowerCase().trim(), b = w.toLowerCase().trim(); if (!a || !b) return false; return a === b || a.startsWith(b) || (b.length > 3 && a.includes(b)) || (a.length > 3 && b.startsWith(a)) || (/^(yes|no)$/.test(b) && new RegExp(`^${b}\\b`).test(a)); };
   switch (field.kind) {
     case "radio": case "checkboxes": {
       const name = el.getAttribute("name"); const type = (el as HTMLInputElement).type;

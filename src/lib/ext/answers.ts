@@ -6,12 +6,12 @@ import { fillFields } from "./fields";
 /** A form question the rule-based filler could not place. Options are verbatim from the page when it has a list. */
 export const Question = z.object({ id: z.string(), label: z.string().max(300), kind: z.string(), options: z.array(z.string().max(200)).max(80).optional(), required: z.boolean().optional() });
 export type Question = z.infer<typeof Question>;
-export type Answer = { id: string; value: string | string[] | null; why: string };
+export type Answer = { id: string; value: string | string[] | null; why: string; assumed?: boolean };
 
-const Out = z.object({ answers: z.array(z.object({ id: z.string(), value: z.union([z.string(), z.array(z.string()), z.null()]), why: z.string().catch("") })) });
+const Out = z.object({ answers: z.array(z.object({ id: z.string(), value: z.union([z.string(), z.array(z.string()), z.null()]), why: z.string().catch(""), assumed: z.boolean().catch(false) })) });
 
 /** Never answered by the model: demographics, referral source, pay, free-text essays. The panel handles those with the user. */
-export const NEVER = /pronoun|gender|hispanic|latino|\brace\b|ethnicit|veteran|disabilit|self-identif|sexual orientation|how did you hear|referr|salary|compensation|\bpay\b|desired rate|password|ssn|social security|date of birth|birth ?date/i;
+export const NEVER = /pronoun|gender|hispanic|latino|\brace\b|ethnicit|veteran|disabilit|self-identif|sexual orientation|how did you hear|referr|salary|compensation|\bpay\b|desired rate|password|ssn|social security|date of birth|birth ?date|convict|felony|misdemeanor|criminal|background check|drug (test|screen)|arrest/i;
 
 export const ANSWERS_SYSTEM = `You fill job-application questions for a candidate from their profile. Rules:
 - Use ONLY the profile. Never invent experience, employers, dates, visas, degrees or numbers. If the profile does not settle a question, value is null and why says what is missing.
@@ -22,7 +22,7 @@ export const ANSWERS_SYSTEM = `You fill job-application questions for a candidat
 - Location questions: use the address / locations. Relocation and remote: from constraints (remoteOk, locations); "Yes" to relocate only if locations include more than one metro or the profile says so; else null.
 - "Why this company / why this role / what interests you" and similar short essays: write 40-80 plain words in first person from the profile's real experience, skills and target roles plus the posting's title and company. No flattery, no invented facts, no "passionate". Longer essays (specific projects, situational questions) that the profile cannot answer: null.
 - Short factual text (years of experience with X, a URL, a school name, a number) may be written from the profile.
-- Keep why under 12 words. Return only JSON: {"answers":[{"id","value","why"}]}.`;
+- Keep why under 12 words. Return only JSON: {"answers":[{"id","value","why","assumed"}]}.`;
 
 export function compactProfile(p: CanonicalProfile) {
   const f = fillFields(p);
@@ -55,9 +55,9 @@ export async function answerQuestions(profile: CanonicalProfile, questions: Ques
       // enforce verbatim options; drop anything the model made up
       const pick = (v: string) => q.options!.find((o) => o === v) ?? q.options!.find((o) => o.toLowerCase() === v.toLowerCase()) ?? q.options!.find((o) => o.toLowerCase().startsWith(v.toLowerCase())) ?? null;
       const vals = (Array.isArray(a.value) ? a.value : [a.value]).map(pick).filter((x): x is string => !!x);
-      return { id: a.id, value: vals.length ? (Array.isArray(a.value) ? vals : vals[0]!) : null, why: vals.length ? a.why : "No matching option" };
+      return { id: a.id, value: vals.length ? (Array.isArray(a.value) ? vals : vals[0]!) : null, why: vals.length ? a.why : "No matching option", assumed: a.assumed };
     }
-    return { id: a.id, value: a.value, why: a.why };
+    return { id: a.id, value: a.value, why: a.why, assumed: a.assumed };
   });
   for (const q of ask) if (!out.some((o) => o.id === q.id)) out.push({ id: q.id, value: null, why: "Not in your profile" });
   return [...out, ...skipped];

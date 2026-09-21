@@ -22,7 +22,9 @@ export function wdStep(): WdStep {
 const byAuto = (id: string, root: ParentNode = document) => root.querySelector<HTMLElement>(`[data-automation-id="${id}"]`);
 const inputOf = (el: Element | null): HTMLInputElement | HTMLTextAreaElement | null => !el ? null : el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement ? el : el.querySelector("input, textarea");
 const norm = (s: string | null | undefined) => clean(s).toLowerCase();
-const matches = (t: string, w: string) => { const a = norm(t), b = norm(w); return a === b || a.startsWith(b) || (b.length > 3 && a.includes(b)) || (/^(yes|no)$/.test(b) && new RegExp(`^${b}\\b`).test(a)); };
+const matches = (t: string, w: string) => { const a = norm(t), b = norm(w); if (!a || !b) return false; return a === b || a.startsWith(b) || (b.length > 3 && a.includes(b)) || (a.length > 3 && b.startsWith(a)) || (/^(yes|no)$/.test(b) && new RegExp(`^${b}\\b`).test(a)); };
+/** "Associate's Degree" -> ["Associate's Degree", "Associate's", "Associate", "AAS"]: try the long name, then its first word, then the code. */
+const degreeGuesses = (name: string | null | undefined, code: string | null | undefined) => [...new Set([name, name?.replace(/\s+degree$/i, ""), name?.split(/[\s']/)[0], code].filter((x): x is string => !!x))];
 
 /** Text input by automation id (or within a row). */
 export function wdText(id: string, value: string | null | undefined, root: ParentNode = document): boolean {
@@ -100,7 +102,9 @@ const push = (rep: WdReport, key: string, ok: boolean, label: string) => { rep.p
 /** My Information page. */
 export async function wdFillInfo(me: Me, saved: Record<string, unknown>): Promise<WdReport> {
   const f = me.fields as Values; const rep: WdReport = [];
-  push(rep, "sourceSection", await wdListbox("sourceSection", (saved["how did you hear about us"] as string) ?? (saved["source"] as string) ?? null), "How did you hear about us");
+  const src = (saved["how did you hear about us"] as string) ?? (saved["how did you hear about this job"] as string) ?? (saved["source"] as string) ?? null;
+  let srcOk = false; for (const want of [src, "Job Board", "Online Job Board", "Company Website", "Other"].filter(Boolean) as string[]) { if (await wdSearch("sourceSection", want, document, 2500) || await wdListbox("sourceSection", want)) { srcOk = true; break; } }
+  push(rep, "sourceSection", srcOk, "How did you hear about us");
   push(rep, "country", await wdListbox("countryDropdown", "United States of America"), "Country");
   push(rep, "firstName", wdText("legalNameSection_firstName", f.firstName as string), "Legal first name");
   push(rep, "lastName", wdText("legalNameSection_lastName", f.lastName as string), "Legal last name");
@@ -141,7 +145,7 @@ export async function wdFillExperience(me: Me, files: { kind: string; file: File
     for (let i = 0; i < rows.length; i++) {
       const r = rows[i]!, e = edus[i]!;
       const school = await wdSearch("school", e.school, r) || wdText("schoolName", e.school, r);
-      await wdListbox("degree", e.degreeName ?? e.degree, r);
+      for (const g of degreeGuesses(e.degreeName, e.degree)) if (await wdListbox("degree", g, r)) break;
       if (e.field) await wdSearch("fieldOfStudy", e.field, r, 5000);
       if (e.gpa != null) wdText("gpa", String(e.gpa), r);
       if (e.startYear) wdDate("firstYearAttended", String(e.startYear), r);

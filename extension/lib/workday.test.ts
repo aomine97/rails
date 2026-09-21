@@ -87,5 +87,10 @@ describe("workday", () => {
     expect(await applyAnswer(document, f[0]!, "Yes")).toBe(true);
     expect(scanFields(document)[0]!.value).toBe("Yes");
   });
+  it("degree listbox takes Vanguard-style short options (Associate's) for a profile that says Associate's Degree", async () => {
+    document.body.innerHTML = ""; listboxButton("degree", ["High School", "Associate's", "Bachelor's", "Master's", "Doctorate"]);
+    expect(await wdListbox("degree", "Associate's Degree")).toBe(true);
+    expect(document.querySelector('[data-automation-id="degree"]')!.textContent).toBe("Associate's");
+  });
   it("reads Workday validation errors", () => { document.body.innerHTML = `<div data-automation-id="errorMessage">Phone Number is required.</div>`; expect(wdErrors()).toEqual(["Phone Number is required."]); });
 });

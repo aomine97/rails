@@ -33,6 +33,11 @@ describe("answerQuestions", () => {
     expect(by("3").value).toBeNull(); expect(by("4").value).toBeNull();
     expect(by("5").value).toBe("2");
   });
+  it("passes assumed through and enforces options on it", async () => {
+    const out = await answerQuestions(profile, [{ id: "1", label: "Have you ever interviewed for a position at Vanguard?", kind: "listbox", options: ["Yes", "No"] }], {}, fake({ answers: [{ id: "1", value: "No", why: "no history on profile", assumed: true }] }));
+    expect(out[0]).toMatchObject({ value: "No", assumed: true });
+    expect(NEVER.test("Have you ever been convicted of a felony?")).toBe(true);
+  });
   it("returns nulls when the model output is unusable", async () => {
     const out = await answerQuestions(profile, [{ id: "1", label: "Why us?", kind: "textarea" }], {}, fake({ nope: true }));
     expect(out).toEqual([]);

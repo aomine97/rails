@@ -2,7 +2,7 @@ import type { ScannedField } from "./scan";
 
 /** The checklist the panel shows while and after autofill: every question on the page, its state, and a control for the ones left. */
 export type RowState = "todo" | "filling" | "done" | "left" | "skip" | "failed";
-export type Row = { f: ScannedField; s: RowState; why?: string; value?: string };
+export type Row = { f: ScannedField; s: RowState; why?: string; value?: string; assumed?: boolean };
 export type FormState = { rows: Row[]; running: boolean; step: string; url: string; tabId: number; filledAt?: number; error?: string; summaryText?: string; wdStep?: { index: number; total: number; label: string; key: string }; account?: { email: string; password: string; mode: "signin" | "create" } };
 
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
@@ -38,9 +38,9 @@ function control(r: Row): string {
 }
 
 function row(r: Row, open: boolean): string {
-  const needs = r.s === "left" || r.s === "failed" || r.s === "todo";
+  const needs = r.s === "left" || r.s === "failed" || r.s === "todo" || (r.s === "done" && !!r.assumed);
   return `<li class="q ${needs ? "q-open" : ""}" data-id="${esc(r.f.id)}">
-    <div class="q-head">${ICON[r.s]}<span class="q-label">${esc(r.f.label)}</span>${r.s === "done" && r.value ? `<span class="q-val" title="${esc(r.value)}">${esc(r.value)}</span>` : ""}</div>
+    <div class="q-head">${r.assumed && r.s === "done" ? `<span class="st st-left" title="Assumed; change it if it is not true">✓</span>` : ICON[r.s]}<span class="q-label">${esc(r.f.label)}${r.assumed && r.s === "done" ? ` <span class="chip" style="background:#FFE8CC;color:#D97706;padding:1px 6px">assumed ${esc(r.value ?? "")}</span>` : ""}</span>${r.s === "done" && r.value && !r.assumed ? `<span class="q-val" title="${esc(r.value)}">${esc(r.value)}</span>` : ""}</div>
     ${needs && open ? `<div class="q-body">${r.why ? `<div class="note" style="margin-bottom:4px">${esc(r.why)}</div>` : ""}${control(r)}<label class="remember"><input type="checkbox" class="rem" data-id="${esc(r.f.id)}"> Remember for other applications</label></div>` : ""}
   </li>`;
 }
