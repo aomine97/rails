@@ -68,7 +68,7 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
   fs.running = true; set("Reading the form…");
   const fields = scanAll();
   let budget = 14;
-  for (const f of fields) if (f.kind === "combobox" && !f.filled && budget > 0) { budget--; f.options = await readComboOptions(rootOf(f.id), f); }
+  for (const f of fields) if ((f.kind === "combobox" || f.kind === "listbox") && !f.filled && budget > 0) { budget--; f.options = await readComboOptions(rootOf(f.id), f); }
   fs.rows = fields.map((f) => ({ f, s: f.filled ? "done" : f.conditional ? "skip" : "todo", value: f.value }));
   if (!fs.rows.length) { fs.running = false; fs.step = "No form on this page yet."; emit(); return fs; }
   emit();
@@ -133,7 +133,7 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
   }
   for (const r of fs.rows) if (r.s === "todo") r.s = "left";
   refresh(fs);
-  const unlisted = fs.rows.filter((r) => (r.s === "left" || r.s === "failed") && r.f.kind === "combobox" && !r.f.options?.length && !r.f.searchable).slice(0, 12);
+  const unlisted = fs.rows.filter((r) => (r.s === "left" || r.s === "failed" || r.assumed) && (r.f.kind === "combobox" || r.f.kind === "listbox") && !r.f.options?.length && !r.f.searchable).slice(0, 16);
   if (unlisted.length) { set("Reading the remaining dropdowns…"); for (const r of unlisted) r.f.options = await readComboOptions(rootOf(r.f.id), r.f, 2500); }
   fs.running = false; fs.step = ""; fs.filledAt = Date.now(); emit();
   const sm = summary(fs); fs.summaryText = `${sm.done}/${sm.req} required filled`;
