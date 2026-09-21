@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 .env*.local
 rails-extension-shell.zip
+
+# ECC agent harness, installed with: npx ecc-universal@2.2.1 install --target claude-project --profile core --no-hooks
+# 491 vendored files (3.7MB); reinstall with that command rather than committing it
+.claude/
