@@ -9,6 +9,12 @@ const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&
 /** Saved answers are keyed by the question text, lower-cased and stripped of punctuation, so the same question on another site matches. */
 export const answerKey = (label: string) => label.toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120);
 
+/** What Rails saw, minus the values: enough to debug a site without seeing the user's answers. */
+export function debugReport(fs: FormState): string {
+  const rows = fs.rows.map((r) => ({ label: r.f.label.slice(0, 90), kind: r.f.kind, id: r.f.id, required: r.f.required, state: r.s, assumed: r.assumed || undefined, filled: r.f.filled, options: r.f.options?.length ?? 0, searchable: r.f.searchable || undefined, why: r.why?.slice(0, 80), hasValue: !!r.value }));
+  return JSON.stringify({ url: fs.url.split("?")[0], wd: fs.wdStep, error: fs.error, rows }, null, 1);
+}
+
 export function summary(fs: FormState) {
   const req = fs.rows.filter((r) => r.f.required && r.s !== "skip");
   const done = req.filter((r) => r.s === "done").length;
@@ -56,6 +62,7 @@ export function renderForm(fs: FormState, expanded: boolean): string {
     ${expanded ? `<div class="q-list">
       ${required.length ? `<h2>Required</h2><ul>${required.map((r) => row(r, !fs.running)).join("")}</ul>` : ""}
       ${optional.length ? `<h2>Optional</h2><ul>${optional.map((r) => row(r, !fs.running)).join("")}</ul>` : ""}
+      <div style="padding:6px 14px 0"><button class="btn ghost sm" id="copy-report" title="Copies what Rails saw on this page (field labels, kinds, states) so you can paste it to support. No answers or personal data.">Copy debug report</button></div>
       <p class="note" style="padding:8px 14px 12px;margin:0">Pick an answer for anything marked ! and Rails puts it in the form. Pronouns, EEO and "how did you hear" stay on this computer. Review the page, then click its Submit.</p>
     </div>` : ""}
   </div>`;

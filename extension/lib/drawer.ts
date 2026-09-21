@@ -1,7 +1,7 @@
 /** In-page Rails drawer: the Jobright pattern (UI lives inside the tab, so it keeps working when you switch tabs), in Rails' skin. */
 import { api, SITE, type JobInfo, type Me } from "./api";
 import { ring, meter, logo, bandLabel, BAND, bandOf, levelLabel, logoUrl } from "./ui";
-import { renderForm, summary, type FormState } from "./form";
+import { renderForm, summary, debugReport, type FormState } from "./form";
 import { prepare, run, fillOne, listOptions, learnCorrections, type RunInput } from "./runner";
 import { isWorkday, wdStep, wdNextButton, wdErrors, watchSteps } from "./workday";
 
@@ -191,6 +191,7 @@ function bind() {
   q<HTMLButtonElement>("#wd-next")?.addEventListener("click", () => void wdNext());
   q<HTMLInputElement>("#auto-acct")?.addEventListener("change", (e) => { state.autoAccounts = (e.target as HTMLInputElement).checked; chrome.storage.local.set({ rails_auto_accounts: state.autoAccounts }).catch(() => {}); render(); });
   q<HTMLButtonElement>("#pw-show")?.addEventListener("click", () => { state.showPw = !state.showPw; render(); });
+  q<HTMLButtonElement>("#copy-report")?.addEventListener("click", async (e) => { if (state.form) { await navigator.clipboard.writeText(debugReport(state.form)); (e.target as HTMLButtonElement).textContent = "Copied"; } });
   q<HTMLButtonElement>("#pw-copy")?.addEventListener("click", () => { if (state.form?.account) void navigator.clipboard.writeText(state.form.account.password); });
   for (const img of root?.querySelectorAll<HTMLImageElement>(".clogo img") ?? []) img.onerror = () => { const d = img.parentElement!; d.style.background = "#0B1B3A"; d.textContent = img.dataset.fb ?? "•"; };
   const fs = state.form; if (!fs) return;
