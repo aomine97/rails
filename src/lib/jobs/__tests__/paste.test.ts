@@ -14,7 +14,8 @@ describe("parsePostingHtml", () => {
     expect(p.title).toBe("Data Analyst"); expect(p.company).toBe("Widgets"); expect(p.text).toContain("Do analysis.");
   });
   it("names companies from ATS urls", () => {
-    expect(hostToName("https://bah.wd1.myworkdayjobs.com/bah_jobs/job/x")).toBe("Bah");
+    expect(hostToName("https://bah.wd1.myworkdayjobs.com/bah_jobs/job/x")).toBe("BAH"); // short slugs are acronyms (IBM, AMD, BAH)
+    expect(hostToName("https://job-boards.greenhouse.io/ibm/jobs/1")).toBe("IBM");
     expect(hostToName("https://job-boards.greenhouse.io/spacex/jobs/1")).toBe("Spacex");
     expect(hostToName("https://jobs.lever.co/palantir/abc")).toBe("Palantir");
   });

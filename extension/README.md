@@ -10,7 +10,9 @@ Side panel + on-demand autofill. Never submits, never uploads a file.
 
 Load unpacked: chrome://extensions -> Developer mode -> Load unpacked -> extension/.output/chrome-mv3
 
-## How it works
+## How it works (v1.5: everything runs inside the tab)
+The Jobright pattern. `rails.content.ts` mounts on the major ATS hosts (and `filler.js` is injected on any other site the user allows): a floating badge, an in-page drawer (`lib/drawer.ts`, shadow DOM) and the runner (`lib/runner.ts`). The drawer shows the job (auto-scored from the page's schema.org JobPosting when Rails has never seen it), the "Prepare your resume" step (keywords you confirm -> tailored resume -> preview -> use it or keep your upload), the Autofill button, the live checklist, and the "Did you submit?" prompt when you come back to the tab or click something that looks like Submit. Because the run lives in the page it keeps going when you switch tabs or close the side panel; a hidden tab throttles timers so it runs slower there, not stopped. Corrections you make by hand before submitting are remembered (`rails_answers`) for the next application. The side panel is now a mirror and launcher: its Autofill sends `rails:run` to the tab and it renders the `rails:state` the page broadcasts.
+
 1. Side panel "Connect to Rails" opens https://rails-psi.vercel.app/ext/connect; that page mints a token and the `connect` content script stores it.
 2. Panel calls /api/ext/me (profile fields), /api/ext/job?url= (fit, checklist, tailored resume for the tab's URL).
 3. "Fill this page": first time on a site, Chrome asks to allow that origin (optional_host_permissions). The background injects `filler.js`, which maps fields by learned selector -> ATS selector -> autocomplete -> name/id -> label -> placeholder and sets values React-safely. An overlay tells the user to review and click the site's Submit.

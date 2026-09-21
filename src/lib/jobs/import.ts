@@ -10,7 +10,7 @@ export type ImportResult = { jobId: string; created: boolean } | { error: string
  * One posting URL -> a job row the user can see (source=paste, visible only to them via `matches`).
  * Shared by the /app/paste form and the extension's "Score it". If the URL identifies a pollable feed, the company goes live for everyone.
  */
-export async function importPosting(admin: SupabaseClient, userId: string, url: string, pastedText = "", title = ""): Promise<ImportResult> {
+export async function importPosting(admin: SupabaseClient, userId: string, url: string, pastedText = "", title = "", company = ""): Promise<ImportResult> {
   if (!/^https?:\/\//.test(url)) return { error: "Paste the full link, starting with https://" };
   // Already in Rails from a feed? Return that row instead of duplicating.
   const clean = url.split("#")[0].replace(/\/$/, "");
@@ -20,8 +20,9 @@ export async function importPosting(admin: SupabaseClient, userId: string, url: 
   try { posting = await fetchPosting(url); }
   catch (e) {
     if (pastedText.length < 300) return { error: (e as Error).message };
-    posting = { url, applyUrl: url, title: title || "Pasted posting", company: hostToName(url), text: pastedText };
+    posting = { url, applyUrl: url, title: title || "Pasted posting", company: company || hostToName(url), text: pastedText };
   }
+  if (company && /^[A-Z][a-z]+$/.test(posting.company) && posting.company.toLowerCase() === company.toLowerCase().replace(/[^a-z]/g, "")) posting.company = company; // "Ibm" -> "IBM" when the page says so
   const det = detectAts(url);
   const { ats, slug } = det;
   const pollable = !!adapters[ats] && (!!slug || ats === "oracle");

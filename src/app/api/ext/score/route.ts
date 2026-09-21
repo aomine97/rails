@@ -12,10 +12,10 @@ export const OPTIONS = preflight;
 export async function POST(req: Request) {
   const u = await extUser(req);
   if (!u) return NextResponse.json({ error: "unauthorized" }, { status: 401, headers: CORS });
-  const body = (await req.json().catch(() => null)) as { url?: string; text?: string; title?: string } | null;
+  const body = (await req.json().catch(() => null)) as { url?: string; text?: string; title?: string; company?: string } | null;
   if (!body?.url) return NextResponse.json({ error: "url required" }, { status: 400, headers: CORS });
   const db = supabaseAdmin();
-  const r = await importPosting(db, u.id, body.url, body.text ?? "", body.title ?? "");
+  const r = await importPosting(db, u.id, body.url, body.text ?? "", body.title ?? "", body.company ?? "");
   if ("error" in r) return NextResponse.json({ error: r.error }, { status: 422, headers: CORS });
   const { data: job } = await db.from("jobs").select("id,title,location,url,apply_url,tags,external_id,companies(name)").eq("id", r.jobId).single();
   if (!job) return NextResponse.json({ error: "saved but not found" }, { status: 500, headers: CORS });

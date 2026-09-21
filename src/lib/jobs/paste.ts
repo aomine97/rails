@@ -38,7 +38,8 @@ export function hostToName(url: string): string {
     return cap(h.split(".")[0]);
   } catch { return "Unknown"; }
 }
-const cap = (s: string) => s.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const ACRONYMS = new Set(["ibm", "amd", "hp", "hpe", "ea", "sap", "ge", "3m", "att", "ups", "nasa", "aws", "ti", "hrt", "imc", "sig", "bah", "gdit", "caci", "saic", "rtx", "ngc", "lmco", "bny", "ms", "jpmc", "hsbc", "ubs", "cvs", "amex", "mitre", "ibm-careers"]);
+const cap = (s: string) => s.replace(/[-_]+/g, " ").split(" ").map((w) => (ACRONYMS.has(w.toLowerCase()) || (w.length <= 3 && /^[a-z]+$/i.test(w))) ? w.toUpperCase() : w.replace(/^\w/, (c) => c.toUpperCase())).join(" ");
 
 export async function fetchPosting(url: string, fetchImpl: typeof fetch = fetch): Promise<PastedPosting> {
   const res = await fetchImpl(url, { headers: { "user-agent": UA, accept: "text/html,*/*" }, redirect: "follow", signal: AbortSignal.timeout(15_000) });
