@@ -115,6 +115,17 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
   const fromSaved = todo().filter((r) => saved[answerKey(r.f.label)] !== undefined);
   if (fromSaved.length) { set("Using your saved answers…"); for (const r of fromSaved) { const v = saved[answerKey(r.f.label)]!; r.s = "filling"; emit(); const ok = await applyAnswer(rootOf(r.f.id), r.f, v).catch(() => false); r.s = ok ? "done" : "left"; r.value = valueText(v); emit(); } }
 
+  // 2b. "How did you hear about us": never sent to the server; saved answer, else the first honest option the page offers
+  for (const r of todo().filter((r) => /how did you (hear|learn|find)/i.test(r.f.label))) {
+    if (!r.f.options?.length && (r.f.kind === "listbox" || r.f.kind === "combobox")) r.f.options = await readComboOptions(rootOf(r.f.id), r.f, 2500);
+    const pref = ["job board", "online job board", "job search", "company website", "career site", "website", "internet", "online", "other"];
+    const pick = pref.map((p) => r.f.options?.find((o) => o.toLowerCase().includes(p))).find(Boolean);
+    if (!pick) continue;
+    r.s = "filling"; emit();
+    const ok = await applyAnswer(rootOf(r.f.id), r.f, pick).catch(() => false);
+    r.s = ok ? "done" : "left"; r.value = pick; r.assumed = ok; r.why = ok ? `Picked "${pick}". Change it below and tick Remember if you'd rather say something else.` : undefined; emit();
+  }
+
   // 3. profile answers from the server (EEO never leaves the page)
   const ask = todo().filter((r) => !r.f.sensitive && !r.f.legal);
   for (const r of todo().filter((r) => r.f.sensitive)) { r.s = "left"; r.why = "Yours to answer. Tick Remember and it fills next time."; }

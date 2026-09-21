@@ -57,7 +57,10 @@ export function scanFields(root: Document | ShadowRoot): ScannedField[] {
     const type = el instanceof HTMLInputElement ? el.type : el instanceof HTMLTextAreaElement ? "textarea" : "select";
     if (type === "file") {
       const label = labelTextFor(el, root) || "Attachment";
-      out.push({ id: mark(el), label, kind: "file", required: isRequired(el, root, label), filled: ((el as HTMLInputElement).files?.length ?? 0) > 0, sensitive: false, conditional: false });
+      // Workday (and others) clear the input after upload and show the file name elsewhere: that still counts as attached
+      const zone = el.closest('[data-automation-id="fileUploadSection"], [data-automation-id^="file-upload"], section, fieldset, div');
+      const uploaded = !!zone?.querySelector('[data-automation-id="file-upload-successful"], [data-automation-id="uploadedFileName"], [data-automation-id="file-upload-item"], a[download], .filename, [class*="uploaded" i]') || /successfully uploaded|\.(pdf|docx?)\b/i.test(clean(zone?.textContent).slice(0, 400));
+      out.push({ id: mark(el), label, kind: "file", required: isRequired(el, root, label), filled: ((el as HTMLInputElement).files?.length ?? 0) > 0 || uploaded, sensitive: false, conditional: false });
       continue;
     }
     if (type === "radio" || type === "checkbox") {
@@ -80,6 +83,14 @@ export function scanFields(root: Document | ShadowRoot): ScannedField[] {
     const label = labelTextFor(el, root);
     if (!label || label.length > 220) continue;
     const base = { id: mark(el), label, required: isRequired(el, root, label), sensitive: SENSITIVE.test(label), conditional: CONDITIONAL.test(label) };
+    const multi = el.closest('[data-automation-id="multiSelectContainer"], [data-automation-id="multiselectInputContainer"]') ?? (el.getAttribute("data-automation-id") === "searchBox" ? el.parentElement?.parentElement : null);
+    if (multi) {
+      // Workday search-select: the picks live in chips next to the box, not in the input
+      const chips = [...multi.querySelectorAll('[data-automation-id="selectedItem"], [data-automation-id="selectedItemList"] li')].map((c) => clean(c.textContent)).filter(Boolean);
+      const count = clean(multi.textContent).match(/(\d+) items? selected/)?.[1];
+      out.push({ ...base, kind: "combobox", searchable: true, filled: chips.length > 0 || (!!count && count !== "0"), value: chips.join(", ") || (count && count !== "0" ? `${count} selected` : "") });
+      continue;
+    }
     if (el instanceof HTMLSelectElement) {
       const opts = [...el.options].map((o) => o.text.trim()).filter((t) => t && !PLACEHOLDER.test(t));
       const cur = el.selectedIndex >= 0 ? el.options[el.selectedIndex]!.text.trim() : "";

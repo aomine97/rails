@@ -14,7 +14,8 @@ const Out = z.object({ answers: z.array(z.object({ id: z.string(), value: z.unio
 export const NEVER = /pronoun|gender|hispanic|latino|\brace\b|ethnicit|veteran|disabilit|self-identif|sexual orientation|how did you hear|referr|salary|compensation|\bpay\b|desired rate|password|ssn|social security|date of birth|birth ?date|convict|felony|misdemeanor|criminal|background check|drug (test|screen)|arrest/i;
 
 export const ANSWERS_SYSTEM = `You fill job-application questions for a candidate from their profile. Rules:
-- Use ONLY the profile. Never invent experience, employers, dates, visas, degrees or numbers. If the profile does not settle a question, value is null and why says what is missing.
+- Use ONLY the profile and the resume text. Never invent experience, employers, dates, visas, degrees or numbers. If neither settles a question, value is null and why names the exact thing to add to the profile ("Add work authorization on your profile", "Add a start year to NOVA on your profile").
+- Read the resume text closely before saying null: years with a tool, coursework, certifications, projects, locations, availability and graduation are usually in it.
 - When a question has options, value must be copied exactly from the options list (or a list of them for multi-select). Never write an option that is not listed.
 - Yes/no questions about experience: "Yes" only when the profile's experience/projects/skills show it plainly; otherwise "No" when the profile is complete enough to say so (e.g. a student with listed jobs and none at a trading firm -> "No"), else null.
 - Work authorization: us_citizen and permanent_resident -> authorized Yes, sponsorship No. visa_needs_sponsorship -> authorized Yes (if the question is "now"), sponsorship Yes. visa_no_sponsorship -> authorized Yes, sponsorship No. unknown -> null.
@@ -37,13 +38,13 @@ export function compactProfile(p: CanonicalProfile) {
   };
 }
 
-export async function answerQuestions(profile: CanonicalProfile, questions: Question[], context: { url?: string; company?: string; title?: string }, client = new Anthropic()): Promise<Answer[]> {
+export async function answerQuestions(profile: CanonicalProfile, questions: Question[], context: { url?: string; company?: string; title?: string; resumeText?: string | null }, client = new Anthropic()): Promise<Answer[]> {
   const ask = questions.filter((q) => !NEVER.test(q.label)).slice(0, 40);
   const skipped: Answer[] = questions.filter((q) => NEVER.test(q.label)).map((q) => ({ id: q.id, value: null, why: "Yours to answer" }));
   if (!ask.length) return skipped;
   const res = await client.messages.create({
     model: process.env.ANSWERS_MODEL ?? process.env.TAGGER_MODEL ?? "claude-haiku-4-5", max_tokens: 2000, system: ANSWERS_SYSTEM,
-    messages: [{ role: "user", content: `PROFILE:\n${JSON.stringify(compactProfile(profile))}\n\nAPPLICATION: ${context.title ?? ""} at ${context.company ?? ""} (${context.url ?? ""})\n\nQUESTIONS:\n${JSON.stringify(ask)}` }],
+    messages: [{ role: "user", content: `PROFILE:\n${JSON.stringify(compactProfile(profile))}\n\nRESUME (the user's own words; anything stated here counts as profile fact):\n${(context.resumeText ?? "").slice(0, 7000)}\n\nAPPLICATION: ${context.title ?? ""} at ${context.company ?? ""} (${context.url ?? ""})\n\nQUESTIONS:\n${JSON.stringify(ask)}` }],
   });
   const raw = res.content.find((c) => c.type === "text")?.text ?? "";
   const parsed = Out.safeParse(JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1)));

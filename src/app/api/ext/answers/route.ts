@@ -15,11 +15,15 @@ export async function POST(req: Request) {
   if (!u) return NextResponse.json({ error: "unauthorized" }, { status: 401, headers: CORS });
   const body = Body.safeParse(await req.json().catch(() => null));
   if (!body.success) return NextResponse.json({ error: "bad_request" }, { status: 400, headers: CORS });
-  const { data: p } = await supabaseAdmin().from("profiles").select("canonical").eq("id", u.id).single();
+  const db = supabaseAdmin();
+  const [{ data: p }, { data: base }] = await Promise.all([
+    db.from("profiles").select("canonical").eq("id", u.id).single(),
+    db.from("resumes").select("text_content").eq("user_id", u.id).eq("kind", "base").order("created_at", { ascending: false }).limit(1).maybeSingle(),
+  ]);
   const parsed = CanonicalProfile.safeParse(p?.canonical);
   if (!parsed.success) return NextResponse.json({ error: "onboarding_incomplete" }, { status: 409, headers: CORS });
   try {
-    const answers = await answerQuestions(parsed.data, body.data.questions, body.data);
+    const answers = await answerQuestions(parsed.data, body.data.questions, { ...body.data, resumeText: base?.text_content ?? null });
     return NextResponse.json({ answers }, { headers: CORS });
   } catch (e) {
     return NextResponse.json({ error: "answers_failed", detail: String((e as Error).message).slice(0, 200) }, { status: 502, headers: CORS });
