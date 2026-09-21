@@ -1,0 +1,828 @@
+[
+  {
+    "name": "Google",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Apple",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Amazon",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Meta",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Microsoft",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Netflix",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Tesla",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "TikTok",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "NVIDIA",
+    "ats": "workday",
+    "slug": "NVIDIAExternalCareerSite",
+    "ok": true,
+    "count": 2000
+  },
+  {
+    "name": "Roblox",
+    "ats": "greenhouse",
+    "slug": "roblox",
+    "ok": true,
+    "count": 243
+  },
+  {
+    "name": "Stripe",
+    "ats": "greenhouse",
+    "slug": "stripe",
+    "ok": true,
+    "count": 665
+  },
+  {
+    "name": "Airbnb",
+    "ats": "greenhouse",
+    "slug": "airbnb",
+    "ok": true,
+    "count": 168
+  },
+  {
+    "name": "Uber",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "OpenAI",
+    "ats": "ashby",
+    "slug": "openai",
+    "ok": true,
+    "count": 817
+  },
+  {
+    "name": "Anthropic",
+    "ats": "greenhouse",
+    "slug": "anthropic",
+    "ok": true,
+    "count": 611
+  },
+  {
+    "name": "Databricks",
+    "ats": "greenhouse",
+    "slug": "databricks",
+    "ok": true,
+    "count": 875
+  },
+  {
+    "name": "Snowflake",
+    "ats": "ashby",
+    "slug": "snowflake",
+    "ok": true,
+    "count": 345
+  },
+  {
+    "name": "Palantir",
+    "ats": "lever",
+    "slug": "palantir",
+    "ok": true,
+    "count": 5
+  },
+  {
+    "name": "Salesforce",
+    "ats": "workday",
+    "slug": "External_Career_Site",
+    "ok": true,
+    "count": 1482
+  },
+  {
+    "name": "Adobe",
+    "ats": "workday",
+    "slug": "external_experienced",
+    "ok": true,
+    "count": 639
+  },
+  {
+    "name": "Oracle",
+    "ats": "oracle",
+    "slug": null,
+    "ok": false,
+    "count": null
+  },
+  {
+    "name": "IBM",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Intel",
+    "ats": "workday",
+    "slug": "External",
+    "ok": true,
+    "count": 613
+  },
+  {
+    "name": "AMD",
+    "ats": "icims",
+    "slug": "careers-amd",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Qualcomm",
+    "ats": "workday",
+    "slug": "External",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Cisco",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Snap",
+    "ats": "workday",
+    "slug": "snap",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Pinterest",
+    "ats": "greenhouse",
+    "slug": "pinterest",
+    "ok": true,
+    "count": 161
+  },
+  {
+    "name": "Coinbase",
+    "ats": "greenhouse",
+    "slug": "coinbase",
+    "ok": true,
+    "count": 217
+  },
+  {
+    "name": "Robinhood",
+    "ats": "greenhouse",
+    "slug": "robinhood",
+    "ok": true,
+    "count": 157
+  },
+  {
+    "name": "DoorDash",
+    "ats": "greenhouse",
+    "slug": "doordashusa",
+    "ok": true,
+    "count": 462
+  },
+  {
+    "name": "Lyft",
+    "ats": "greenhouse",
+    "slug": "lyft",
+    "ok": true,
+    "count": 176
+  },
+  {
+    "name": "Dropbox",
+    "ats": "greenhouse",
+    "slug": "dropbox",
+    "ok": true,
+    "count": 44
+  },
+  {
+    "name": "Figma",
+    "ats": "greenhouse",
+    "slug": "figma",
+    "ok": true,
+    "count": 152
+  },
+  {
+    "name": "Notion",
+    "ats": "ashby",
+    "slug": "notion",
+    "ok": true,
+    "count": 128
+  },
+  {
+    "name": "Discord",
+    "ats": "greenhouse",
+    "slug": "discord",
+    "ok": true,
+    "count": 47
+  },
+  {
+    "name": "Twitch",
+    "ats": "greenhouse",
+    "slug": "twitch",
+    "ok": true,
+    "count": 48
+  },
+  {
+    "name": "Reddit",
+    "ats": "greenhouse",
+    "slug": "reddit",
+    "ok": true,
+    "count": 156
+  },
+  {
+    "name": "Electronic Arts",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Riot Games",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Epic Games",
+    "ats": "greenhouse",
+    "slug": "epicgames",
+    "ok": true,
+    "count": 150
+  },
+  {
+    "name": "Unity",
+    "ats": "greenhouse",
+    "slug": "unity3d",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Bloomberg",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Capital One",
+    "ats": "workday",
+    "slug": "Capital_One",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "JPMorgan Chase",
+    "ats": "oracle",
+    "slug": null,
+    "ok": true,
+    "count": null
+  },
+  {
+    "name": "Goldman Sachs",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Morgan Stanley",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Citadel",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Citadel Securities",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Jane Street",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Two Sigma",
+    "ats": "greenhouse",
+    "slug": "twosigma",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Hudson River Trading",
+    "ats": "greenhouse",
+    "slug": "wehrtyou",
+    "ok": true,
+    "count": 83
+  },
+  {
+    "name": "Optiver",
+    "ats": "greenhouse",
+    "slug": "optiverus",
+    "ok": true,
+    "count": 161
+  },
+  {
+    "name": "IMC Trading",
+    "ats": "greenhouse",
+    "slug": "imc",
+    "ok": true,
+    "count": 172
+  },
+  {
+    "name": "Jump Trading",
+    "ats": "greenhouse",
+    "slug": "jumptrading",
+    "ok": true,
+    "count": 110
+  },
+  {
+    "name": "D. E. Shaw",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Susquehanna (SIG)",
+    "ats": "icims",
+    "slug": "careers-sig",
+    "ok": true,
+    "count": 20
+  },
+  {
+    "name": "Akuna Capital",
+    "ats": "greenhouse",
+    "slug": "akunacapital",
+    "ok": true,
+    "count": 40
+  },
+  {
+    "name": "Five Rings",
+    "ats": "greenhouse",
+    "slug": "fiveringsllc",
+    "ok": true,
+    "count": 16
+  },
+  {
+    "name": "Point72",
+    "ats": "greenhouse",
+    "slug": "point72",
+    "ok": true,
+    "count": 233
+  },
+  {
+    "name": "Millennium",
+    "ats": "greenhouse",
+    "slug": "mlp",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "SpaceX",
+    "ats": "greenhouse",
+    "slug": "spacex",
+    "ok": true,
+    "count": 2507
+  },
+  {
+    "name": "Anduril",
+    "ats": "greenhouse",
+    "slug": "andurilindustries",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Lockheed Martin",
+    "ats": "workday",
+    "slug": "External",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Northrop Grumman",
+    "ats": "workday",
+    "slug": "Northrop_Grumman_External_Site",
+    "ok": true,
+    "count": 3794
+  },
+  {
+    "name": "RTX (Raytheon)",
+    "ats": "workday",
+    "slug": "REC_RTX_Ext_Gateway",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Boeing",
+    "ats": "workday",
+    "slug": "EXTERNAL_CAREERS",
+    "ok": true,
+    "count": 708
+  },
+  {
+    "name": "Atlassian",
+    "ats": "icims",
+    "slug": "campus-globalcareers-atlassian",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Shopify",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "LinkedIn",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Duolingo",
+    "ats": "greenhouse",
+    "slug": "duolingo",
+    "ok": true,
+    "count": 81
+  },
+  {
+    "name": "Ramp",
+    "ats": "ashby",
+    "slug": "ramp",
+    "ok": true,
+    "count": 148
+  },
+  {
+    "name": "Scale AI",
+    "ats": "greenhouse",
+    "slug": "scaleai",
+    "ok": true,
+    "count": 223
+  },
+  {
+    "name": "Datadog",
+    "ats": "greenhouse",
+    "slug": "datadog",
+    "ok": true,
+    "count": 454
+  },
+  {
+    "name": "Cloudflare",
+    "ats": "greenhouse",
+    "slug": "cloudflare",
+    "ok": true,
+    "count": 379
+  },
+  {
+    "name": "MongoDB",
+    "ats": "greenhouse",
+    "slug": "mongodb",
+    "ok": true,
+    "count": 401
+  },
+  {
+    "name": "Twilio",
+    "ats": "greenhouse",
+    "slug": "twilio",
+    "ok": true,
+    "count": 143
+  },
+  {
+    "name": "Block",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "PayPal",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Visa",
+    "ats": "workday",
+    "slug": "Visa",
+    "ok": true,
+    "count": 790
+  },
+  {
+    "name": "Mastercard",
+    "ats": "workday",
+    "slug": "Campus",
+    "ok": true,
+    "count": 45
+  },
+  {
+    "name": "Dell",
+    "ats": "oracle",
+    "slug": null,
+    "ok": false,
+    "count": null
+  },
+  {
+    "name": "HP",
+    "ats": "greenhouse",
+    "slug": "hpiq",
+    "ok": true,
+    "count": 33
+  },
+  {
+    "name": "Broadcom",
+    "ats": "workday",
+    "slug": "External_Career",
+    "ok": true,
+    "count": 371
+  },
+  {
+    "name": "Micron",
+    "ats": "workday",
+    "slug": "External",
+    "ok": true,
+    "count": 3039
+  },
+  {
+    "name": "Texas Instruments",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Arm",
+    "ats": "workday",
+    "slug": "Arm",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Samsung",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Sony",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Nintendo",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Booz Allen Hamilton",
+    "ats": "workday",
+    "slug": "bah_jobs",
+    "ok": true,
+    "count": 2000
+  },
+  {
+    "name": "Leidos",
+    "ats": "workday",
+    "slug": "External",
+    "ok": true,
+    "count": 2000
+  },
+  {
+    "name": "SAIC",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "MITRE",
+    "ats": "workday",
+    "slug": "MITRE",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Johns Hopkins APL",
+    "ats": "custom",
+    "slug": null,
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "NASA",
+    "ats": "usajobs",
+    "slug": null,
+    "ok": true,
+    "count": null
+  },
+  {
+    "name": "Waymo",
+    "ats": "greenhouse",
+    "slug": "waymo",
+    "ok": true,
+    "count": 339
+  },
+  {
+    "name": "Rivian",
+    "ats": "greenhouse",
+    "slug": "rivian",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Samsara",
+    "ats": "greenhouse",
+    "slug": "samsara",
+    "ok": true,
+    "count": 273
+  },
+  {
+    "name": "Rippling",
+    "ats": "greenhouse",
+    "slug": "rippling",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Plaid",
+    "ats": "lever",
+    "slug": "plaid",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Brex",
+    "ats": "greenhouse",
+    "slug": "brex",
+    "ok": true,
+    "count": 251
+  },
+  {
+    "name": "Vercel",
+    "ats": "ashby",
+    "slug": "vercel",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Linear",
+    "ats": "ashby",
+    "slug": "linear",
+    "ok": true,
+    "count": 32
+  },
+  {
+    "name": "Perplexity",
+    "ats": "ashby",
+    "slug": "perplexity",
+    "ok": true,
+    "count": 118
+  },
+  {
+    "name": "Cursor (Anysphere)",
+    "ats": "ashby",
+    "slug": "anysphere",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "HashiCorp",
+    "ats": "greenhouse",
+    "slug": "hashicorp",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "GitLab",
+    "ats": "greenhouse",
+    "slug": "gitlab",
+    "ok": true,
+    "count": 216
+  },
+  {
+    "name": "Okta",
+    "ats": "greenhouse",
+    "slug": "okta",
+    "ok": true,
+    "count": 324
+  },
+  {
+    "name": "Asana",
+    "ats": "greenhouse",
+    "slug": "asana",
+    "ok": true,
+    "count": 103
+  },
+  {
+    "name": "Instacart",
+    "ats": "greenhouse",
+    "slug": "instacart",
+    "ok": true,
+    "count": 108
+  },
+  {
+    "name": "Affirm",
+    "ats": "greenhouse",
+    "slug": "affirm",
+    "ok": true,
+    "count": 199
+  },
+  {
+    "name": "Chime",
+    "ats": "greenhouse",
+    "slug": "chime",
+    "ok": true,
+    "count": 67
+  },
+  {
+    "name": "Gusto",
+    "ats": "greenhouse",
+    "slug": "gusto",
+    "ok": true,
+    "count": 94
+  },
+  {
+    "name": "Verkada",
+    "ats": "greenhouse",
+    "slug": "verkada",
+    "ok": true,
+    "count": 297
+  },
+  {
+    "name": "Applied Intuition",
+    "ats": "greenhouse",
+    "slug": "appliedintuition",
+    "ok": false,
+    "count": 0
+  },
+  {
+    "name": "Zoox",
+    "ats": "lever",
+    "slug": "zoox",
+    "ok": true,
+    "count": 5
+  },
+  {
+    "name": "Nuro",
+    "ats": "greenhouse",
+    "slug": "nuro",
+    "ok": true,
+    "count": 107
+  }
+]

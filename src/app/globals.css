@@ -28,6 +28,12 @@
   --red-chip-text: #9F1D1D;
   --navy-2: #14274D;
   --navy-line: #26395E;
+  /* greys, light to dark */
+  --g1: #F7F9FC; --g2: #F1F4F9; --g3: #E6EBF3; --g4: #D6DEEA; --g5: #B9C4D6; --g6: #8A99B3; --g7: #5B6B85; --g8: #33415C; --g9: #1E2A44;
+  --shadow-sm: 0 1px 2px rgba(11,27,58,.06);
+  --shadow-md: 0 4px 12px rgba(11,27,58,.08);
+  --shadow-lg: 0 12px 32px rgba(11,27,58,.12);
+  --shadow-cta: 0 6px 18px rgba(255,122,46,.35);
 }
 
 @theme inline {
@@ -60,7 +66,18 @@
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-display: var(--font-inter-tight), var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --shadow-sm: var(--shadow-sm); --shadow-md: var(--shadow-md); --shadow-lg: var(--shadow-lg); --shadow-cta: var(--shadow-cta);
+  --color-g1: var(--g1); --color-g2: var(--g2); --color-g3: var(--g3); --color-g4: var(--g4); --color-g5: var(--g5); --color-g6: var(--g6); --color-g7: var(--g7); --color-g8: var(--g8); --color-g9: var(--g9);
 }
+
+/* focus is always visible; motion is short */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
+:where(a, button) { transition: background-color .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease; }
+button:active:not(:disabled) { transform: translateY(1px); }
+select { appearance: none; -webkit-appearance: none; }
+.prose-measure { max-width: 68ch; }
+@keyframes shimmer { from { background-position: -400px 0; } to { background-position: 400px 0; } }
+.skeleton { background: linear-gradient(90deg, var(--g2) 0%, var(--g3) 40%, var(--g2) 80%); background-size: 800px 100%; animation: shimmer 1.4s linear infinite; border-radius: 8px; }
 
 body {
   background: var(--ground);

@@ -57,16 +57,23 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   return (
     <AppShell active="/app" name={profile.full_name} credits={credits?.balance ?? 3}>
       <div className="flex flex-col">
-        <div className="flex items-center gap-1 border-b border-line bg-surface px-6 pt-3 text-sm font-semibold">
-          <span className="mr-3 font-display text-xl font-extrabold tracking-tight">JOBS</span>
-          {[["recommended", "Recommended"], ["liked", `Liked ${liked.size ? liked.size : ""}`], ["applied", `Applied ${appliedIds.size ? appliedIds.size : ""}`], ["external", "External"], ["hidden", `Hidden ${hidden.size ? hidden.size : ""}`]].map(([k, l]) => (
-            <Link key={k} href={href({ tab: k, page: "1" })} className={`border-b-2 px-3 pb-2 ${tab === k ? "border-blue text-ink" : "border-transparent text-muted"}`}>{l}</Link>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Jobs</h1>
+            <p className="mt-1 text-[14px] text-muted"><span className="font-semibold text-ink">{items.length.toLocaleString()}</span> match your profile · <span className="font-semibold text-blue">{feed.newToday} new since yesterday</span> · every one verified live</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <form action="/app" className="relative"><svg className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-g6" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg><input name="q" defaultValue={sp.q} placeholder="Search title, company, city" className="h-10 w-72 rounded-xl border border-line bg-surface pl-9 pr-3 text-[14px] outline-none focus:border-blue" /></form>
+            <Link href="/app/paste" className="inline-flex h-10 items-center gap-2 rounded-xl border border-line bg-surface px-4 text-[14px] font-bold text-ink hover:border-ink">+ Paste a link</Link>
+          </div>
+        </div>
+        <div className="mt-4 flex items-center gap-1 border-b border-line text-[14px] font-semibold">
+          {[["recommended", "Recommended"], ["liked", `Liked${liked.size ? ` ${liked.size}` : ""}`], ["applied", `Applied${appliedIds.size ? ` ${appliedIds.size}` : ""}`], ["external", "External"], ["hidden", `Hidden${hidden.size ? ` ${hidden.size}` : ""}`]].map(([k, l]) => (
+            <Link key={k} href={href({ tab: k, page: "1" })} className={`-mb-px border-b-2 px-3 pb-2.5 pt-1 ${tab === k ? "border-ink text-ink" : "border-transparent text-muted hover:text-ink"}`}>{l}</Link>
           ))}
-          <Link href="/app/paste" className="ml-auto mr-3 pb-2 text-[13px] font-semibold text-blue">+ Paste a link</Link>
-          <form className="pb-2" action="/app"><input name="q" defaultValue={sp.q} placeholder="Search title, company, city" className="h-9 w-64 rounded-lg border border-line bg-ground px-3 text-sm font-normal outline-none focus:border-blue" /></form>
         </div>
         {due.length > 0 && (
-          <Link href="/app/tracker" className="flex items-center gap-2 border-b border-line bg-amber-chip px-6 py-2 text-[13px] text-amber-chip-text">
+          <Link href="/app/tracker" className="mt-4 flex items-center gap-2 rounded-xl bg-amber-chip px-4 py-2.5 text-[13px] text-amber-chip-text">
             <span className="font-bold">{due.length} follow-up{due.length === 1 ? "" : "s"} due</span>
             <span className="truncate">{due.slice(0, 3).map((x) => `${x.app.company_name}: ${x.f.text}`).join(" · ")}</span>
             <span className="ml-auto font-semibold">Open tracker →</span>
@@ -75,17 +82,15 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
 
         <FeedFilters levels={LEVELS} fields={FIELDS} where={WHERE} current={{ level: sp.level, field: sp.field, where: sp.where, top: sp.top === "1" }} base={{ tab: sp.tab, q: sp.q, sort: sp.sort }} />
 
-        <div className="flex items-center justify-between px-6 pb-2 pt-3 text-[13px] text-text">
-          <div><span className="font-bold text-ink">{items.length.toLocaleString()} results</span> for your profile · <span className="font-semibold text-blue">{feed.newToday} new since yesterday</span> · all verified live</div>
-          <div className="flex gap-3 text-xs font-semibold">
-            <Link href={href({ sort: "fit", page: "1" })} className={sp.sort !== "new" ? "text-ink" : "text-muted"}>Best fit</Link>
-            <Link href={href({ sort: "new", page: "1" })} className={sp.sort === "new" ? "text-ink" : "text-muted"}>Newest</Link>
-          </div>
+        <div className="flex items-center justify-end gap-3 pb-3 pt-3 text-[13px] font-semibold">
+          <span className="text-muted">Sort</span>
+          <Link href={href({ sort: "fit", page: "1" })} className={sp.sort !== "new" ? "text-ink underline underline-offset-4" : "text-muted hover:text-ink"}>Best fit</Link>
+          <Link href={href({ sort: "new", page: "1" })} className={sp.sort === "new" ? "text-ink underline underline-offset-4" : "text-muted hover:text-ink"}>Newest</Link>
         </div>
 
         {tab === "applied" ? (
           (apps ?? []).filter((a) => a.stage !== "saved").length === 0 ? <Empty title="Nothing applied yet." body="Hit Apply now on a card, apply on the company site, and answer Yes when the card asks. It lands here with its stage." /> : (
-            <ul className="flex flex-col gap-2 px-6 pb-10">
+            <ul className="flex flex-col gap-2 pb-10">
               {(apps ?? []).filter((a) => a.stage !== "saved").map((a) => (
                 <li key={a.id} className="flex items-center justify-between rounded-xl border border-line bg-surface px-4 py-3">
                   <div><a href={a.url ?? "#"} target="_blank" rel="noopener" className="font-semibold text-ink hover:text-blue">{a.title}</a><div className="text-sm text-muted">{a.company_name}</div></div>
@@ -99,7 +104,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
         ) : pageItems.length === 0 ? (
           <Empty title={items.length === 0 && feed.total === 0 ? "Nothing matches yet." : "No jobs on this page."} body={feed.total === 0 ? "Try clearing a filter. If the feed is empty with no filters, the tagger is still catching up on new postings; check back in 15 minutes." : "Go back a page or clear a filter."} />
         ) : (
-          <ul className="flex flex-col gap-3 px-6 pb-10">
+          <ul className="flex flex-col gap-4 pb-10">
             {pageItems.map(({ job, tags, score, isNew, ageDays, otherLocations }) => {
               const pay = payLabel(tags, job);
               const company = job.companies?.name ?? "";
@@ -185,7 +190,7 @@ function Ico({ d }: { d: string }) {
 
 function Empty({ title, body }: { title: string; body: string }) {
   return (
-    <div className="mx-6 my-6 rounded-2xl border border-dashed border-line-strong bg-surface p-8 text-center">
+    <div className="my-6 rounded-2xl border border-dashed border-line-strong bg-surface p-8 text-center">
       <div className="font-display text-lg font-extrabold">{title}</div>
       <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-text">{body}</p>
     </div>
