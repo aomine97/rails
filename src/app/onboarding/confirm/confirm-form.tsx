@@ -1,14 +1,20 @@
 "use client";
 
+import type React from "react";
 import { useActionState, useState } from "react";
 import { FormError, PrimaryButton } from "@/components/ui";
 import type { CanonicalProfile } from "@/lib/schemas/profile";
 import { confirmProfile, type ConfirmState } from "../actions";
 
 type P = CanonicalProfile;
-const input = "h-10 w-full rounded-lg border border-line-strong bg-surface px-3 text-[14px] text-ink outline-none focus:border-blue";
-const card = "rounded-2xl border border-line bg-surface p-5";
-const label = "text-xs font-semibold uppercase tracking-wide text-muted";
+const input = "h-11 w-full rounded-[10px] border border-line-strong bg-surface px-3 text-[14.5px] text-ink outline-none focus:border-blue focus:ring-2 focus:ring-blue/15";
+const card = "rounded-2xl border border-line bg-surface p-6 shadow-[var(--shadow-sm)]";
+const label = "font-display text-[17px] font-extrabold tracking-tight text-ink";
+const why = "mt-0.5 text-[13px] text-muted";
+/** Label above the input; the placeholder is an example, never the label. */
+function L({ t, children, className = "" }: { t: string; children: React.ReactNode; className?: string }) {
+  return <label className={`flex flex-col gap-1.5 ${className}`}><span className="text-[12.5px] font-semibold text-ink">{t}</span>{children}</label>;
+}
 
 export function ConfirmForm({ initial }: { initial: P }) {
   const [p, setP] = useState<P>(initial);
@@ -34,21 +40,22 @@ export function ConfirmForm({ initial }: { initial: P }) {
 
       <section className={card}>
         <div className={label}>You</div>
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <input className={input} value={p.name} onChange={(e) => set("name", e.target.value)} placeholder="Full name" />
-          <input className={input} value={p.phone ?? ""} onChange={(e) => set("phone", e.target.value || null)} placeholder="Phone" />
-          <input className={input} value={p.links.linkedin ?? ""} onChange={(e) => set("links", { ...p.links, linkedin: e.target.value || null })} placeholder="LinkedIn URL" />
-          <input className={input} value={p.links.github ?? ""} onChange={(e) => set("links", { ...p.links, github: e.target.value || null })} placeholder="GitHub URL" />
+        <p className={why}>What every application form asks first. Exactly as you want it to appear.</p>
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <L t="Full name"><input className={input} value={p.name} onChange={(e) => set("name", e.target.value)} placeholder="Maya Patel" autoComplete="name" /></L>
+          <L t="Phone"><input className={input} value={p.phone ?? ""} onChange={(e) => set("phone", e.target.value || null)} placeholder="(571) 555-0100" autoComplete="tel" inputMode="tel" /></L>
+          <L t="LinkedIn"><input className={input} value={p.links.linkedin ?? ""} onChange={(e) => set("links", { ...p.links, linkedin: e.target.value || null })} placeholder="linkedin.com/in/you" /></L>
+          <L t="GitHub"><input className={input} value={p.links.github ?? ""} onChange={(e) => set("links", { ...p.links, github: e.target.value || null })} placeholder="github.com/you" /></L>
         </div>
-        <input className={`${input} mt-3`} value={rolesText} onChange={(e) => { setRolesText(e.target.value); set("targetRoles", splitList(e.target.value)); }} onBlur={() => setRolesText(splitList(rolesText).join(", "))} placeholder="Roles you want, comma separated: Software Engineer Intern, Cloud Support" />
+        <L t="Roles you want (comma separated)" className="mt-3"><input className={input} value={rolesText} onChange={(e) => { setRolesText(e.target.value); set("targetRoles", splitList(e.target.value)); }} onBlur={() => setRolesText(splitList(rolesText).join(", "))} placeholder="Software Engineer Intern, Cloud Support" /></L>
       </section>
 
       <section className={card}>
-        <div className="flex items-center justify-between"><div className={label}>Experience · {p.experience.length} entries</div>
+        <div className="flex items-center justify-between"><div><div className={label}>Experience <span className="text-muted">· {p.experience.length}</span></div><p className={why}>Jobs, internships, projects, research. Bullets with numbers are what get you read.</p></div>
           <button type="button" className="text-sm font-semibold text-blue" onClick={() => set("experience", [...p.experience, { id: `u${Date.now()}`, title: "", org: "", kind: "job", start: null, end: null, bullets: [], skills: [], source: "user" }])}>+ Add a role</button></div>
-        <div className="mt-3 flex flex-col gap-4">
+        <div className="mt-4 flex flex-col gap-4">
           {p.experience.map((e, i) => (
-            <div key={e.id} className="rounded-xl border border-line bg-light p-4">
+            <div key={e.id} className="rounded-xl border border-line bg-g1 p-4">
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_110px_110px]">
                 <input className={input} value={e.title} placeholder="Title" onChange={(ev) => set("experience", p.experience.map((x, j) => j === i ? { ...x, title: ev.target.value } : x))} />
                 <input className={input} value={e.org} placeholder="Company / school" onChange={(ev) => set("experience", p.experience.map((x, j) => j === i ? { ...x, org: ev.target.value } : x))} />
@@ -68,6 +75,7 @@ export function ConfirmForm({ initial }: { initial: P }) {
 
       <section className={card}>
         <div className={label}>Education</div>
+        <p className={why}>School, degree, field, years. Forms ask for start and graduation year separately.</p>
         {p.education.map((ed, i) => (
           <div key={i} className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-[1fr_90px_1fr_90px]">
             <input className={input} value={ed.school} placeholder="School" onChange={(ev) => set("education", p.education.map((x, j) => j === i ? { ...x, school: ev.target.value } : x))} />
@@ -81,7 +89,8 @@ export function ConfirmForm({ initial }: { initial: P }) {
       </section>
 
       <section className={card}>
-        <div className={label}>Skills you listed · {p.skills.length}</div>
+        <div className={label}>Skills <span className="text-muted">· {p.skills.length}</span></div>
+        <p className={why}>Only things you can talk about in an interview. Each one moves your fit score.</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {p.skills.map((s, i) => (
             <span key={s.key + i} className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-semibold ${s.source === "user" ? "bg-green-chip text-green-chip-text" : "bg-blue-chip text-blue-chip-text"}`}>
@@ -98,6 +107,7 @@ export function ConfirmForm({ initial }: { initial: P }) {
 
       <section className={card}>
         <div className={label}>Facts that filter jobs</div>
+        <p className={why}>Work authorization, where you can work, and your mailing address. Never shown publicly; used to fill forms and hide jobs you can&apos;t take.</p>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className="flex flex-col gap-1 text-sm"><span className="font-semibold">Preferred first name</span>
             <input className={input} value={p.preferredName ?? ""} onChange={(e) => set("preferredName", e.target.value || null)} onBlur={(e) => set("preferredName", tidy(e.target.value))} placeholder="If different from your legal first name" /></label>
