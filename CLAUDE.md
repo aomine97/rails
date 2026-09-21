@@ -14,6 +14,7 @@ Read PLAN.md at the start of every session and work the next unchecked item only
 ## Non-negotiables
 - Every tailored resume line traces to the canonical profile or to a skill the user typed in themselves ("add a skill you actually have"). Show the source; don't lecture the user about it.
 - Human clicks Submit, always. Code never submits. Autopilot prepares; the user approves and clicks.
+- ATS account passwords are generated and stored in the browser only (extension storage), never on Rails servers; auto-clicking Create Account is an opt-in the user turns on.
 - EEO/demographic answers stay client-side (extension storage). Never stored server-side.
 - No placement fees charged to candidates, ever.
 - Telemetry on every extension fill: {domain, ats, selector, field, success} — from user one.

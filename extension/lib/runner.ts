@@ -4,7 +4,9 @@ import { api, getToken, type JobInfo, type Me } from "./api";
 import { fillForm, atsOf, attachFile, type Values, type FillResult } from "./fill";
 import { scanFields, readComboOptions, applyAnswer, type ScannedField } from "./scan";
 import { answerKey, summary, type FormState, type Row } from "./form";
-import { isWorkday, wdStep, wdFillInfo, wdFillExperience, wdFillDisclosures, wdText, type WdReport } from "./workday";
+import { isWorkday, wdStep, wdFillInfo, wdFillExperience, wdFillDisclosures, type WdReport } from "./workday";
+import { accountFor, saveAccount, generatePassword, accountForm } from "./accounts";
+import { setValue } from "./fill";
 
 export type RunFile = { kind: "resume" | "letter"; name: string; type: string; bytes: ArrayBuffer };
 export type RunInput = { me: Me; job: JobInfo | null; files: RunFile[]; learned: Record<string, string[]> };
@@ -81,10 +83,18 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
       if (step.key === "info") rep = await wdFillInfo(input.me, await loadSaved());
       else if (step.key === "experience") rep = await wdFillExperience(input.me, files);
       else if (step.key === "disclosures") rep = await wdFillDisclosures(await loadSaved());
-      else if (step.key === "account") { rep = [{ key: "email", success: wdText("email", input.me.fields.email as string), label: "Email" }]; fs.error = "Create the account yourself (Rails never types passwords), then come back to this drawer."; }
+      else if (step.key === "account") rep = await fillAccount(input.me.fields.email as string, fs);
       else if (step.key === "start") { const r = files.find((x) => x.kind === "resume"); const inp = document.querySelector<HTMLInputElement>('input[data-automation-id="file-upload-input-ref"], input[type="file"]'); if (r && inp) { try { const dt = new DataTransfer(); dt.items.add(r.file); inp.files = dt.files; inp.dispatchEvent(new Event("change", { bubbles: true })); rep = [{ key: "resume", success: true, label: `Resume uploaded for Workday's own parser: ${r.file.name}` }]; } catch { /* left */ } } }
     } catch (e) { fs.error = `Workday step failed: ${String((e as Error).message)}`; }
     for (const r of rep) fs.rows.unshift({ f: { id: `wd:${r.key}`, label: r.label, kind: "text", required: true, filled: r.success, sensitive: false, conditional: false }, s: r.success ? "done" : "left", why: r.success ? undefined : "Set this one on the page." });
+    emit();
+  }
+
+  // 0b. Any other ATS with a sign-in / create-account form (iCIMS, Oracle, Taleo, SuccessFactors): same password-manager behavior.
+  if (!isWorkday() && accountForm().mode) {
+    set("Account…");
+    const rep = await fillAccount(input.me.fields.email as string, fs);
+    for (const r of rep) fs.rows.unshift({ f: { id: `acct:${r.key}`, label: r.label, kind: "text", required: true, filled: r.success, sensitive: false, conditional: false }, s: r.success ? "done" : "left" });
     emit();
   }
 
@@ -128,6 +138,25 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
   fs.running = false; fs.step = ""; fs.filledAt = Date.now(); emit();
   const sm = summary(fs); fs.summaryText = `${sm.done}/${sm.req} required filled`;
   return fs;
+}
+
+/** Sign in with the account saved for this tenant, or create one: email + a generated password, stored only in this browser.
+ *  The Create Account / Sign In click is the user's unless "create accounts for me" is on. */
+export async function fillAccount(email: string, fs: FormState): Promise<WdReport> {
+  const form = accountForm(); if (!form.mode || !form.password) return [];
+  let acct = await accountFor();
+  if (form.mode === "signin") {
+    if (!acct) { fs.error = "No saved account for this site. Use Create Account (Rails will make the password) or sign in yourself."; return [{ key: "account", success: false, label: "Sign in: no saved account for this site" }]; }
+    const ok = (form.email ? setValue(form.email, acct.email) : true) && setValue(form.password, acct.password);
+    fs.account = { email: acct.email, password: acct.password, mode: "signin" };
+    return [{ key: "account", success: ok, label: `Sign in as ${acct.email} (saved on this computer)` }];
+  }
+  if (!acct) { acct = { email, password: generatePassword(), createdAt: Date.now(), host: location.hostname }; await saveAccount(acct); }
+  const ok = (form.email ? setValue(form.email, acct.email) : true) && setValue(form.password, acct.password) && (form.verify ? setValue(form.verify, acct.password) : true);
+  fs.account = { email: acct.email, password: acct.password, mode: "create" };
+  const auto = (await chrome.storage.local.get("rails_auto_accounts").catch(() => ({} as Record<string, unknown>))).rails_auto_accounts === true;
+  if (ok && auto && form.submit) { if (form.terms && !form.terms.checked) form.terms.click(); form.submit.click(); }
+  return [{ key: "account", success: ok, label: `Create account: ${acct.email} + generated password (saved on this computer)` }, ...(form.terms ? [{ key: "terms", success: auto, label: "Terms checkbox" }] : [])];
 }
 
 /** What the user changed by hand after we filled: remembered for the next application on any site. */

@@ -11,9 +11,9 @@ type Tailor = { stage: "offer" | "working" | "preview" | "done" | "skipped"; tex
 type State = {
   open: boolean; busy: string | null; me: Me | null; job: JobInfo | null; input: RunInput | null; form: FormState | null; formOpen: boolean;
   tailor: Tailor; applied: "unknown" | "asked" | "yes" | "no"; pageKind: "job" | "confirmation" | "other"; status: string | null;
-  wdAuto: boolean;
+  wdAuto: boolean; autoAccounts: boolean; showPw: boolean;
 };
-const state: State = { open: false, busy: null, me: null, job: null, input: null, form: null, formOpen: true, tailor: { stage: "offer", added: new Set(), evidenceFor: null }, applied: "unknown", pageKind: "other", status: null, wdAuto: false };
+const state: State = { open: false, busy: null, me: null, job: null, input: null, form: null, formOpen: true, tailor: { stage: "offer", added: new Set(), evidenceFor: null }, applied: "unknown", pageKind: "other", status: null, wdAuto: false, autoAccounts: false, showPw: false };
 
 let host: HTMLElement | null = null; let root: ShadowRoot | null = null; let onOpenPanel: (() => void) | null = null;
 
@@ -123,7 +123,9 @@ function workdayCard(): string {
   return `<div class="card">
     <div class="row" style="justify-content:space-between"><div><h2>Workday</h2><div class="ink" style="font-size:14px;margin-top:2px">${st.index ? `Step ${st.index} of ${st.total} · ` : ""}${esc(st.label || names[st.key])}</div></div>
       <label class="remember" title="After each step is filled, Rails clicks Workday's Save and Continue and fills the next step. Stops before Review."><input type="checkbox" id="wd-auto" ${state.wdAuto ? "checked" : ""}> Fill every step</label></div>
-    ${st.key === "account" ? `<p class="note" style="margin:8px 0 0">Create the account yourself; Rails never types passwords. Once you're in, the drawer fills My Information.</p>` : ""}
+    ${st.key === "account" ? `<p class="note" style="margin:8px 0 0">Rails fills the email and a generated password (kept only in this browser, like a password manager). ${state.autoAccounts ? "It also ticks the terms box and clicks Create Account / Sign In." : "You tick the terms box and click Create Account / Sign In."}</p>
+      <label class="remember" style="margin-top:6px" title="Rails clicks Create Account / Sign In for you. Some employers' terms forbid automated account creation; that is your call."><input type="checkbox" id="auto-acct" ${state.autoAccounts ? "checked" : ""}> Create accounts for me</label>` : ""}
+    ${state.form?.account ? `<div style="margin-top:10px;background:#F5F7FB;border:1px solid #E6EAF2;border-radius:10px;padding:8px 10px;font-size:12px"><div class="row" style="justify-content:space-between"><span class="ink">${state.form.account.mode === "create" ? "New account" : "Saved account"}</span><button class="btn ghost sm" id="pw-copy">Copy password</button></div><div class="muted" style="margin-top:2px">${esc(state.form.account.email)}</div><div style="font-family:ui-monospace,monospace;margin-top:2px">${state.showPw ? esc(state.form.account.password) : "••••••••••••••••"} <button class="btn ghost sm" id="pw-show">${state.showPw ? "Hide" : "Show"}</button></div><div class="note" style="margin-top:4px">Stored only in this browser's extension storage. If the site emails a verification code, paste it yourself.</div></div>` : ""}
     ${st.key === "review" ? `<p class="note" style="margin:8px 0 0">Read it through. Submit is yours.</p>` : ""}
     ${st.key === "identify" ? `<p class="note" style="margin:8px 0 0">Self-identification needs your own signature and date; Rails leaves it to you.</p>` : ""}
     ${done && st.key !== "review" && wdNextButton() ? `<button class="btn secondary" id="wd-next" style="margin-top:10px;width:100%">Save and Continue →</button>` : ""}
@@ -187,6 +189,9 @@ function bind() {
   q<HTMLElement>("#form-head")?.addEventListener("click", () => { state.formOpen = !state.formOpen; render(); });
   q<HTMLInputElement>("#wd-auto")?.addEventListener("change", (e) => { state.wdAuto = (e.target as HTMLInputElement).checked; chrome.storage.local.set({ rails_wd_auto: state.wdAuto }).catch(() => {}); });
   q<HTMLButtonElement>("#wd-next")?.addEventListener("click", () => void wdNext());
+  q<HTMLInputElement>("#auto-acct")?.addEventListener("change", (e) => { state.autoAccounts = (e.target as HTMLInputElement).checked; chrome.storage.local.set({ rails_auto_accounts: state.autoAccounts }).catch(() => {}); render(); });
+  q<HTMLButtonElement>("#pw-show")?.addEventListener("click", () => { state.showPw = !state.showPw; render(); });
+  q<HTMLButtonElement>("#pw-copy")?.addEventListener("click", () => { if (state.form?.account) void navigator.clipboard.writeText(state.form.account.password); });
   for (const img of root?.querySelectorAll<HTMLImageElement>(".clogo img") ?? []) img.onerror = () => { const d = img.parentElement!; d.style.background = "#0B1B3A"; d.textContent = img.dataset.fb ?? "•"; };
   const fs = state.form; if (!fs) return;
   for (const sel of root?.querySelectorAll<HTMLSelectElement>(".pick:not([multiple])") ?? []) sel.onchange = () => { if (sel.value) void one(sel.dataset.id!, sel.value); };
@@ -306,10 +311,10 @@ export function mountDrawer(opts: { openPanel: () => void }) {
   (document.body ?? document.documentElement).appendChild(host);
   render();
   if (isWorkday()) {
-    chrome.storage.local.get("rails_wd_auto").then((r) => { state.wdAuto = r.rails_wd_auto === true; render(); }).catch(() => {});
+    chrome.storage.local.get(["rails_wd_auto", "rails_auto_accounts"]).then((r) => { state.wdAuto = r.rails_wd_auto === true; state.autoAccounts = r.rails_auto_accounts === true; render(); }).catch(() => {});
     watchSteps((step) => {
       state.form = null; state.input = null; state.status = null; render();
-      if (state.wdAuto && state.me && ["info", "experience", "questions", "disclosures"].includes(step.key)) { setOpen(true); void startFill().then(async () => { if (state.wdAuto && state.form && !state.form.error && state.form.rows.every((r) => r.s !== "left" && r.s !== "failed")) await wdNext(); }); }
+      if (state.wdAuto && state.me && (["info", "experience", "questions", "disclosures"].includes(step.key) || (step.key === "account" && state.autoAccounts))) { setOpen(true); void startFill().then(async () => { if (state.wdAuto && state.form && !state.form.error && state.form.rows.every((r) => r.s !== "left" && r.s !== "failed")) await wdNext(); }); }
       else if (["info", "experience", "questions", "disclosures"].includes(step.key)) { state.status = `New step: ${step.label}. Autofill fills it.`; setOpen(true); render(); }
     });
   }

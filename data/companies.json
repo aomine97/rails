@@ -61,7 +61,7 @@
     "name": "NVIDIA",
     "ats": "workday",
     "slug": "NVIDIAExternalCareerSite",
-    "careersUrl": "https://nvidia.wd5.myworkdayjobs.com",
+    "careersUrl": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
     "sample": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite/job/US-CA-Santa-Clara/NVIDIA-2027-Internships--Software-Engineering_JR2023495?utm_source=Simplify&ref=Simplify",
     "roles": 32,
     "tenant": "nvidia",
@@ -82,8 +82,8 @@
   {
     "name": "GE Vernova",
     "ats": "workday",
-    "slug": "vernova_externalsite",
-    "careersUrl": "https://gevernova.wd5.myworkdayjobs.com",
+    "slug": "Vernova_ExternalSite",
+    "careersUrl": "https://gevernova.wd5.myworkdayjobs.com/Vernova_ExternalSite",
     "sample": "https://gevernova.wd5.myworkdayjobs.com/vernova_externalsite/job/Bellevue/GE-Vernova---Energy-Optimization-Software-Engineer-Intern---Summer-2027_R5050015-2?utm_source=Simplify&ref=Simplify",
     "roles": 28,
     "tenant": "gevernova",
@@ -96,7 +96,9 @@
     "slug": "careersus-shure",
     "careersUrl": "https://careersus-shure.icims.com",
     "sample": "https://careersus-shure.icims.com/jobs/4956/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 28
+    "roles": 28,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Navy Federal",
@@ -195,15 +197,17 @@
     "name": "National Information Solutions Cooperative",
     "ats": "greenhouse",
     "slug": "nisc",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/nisc",
     "sample": "https://job-boards.greenhouse.io/nisc/jobs/8204086?utm_source=Simplify&ref=Simplify",
-    "roles": 13
+    "roles": 13,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "NXP Semiconductors",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://nxp.wd3.myworkdayjobs.com",
+    "careersUrl": "https://nxp.wd3.myworkdayjobs.com/careers",
     "sample": "https://nxp.wd3.myworkdayjobs.com/en-US/careers/job/Austin-Ed-Bluestein-Office/Data-Science---Structured-Problem-Solving-Intern---Summer-2027_R-10065037?utm_source=Simplify&ref=Simplify",
     "roles": 13,
     "tenant": "nxp",
@@ -233,9 +237,11 @@
     "name": "Palantir",
     "ats": "lever",
     "slug": "palantir",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/palantir",
     "sample": "https://jobs.lever.co/palantir/d372c805-d0cd-4a10-9522-fbecc78d6f3e/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 12
+    "roles": 12,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Textron",
@@ -249,7 +255,7 @@
     "name": "Visa",
     "ats": "workday",
     "slug": "Visa",
-    "careersUrl": "https://visa.wd5.myworkdayjobs.com",
+    "careersUrl": "https://visa.wd5.myworkdayjobs.com/Visa",
     "sample": "https://visa.wd5.myworkdayjobs.com/Visa/job/US---Austin-TX/Software-Engineer--Intern---2027-Austin--TX_REF088544W-1?utm_source=Simplify&ref=Simplify",
     "roles": 12,
     "tenant": "visa",
@@ -258,13 +264,13 @@
   },
   {
     "name": "General Motors",
-    "ats": "workday",
-    "slug": "Careers_GM",
-    "careersUrl": "https://generalmotors.wd5.myworkdayjobs.com",
+    "ats": "greenhouse",
+    "slug": "general",
+    "careersUrl": "https://job-boards.greenhouse.io/general",
     "sample": "https://generalmotors.wd5.myworkdayjobs.com/en-CA/Careers_GM/job/Warren-Michigan-United-States-of-America/XMLNAME-2027-Summer-Intern---Digital-Product--Product-Management--MBA-_JR-202620538?utm_source=Simplify&ref=Simplify",
     "roles": 11,
-    "tenant": "generalmotors",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": "en-CA"
   },
   {
@@ -282,23 +288,27 @@
     "name": "Schonfeld",
     "ats": "greenhouse",
     "slug": "schonfeld",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/schonfeld",
     "sample": "https://job-boards.greenhouse.io/schonfeld/jobs/8180089?utm_source=Simplify&ref=Simplify",
-    "roles": 11
+    "roles": 11,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SpaceX",
     "ats": "greenhouse",
     "slug": "spacex",
-    "careersUrl": "https://boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/spacex",
     "sample": "https://boards.greenhouse.io/spacex/jobs/8621757002?utm_source=Simplify&ref=Simplify",
-    "roles": 11
+    "roles": 11,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Amgen",
     "ats": "workday",
-    "slug": "careers",
-    "careersUrl": "https://amgen.wd1.myworkdayjobs.com",
+    "slug": "Careers",
+    "careersUrl": "https://amgen.wd1.myworkdayjobs.com/Careers",
     "sample": "https://amgen.wd1.myworkdayjobs.com/careers/job/United-States---Remote/Undergrad-Intern---Software-Engineer---Amgen-s-Technology---Medical-Organizations--Summer-2027-_R-255719?utm_source=Simplify&ref=Simplify",
     "roles": 10,
     "tenant": "amgen",
@@ -318,13 +328,13 @@
   },
   {
     "name": "CACI",
-    "ats": "workday",
-    "slug": "external",
-    "careersUrl": "https://caci.wd1.myworkdayjobs.com",
+    "ats": "smartrecruiters",
+    "slug": "caci",
+    "careersUrl": "https://jobs.smartrecruiters.com/caci",
     "sample": "https://caci.wd1.myworkdayjobs.com/external/job/437-DENVER-CO/Cleared-Software-Engineer-Intern---Summer-2027_331999?utm_source=Simplify&ref=Simplify",
     "roles": 10,
-    "tenant": "caci",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -395,9 +405,11 @@
     "name": "DV Trading",
     "ats": "greenhouse",
     "slug": "dvtrading",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/dvtrading",
     "sample": "https://job-boards.greenhouse.io/dvtrading/jobs/4733138005?utm_source=Simplify&ref=Simplify",
-    "roles": 9
+    "roles": 9,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Intuit",
@@ -441,19 +453,21 @@
     "name": "Robinhood",
     "ats": "greenhouse",
     "slug": "robinhood",
-    "careersUrl": "https://boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/robinhood",
     "sample": "https://boards.greenhouse.io/robinhood/jobs/8142959?utm_source=Simplify&ref=Simplify",
-    "roles": 9
+    "roles": 9,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Sierra Nevada Corporation",
-    "ats": "workday",
-    "slug": "snc_external_career_site",
-    "careersUrl": "https://snc.wd1.myworkdayjobs.com",
+    "ats": "ashby",
+    "slug": "sierra",
+    "careersUrl": "https://jobs.ashbyhq.com/sierra",
     "sample": "https://snc.wd1.myworkdayjobs.com/snc_external_career_site/job/Sparks-NV/Software-Engineering-Intern--Summer-2027-_R0030760?utm_source=Simplify&ref=Simplify",
     "roles": 9,
-    "tenant": "snc",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -471,9 +485,11 @@
     "name": "Veeam Software",
     "ats": "greenhouse",
     "slug": "veeamsoftware",
-    "careersUrl": "https://job-boards.eu.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/veeamsoftware",
     "sample": "https://job-boards.eu.greenhouse.io/veeamsoftware/jobs/4955293101?utm_source=Simplify&ref=Simplify",
-    "roles": 9
+    "roles": 9,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Blue Origin",
@@ -489,10 +505,12 @@
   {
     "name": "Coinbase",
     "ats": "greenhouse",
-    "slug": "embed",
-    "careersUrl": "https://boards.greenhouse.io",
+    "slug": "coinbase",
+    "careersUrl": "https://job-boards.greenhouse.io/coinbase",
     "sample": "https://boards.greenhouse.io/embed/job_app?token=8168315&utm_source=Simplify&ref=Simplify",
-    "roles": 8
+    "roles": 8,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Goldman Sachs",
@@ -515,20 +533,20 @@
   },
   {
     "name": "LPL Financial Holdings",
-    "ats": "workday",
-    "slug": "university",
-    "careersUrl": "https://lplfinancial.wd1.myworkdayjobs.com",
+    "ats": "greenhouse",
+    "slug": "lpl",
+    "careersUrl": "https://job-boards.greenhouse.io/lpl",
     "sample": "https://lplfinancial.wd1.myworkdayjobs.com/university/job/Fort-MillCharlotte/Summer-Intern-2027--Software-Engineer_R-052921?utm_source=Simplify&ref=Simplify",
     "roles": 8,
-    "tenant": "lplfinancial",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
     "name": "Motorola",
     "ats": "workday",
-    "slug": "Careers",
-    "careersUrl": "https://motorolasolutions.wd5.myworkdayjobs.com",
+    "slug": "careers",
+    "careersUrl": "https://motorolasolutions.wd5.myworkdayjobs.com/careers",
     "sample": "https://motorolasolutions.wd5.myworkdayjobs.com/Careers/job/Chicago-IL/Software-Engineering-Intern---Summer-2027_R68388?utm_source=Simplify&ref=Simplify",
     "roles": 8,
     "tenant": "motorolasolutions",
@@ -552,7 +570,9 @@
     "slug": "careers-springswindowfashions",
     "careersUrl": "https://careers-springswindowfashions.icims.com",
     "sample": "https://careers-springswindowfashions.icims.com/jobs/12891/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 8
+    "roles": 8,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "The Hartford",
@@ -567,22 +587,24 @@
   },
   {
     "name": "Allied Solutions",
-    "ats": "workday",
-    "slug": "Allied_External",
-    "careersUrl": "https://alliedsolutions.wd501.myworkdayjobs.com",
+    "ats": "greenhouse",
+    "slug": "allied",
+    "careersUrl": "https://job-boards.greenhouse.io/allied",
     "sample": "https://alliedsolutions.wd501.myworkdayjobs.com/Allied_External/job/Carmel-IN/Software-Engineering-Intern_R-011087?utm_source=Simplify&ref=Simplify",
     "roles": 7,
-    "tenant": "alliedsolutions",
-    "wdn": 501,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
     "name": "Bedrock Robotics",
     "ats": "ashby",
-    "slug": "bedrock-robotics",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/bedrock-robotics/8927dd7e-a48d-49a2-92eb-09ec059432f4/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 7
+    "roles": 7,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cox",
@@ -627,8 +649,8 @@
   {
     "name": "LSEG",
     "ats": "workday",
-    "slug": "Graduate_Careers",
-    "careersUrl": "https://lseg.wd3.myworkdayjobs.com",
+    "slug": "careers",
+    "careersUrl": "https://lseg.wd3.myworkdayjobs.com/careers",
     "sample": "https://lseg.wd3.myworkdayjobs.com/Graduate_Careers/job/Greater-Charlotte-Area-United-States/Engineering-Summer-Internship-Programme_R0123571?utm_source=Simplify&ref=Simplify",
     "roles": 7,
     "tenant": "lseg",
@@ -689,24 +711,24 @@
   },
   {
     "name": "USAA",
-    "ats": "workday",
-    "slug": "USAAJOBSWD",
-    "careersUrl": "https://usaa.wd1.myworkdayjobs.com",
+    "ats": "icims",
+    "slug": "careers-usaa",
+    "careersUrl": "https://careers-usaa.icims.com",
     "sample": "https://usaa.wd1.myworkdayjobs.com/en-US/USAAJOBSWD/job/San-Antonio-Home-Office-I/Technology-Intern_R0120133?utm_source=Simplify&ref=Simplify",
     "roles": 7,
-    "tenant": "usaa",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": "en-US"
   },
   {
     "name": "Vanguard",
-    "ats": "workday",
-    "slug": "contractors_restricted",
-    "careersUrl": "https://vanguard.wd5.myworkdayjobs.com",
+    "ats": "icims",
+    "slug": "careers-vanguard",
+    "careersUrl": "https://careers-vanguard.icims.com",
     "sample": "https://vanguard.wd5.myworkdayjobs.com/en-US/contractors_restricted/job/DallasFt-Worth-TX/XMLNAME-2027-Spring-Summer-Co-op-Opportunities---Dallas_182410?utm_source=Simplify&ref=Simplify",
     "roles": 7,
-    "tenant": "vanguard",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": "en-US"
   },
   {
@@ -749,13 +771,13 @@
   },
   {
     "name": "Capital One",
-    "ats": "workday",
-    "slug": "Capital_One",
-    "careersUrl": "https://capitalone.wd12.myworkdayjobs.com",
+    "ats": "lever",
+    "slug": "capital",
+    "careersUrl": "https://jobs.lever.co/capital",
     "sample": "https://capitalone.wd12.myworkdayjobs.com/Capital_One/job/New-York-NY/Current-PhD--AI-Engineering-Internship-Program---Summer-2027_R249110-1?utm_source=Simplify&ref=Simplify",
     "roles": 6,
-    "tenant": "capitalone",
-    "wdn": 12,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -769,8 +791,8 @@
   {
     "name": "Ciena",
     "ats": "workday",
-    "slug": "Careers",
-    "careersUrl": "https://ciena.wd5.myworkdayjobs.com",
+    "slug": "careers",
+    "careersUrl": "https://ciena.wd5.myworkdayjobs.com/careers",
     "sample": "https://ciena.wd5.myworkdayjobs.com/Careers/job/Ottawa/NPI-Hardware-Co-op--8-month---January-2027-_R031642?utm_source=Simplify&ref=Simplify",
     "roles": 6,
     "tenant": "ciena",
@@ -792,7 +814,7 @@
     "name": "Freddie Mac",
     "ats": "workday",
     "slug": "External",
-    "careersUrl": "https://freddiemac.wd5.myworkdayjobs.com",
+    "careersUrl": "https://freddiemac.wd5.myworkdayjobs.com/External",
     "sample": "https://freddiemac.wd5.myworkdayjobs.com/External/job/McLean-VA/Single-Family-Software-Developer-Intern--Summer-2027_JR17544?utm_source=Simplify&ref=Simplify",
     "roles": 6,
     "tenant": "freddiemac",
@@ -803,15 +825,17 @@
     "name": "HP IQ",
     "ats": "greenhouse",
     "slug": "hpiq",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/hpiq",
     "sample": "https://job-boards.greenhouse.io/hpiq/jobs/6111955004?utm_source=Simplify&ref=Simplify",
-    "roles": 6
+    "roles": 6,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Intel",
     "ats": "workday",
-    "slug": "en-us",
-    "careersUrl": "https://intel.wd1.myworkdayjobs.com",
+    "slug": "External",
+    "careersUrl": "https://intel.wd1.myworkdayjobs.com/External",
     "sample": "https://intel.wd1.myworkdayjobs.com/en-us/external/job/US-Oregon-Hillsboro/Software-Engineering---Intern--Graduate_JR0286836?utm_source=Simplify&ref=Simplify",
     "roles": 6,
     "tenant": "intel",
@@ -863,7 +887,7 @@
     "name": "Nationwide",
     "ats": "workday",
     "slug": "Nationwide_Career",
-    "careersUrl": "https://nationwide.wd1.myworkdayjobs.com",
+    "careersUrl": "https://nationwide.wd1.myworkdayjobs.com/Nationwide_Career",
     "sample": "https://nationwide.wd1.myworkdayjobs.com/Nationwide_Career/job/Ohio---Columbus-One-Nationwide-Plaza/Summer-2027-Personal-Lines-Business-Insights-Intern_100197?utm_source=Simplify&ref=Simplify",
     "roles": 6,
     "tenant": "nationwide",
@@ -874,7 +898,7 @@
     "name": "OCC",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://theocc.wd5.myworkdayjobs.com",
+    "careersUrl": "https://theocc.wd5.myworkdayjobs.com/careers",
     "sample": "https://theocc.wd5.myworkdayjobs.com/careers/job/Chicago---125-S-Franklin/Year-Round-Intern---AI-Research---Engineering_REQ-4833?utm_source=Simplify&ref=Simplify",
     "roles": 6,
     "tenant": "theocc",
@@ -906,9 +930,11 @@
     "name": "Together AI",
     "ats": "greenhouse",
     "slug": "togetherai",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/togetherai",
     "sample": "https://job-boards.greenhouse.io/togetherai/jobs/5232036007?utm_source=Simplify&ref=Simplify",
-    "roles": 6
+    "roles": 6,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Westinghouse Electric Company",
@@ -920,20 +946,20 @@
   },
   {
     "name": "Applied Materials",
-    "ats": "workday",
-    "slug": "External",
-    "careersUrl": "https://amat.wd1.myworkdayjobs.com",
+    "ats": "ashby",
+    "slug": "applied",
+    "careersUrl": "https://jobs.ashbyhq.com/applied",
     "sample": "https://amat.wd1.myworkdayjobs.com/External/job/AlbanyNY/Summer-2027-Global-Technical-Learning-Center-Data-Analyst-Intern--Bachelor-s-Master-s--Albany--NY-_R2627551?utm_source=Simplify&ref=Simplify",
     "roles": 5,
-    "tenant": "amat",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
     "name": "Boeing",
     "ats": "workday",
     "slug": "EXTERNAL_CAREERS",
-    "careersUrl": "https://boeing.wd1.myworkdayjobs.com",
+    "careersUrl": "https://boeing.wd1.myworkdayjobs.com/EXTERNAL_CAREERS",
     "sample": "https://boeing.wd1.myworkdayjobs.com/EXTERNAL_CAREERS/job/USA---Tukwila-WA/Boeing-Engineering---Technology-Innovation-Graduate-Researcher-Program--Software-Engineering-Artificial-Intelligence-Intern_JR2026523687?utm_source=Simplify&ref=Simplify",
     "roles": 5,
     "tenant": "boeing",
@@ -942,13 +968,13 @@
   },
   {
     "name": "Brunswick",
-    "ats": "workday",
-    "slug": "search",
-    "careersUrl": "https://brunswick.wd1.myworkdayjobs.com",
+    "ats": "ashby",
+    "slug": "brunswick",
+    "careersUrl": "https://jobs.ashbyhq.com/brunswick",
     "sample": "https://brunswick.wd1.myworkdayjobs.com/en-US/search/job/Fond-du-Lac-WI/Mercury-Marine---Systems-Software-Engineering-Co-op_JR-051212?utm_source=Simplify&ref=Simplify",
     "roles": 5,
-    "tenant": "brunswick",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": "en-US"
   },
   {
@@ -981,10 +1007,12 @@
   {
     "name": "Duolingo",
     "ats": "greenhouse",
-    "slug": "duolingounirecruitment",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "slug": "duolingo",
+    "careersUrl": "https://job-boards.greenhouse.io/duolingo",
     "sample": "https://job-boards.greenhouse.io/duolingounirecruitment/jobs/8806115002?utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Emerson Electric",
@@ -1014,9 +1042,11 @@
     "name": "Gallup",
     "ats": "greenhouse",
     "slug": "gallup",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/gallup",
     "sample": "https://job-boards.greenhouse.io/gallup/jobs/4395897009?utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "General Dynamics Mission Systems",
@@ -1024,7 +1054,9 @@
     "slug": "careers-gdms",
     "careersUrl": "https://careers-gdms.icims.com",
     "sample": "https://careers-gdms.icims.com/jobs/74848/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "GM financial",
@@ -1048,10 +1080,12 @@
   {
     "name": "ID.me",
     "ats": "greenhouse",
-    "slug": "idmeuniversityrecruiting",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "slug": "idme",
+    "careersUrl": "https://job-boards.greenhouse.io/idme",
     "sample": "https://job-boards.greenhouse.io/idmeuniversityrecruiting/jobs/7980429003?utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "LexisNexis Risk Solutions",
@@ -1067,8 +1101,8 @@
   {
     "name": "Mastercard",
     "ats": "workday",
-    "slug": "Campus",
-    "careersUrl": "https://mastercard.wd1.myworkdayjobs.com",
+    "slug": "CorporateCareers",
+    "careersUrl": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers",
     "sample": "https://mastercard.wd1.myworkdayjobs.com/Campus/job/OFallon-Missouri/Product-Management---Technical-Intern--Summer-2027---St-Louis--MO--US_R-284711?utm_source=Simplify&ref=Simplify",
     "roles": 5,
     "tenant": "mastercard",
@@ -1090,9 +1124,11 @@
     "name": "Perpay",
     "ats": "greenhouse",
     "slug": "perpay",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/perpay",
     "sample": "https://job-boards.greenhouse.io/perpay/jobs/4076978007?utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Pilot Company",
@@ -1106,9 +1142,11 @@
     "name": "Rocket Lab USA",
     "ats": "greenhouse",
     "slug": "rocketlab",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/rocketlab",
     "sample": "https://job-boards.greenhouse.io/rocketlab/jobs/7990138003?utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "RoviSys",
@@ -1116,13 +1154,15 @@
     "slug": "careers-rovisys",
     "careersUrl": "https://careers-rovisys.icims.com",
     "sample": "https://careers-rovisys.icims.com/jobs/2131/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Stryker",
     "ats": "workday",
     "slug": "StrykerCareers",
-    "careersUrl": "https://stryker.wd1.myworkdayjobs.com",
+    "careersUrl": "https://stryker.wd1.myworkdayjobs.com/StrykerCareers",
     "sample": "https://stryker.wd1.myworkdayjobs.com/StrykerCareers/job/San-Jose-California/Summer-2027-Internship---Software-Engineering---California_R572624?utm_source=Simplify&ref=Simplify",
     "roles": 5,
     "tenant": "stryker",
@@ -1132,10 +1172,12 @@
   {
     "name": "Susquehanna International Group",
     "ats": "icims",
-    "slug": "careers-sig",
-    "careersUrl": "https://careers-sig.icims.com",
+    "slug": "sig",
+    "careersUrl": "https://sig.icims.com",
     "sample": "https://careers-sig.icims.com/jobs/11334/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Teledyne",
@@ -1151,10 +1193,12 @@
   {
     "name": "Verkada",
     "ats": "greenhouse",
-    "slug": "verkada",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "slug": "verkada2",
+    "careersUrl": "https://job-boards.greenhouse.io/verkada2",
     "sample": "https://job-boards.greenhouse.io/verkada/jobs/5219131007?utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Vermeer",
@@ -1181,7 +1225,9 @@
     "slug": "careers-westernsouthern",
     "careersUrl": "https://careers-westernsouthern.icims.com",
     "sample": "https://careers-westernsouthern.icims.com/jobs/25245/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 5
+    "roles": 5,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Wex",
@@ -1248,7 +1294,7 @@
     "name": "Baird",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://baird.wd1.myworkdayjobs.com",
+    "careersUrl": "https://baird.wd1.myworkdayjobs.com/careers",
     "sample": "https://baird.wd1.myworkdayjobs.com/careers/job/WI-Milwaukee/Internship---Software-Developer--Year-Round-_R20261024-1?utm_source=Simplify&ref=Simplify",
     "roles": 4,
     "tenant": "baird",
@@ -1300,9 +1346,11 @@
     "name": "Compeer Financial",
     "ats": "greenhouse",
     "slug": "compeerfinancial",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/compeerfinancial",
     "sample": "https://job-boards.greenhouse.io/compeerfinancial/jobs/5404850008?utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Constellation Energy",
@@ -1316,13 +1364,13 @@
   },
   {
     "name": "CoStar Group",
-    "ats": "workday",
-    "slug": "Costar_Campus",
-    "careersUrl": "https://costar.wd1.myworkdayjobs.com",
+    "ats": "greenhouse",
+    "slug": "costar",
+    "careersUrl": "https://job-boards.greenhouse.io/costar",
     "sample": "https://costar.wd1.myworkdayjobs.com/Costar_Campus/job/Irvine-US/Summer-2027-Technology-Intern---Irvine--CA_R39673?utm_source=Simplify&ref=Simplify",
     "roles": 4,
-    "tenant": "costar",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -1392,13 +1440,13 @@
   },
   {
     "name": "General Dynamics Information Technology",
-    "ats": "workday",
-    "slug": "external_career_site",
-    "careersUrl": "https://gdit.wd5.myworkdayjobs.com",
+    "ats": "greenhouse",
+    "slug": "general",
+    "careersUrl": "https://job-boards.greenhouse.io/general",
     "sample": "https://gdit.wd5.myworkdayjobs.com/external_career_site/job/USA-VA-Falls-Church/Summer-2027-Software-Development-Internship_RQ228405?utm_source=Simplify&ref=Simplify",
     "roles": 4,
-    "tenant": "gdit",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -1441,18 +1489,22 @@
   {
     "name": "Northwood Space",
     "ats": "ashby",
-    "slug": "NorthwoodSpace",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/NorthwoodSpace/ce3d4b73-461e-4128-a6f1-f933897e8119/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Notion",
     "ats": "ashby",
     "slug": "notion",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "careersUrl": "https://jobs.ashbyhq.com/notion",
     "sample": "https://jobs.ashbyhq.com/notion/3fba1c39-c5cb-47d7-9ad2-1cec4d7e9d0c/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Optiver",
@@ -1497,10 +1549,12 @@
   {
     "name": "Revel",
     "ats": "ashby",
-    "slug": "revel",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/revel/29968ce1-8838-44e8-ac4e-6b1c87ce5314/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Roblox",
@@ -1516,17 +1570,21 @@
     "name": "Scale AI",
     "ats": "greenhouse",
     "slug": "scaleai",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/scaleai",
     "sample": "https://job-boards.greenhouse.io/scaleai/jobs/4730846005?utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Solidigm",
     "ats": "smartrecruiters",
-    "slug": "Solidigm",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "solidigm",
+    "careersUrl": "https://jobs.smartrecruiters.com/solidigm",
     "sample": "https://jobs.smartrecruiters.com/Solidigm/744000147613769?utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Stripe",
@@ -1541,10 +1599,12 @@
   {
     "name": "Talos",
     "ats": "ashby",
-    "slug": "Talos-Trading",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Talos-Trading/42cad756-c312-4142-a9b7-18ed76f61c5d/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "TD Bank",
@@ -1568,10 +1628,12 @@
   {
     "name": "Texas Sports Academy",
     "ats": "workable",
-    "slug": "texas-sports-academy-main",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/texas-sports-academy-main/j/CC2A1186D4/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "The Home Depot",
@@ -1616,26 +1678,32 @@
   {
     "name": "Western Digital",
     "ats": "smartrecruiters",
-    "slug": "WesternDigital",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "westerndigital",
+    "careersUrl": "https://jobs.smartrecruiters.com/westerndigital",
     "sample": "https://jobs.smartrecruiters.com/WesternDigital/744000149367234?utm_source=Simplify&ref=Simplify",
-    "roles": 4
+    "roles": 4,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "AbbVie",
     "ats": "smartrecruiters",
-    "slug": "AbbVie",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "abbvie",
+    "careersUrl": "https://jobs.smartrecruiters.com/abbvie",
     "sample": "https://jobs.smartrecruiters.com/AbbVie/3743990014860306?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Allen Control Systems",
     "ats": "ashby",
-    "slug": "allen-control-systems",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/allen-control-systems/a7831fef-7125-4c03-b828-5f0472989037/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Altar'd State",
@@ -1667,10 +1735,12 @@
   {
     "name": "Apex",
     "ats": "ashby",
-    "slug": "apex-technology-inc",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/apex-technology-inc/2d5ad921-241f-4e7a-b9ff-9d01763da88c/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Apple",
@@ -1684,9 +1754,11 @@
     "name": "Applied Intuition",
     "ats": "ashby",
     "slug": "applied",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "careersUrl": "https://jobs.ashbyhq.com/applied",
     "sample": "https://jobs.ashbyhq.com/applied/a837cbd6-9fe4-4d74-a2dc-84f602c40694/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "C3.ai",
@@ -1712,10 +1784,12 @@
   {
     "name": "Chicago Trading Company",
     "ats": "greenhouse",
-    "slug": "chicagotradingcampus",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "slug": "chicagotrading",
+    "careersUrl": "https://job-boards.greenhouse.io/chicagotrading",
     "sample": "https://job-boards.greenhouse.io/chicagotradingcampus/jobs/4716932005?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Collier Aerospace",
@@ -1756,7 +1830,7 @@
     "name": "DIRECTV",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://directv.wd1.myworkdayjobs.com",
+    "careersUrl": "https://directv.wd1.myworkdayjobs.com/careers",
     "sample": "https://directv.wd1.myworkdayjobs.com/careers/job/El-Segundo-CA/Customer-Operations-Intern_R260273?utm_source=Simplify&ref=Simplify",
     "roles": 3,
     "tenant": "directv",
@@ -1812,26 +1886,32 @@
   {
     "name": "Gecko Robotics",
     "ats": "ashby",
-    "slug": "gecko-robotics",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/gecko-robotics/01138338-ff3c-4982-8ba3-5401386bf082/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "General Dynamics UK",
-    "ats": "smartrecruiters",
-    "slug": "GDMSI",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "ats": "greenhouse",
+    "slug": "general",
+    "careersUrl": "https://job-boards.greenhouse.io/general",
     "sample": "https://jobs.smartrecruiters.com/GDMSI/744000147541849?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "General Matter",
     "ats": "greenhouse",
     "slug": "generalmatter",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/generalmatter",
     "sample": "https://job-boards.greenhouse.io/generalmatter/jobs/5377118008?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hexagon AB",
@@ -1839,7 +1919,9 @@
     "slug": "careers-hexagonpositioning",
     "careersUrl": "https://careers-hexagonpositioning.icims.com",
     "sample": "https://careers-hexagonpositioning.icims.com/jobs/3085/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hy-Vee",
@@ -1856,9 +1938,11 @@
     "name": "Immuta",
     "ats": "lever",
     "slug": "immuta",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/immuta",
     "sample": "https://jobs.lever.co/immuta/bf3c9d23-8da9-4a11-adf6-ecb7bce82ad4/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Impulse Space",
@@ -1882,7 +1966,7 @@
     "name": "KBR",
     "ats": "workday",
     "slug": "KBR_Careers",
-    "careersUrl": "https://kbr.wd5.myworkdayjobs.com",
+    "careersUrl": "https://kbr.wd5.myworkdayjobs.com/KBR_Careers",
     "sample": "https://kbr.wd5.myworkdayjobs.com/KBR_Careers/job/Chantilly-Virginia/JR-Software-Engineer_R2128745?utm_source=Simplify&ref=Simplify",
     "roles": 3,
     "tenant": "kbr",
@@ -1912,10 +1996,12 @@
   {
     "name": "Klaviyo",
     "ats": "greenhouse",
-    "slug": "klaviyocampus",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "slug": "klaviyo",
+    "careersUrl": "https://job-boards.greenhouse.io/klaviyo",
     "sample": "https://job-boards.greenhouse.io/klaviyocampus/jobs/7989364003?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Lawrence Livermore National Laboratory (LLNL)",
@@ -1931,7 +2017,9 @@
     "slug": "uscareers-lennox",
     "careersUrl": "https://uscareers-lennox.icims.com",
     "sample": "https://uscareers-lennox.icims.com/jobs/54893/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "LexisNexis Legal & Professional",
@@ -2028,17 +2116,21 @@
     "name": "RF-SMART",
     "ats": "greenhouse",
     "slug": "rfsmart",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/rfsmart",
     "sample": "https://job-boards.greenhouse.io/rfsmart/jobs/5407206008?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Robert Bosch Venture Capital",
     "ats": "smartrecruiters",
-    "slug": "BoschGroup",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "robertbosch",
+    "careersUrl": "https://jobs.smartrecruiters.com/robertbosch",
     "sample": "https://jobs.smartrecruiters.com/BoschGroup/744000150217869?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Saab",
@@ -2065,10 +2157,12 @@
   {
     "name": "SentiLink",
     "ats": "ashby",
-    "slug": "sentilink",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/sentilink/f9a47314-c48a-4053-a113-6974b211559f/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Sun Life",
@@ -2084,10 +2178,12 @@
   {
     "name": "Superhuman",
     "ats": "ashby",
-    "slug": "Superhuman%20Platform%20Inc",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Superhuman%20Platform%20Inc/5f1f25ee-709d-4ae0-ada4-d1f243bde89c/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Tradeweb",
@@ -2100,10 +2196,12 @@
   {
     "name": "TWG Global",
     "ats": "workable",
-    "slug": "twgai",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/twgai/j/772CD136FF/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Two Sigma",
@@ -2137,10 +2235,12 @@
   {
     "name": "WallStreetQuants",
     "ats": "workable",
-    "slug": "wallstreetquants",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/wallstreetquants/j/62537809CA/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Walmart",
@@ -2183,10 +2283,12 @@
   {
     "name": "Zip",
     "ats": "ashby",
-    "slug": "zip",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/zip/249837b3-106f-4751-a4f2-03a2c5df5faf/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 3
+    "roles": 3,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "9to9 Software Solutions",
@@ -2230,9 +2332,11 @@
     "name": "Appian",
     "ats": "greenhouse",
     "slug": "appian",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/appian",
     "sample": "https://job-boards.greenhouse.io/appian/jobs/8041237?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "AQR Capital Management",
@@ -2247,10 +2351,12 @@
   {
     "name": "Atoms",
     "ats": "greenhouse",
-    "slug": "cssmerge",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "slug": "atoms",
+    "careersUrl": "https://job-boards.greenhouse.io/atoms",
     "sample": "https://job-boards.greenhouse.io/cssmerge/jobs/8693034002?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Awardco",
@@ -2265,10 +2371,12 @@
   {
     "name": "Axon",
     "ats": "greenhouse",
-    "slug": "axontalentcommunity",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "slug": "axon",
+    "careersUrl": "https://job-boards.greenhouse.io/axon",
     "sample": "https://job-boards.greenhouse.io/axontalentcommunity/jobs/7800627003?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Bank of Montreal",
@@ -2284,10 +2392,12 @@
   {
     "name": "Barnes & Thornburg",
     "ats": "ashby",
-    "slug": "barnes",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/barnes/af9258a6-b6e6-4714-92dc-a9952c0590a7/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Barr",
@@ -2304,9 +2414,11 @@
     "name": "Belvedere Trading",
     "ats": "lever",
     "slug": "belvederetrading",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/belvederetrading",
     "sample": "https://jobs.lever.co/belvederetrading/10746b3d-1760-4573-9b63-b93f5a5e4fc0/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Blackhawk Network Holdings",
@@ -2314,7 +2426,9 @@
     "slug": "careers-blackhawknetwork",
     "careersUrl": "https://careers-blackhawknetwork.icims.com",
     "sample": "https://careers-blackhawknetwork.icims.com/jobs/26868/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Bosch Home Comfort",
@@ -2360,34 +2474,42 @@
   {
     "name": "Cerebras",
     "ats": "ashby",
-    "slug": "cerebras",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/cerebras/99c289fa-8fc6-49f7-b7e8-78ac4e9d99ac/application?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Charles Schwab",
-    "ats": "icims",
-    "slug": "career-schwab",
-    "careersUrl": "https://career-schwab.icims.com",
+    "ats": "greenhouse",
+    "slug": "charles",
+    "careersUrl": "https://job-boards.greenhouse.io/charles",
     "sample": "https://career-schwab.icims.com/jobs/126228/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Commure",
     "ats": "ashby",
-    "slug": "Commure",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Commure/62841aa1-3ee5-4547-8380-637b737b2cb3/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Crusoe",
     "ats": "ashby",
-    "slug": "Crusoe",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Crusoe/9a5223c4-9eb7-4fdb-b97c-f43525df35ed/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cummins",
@@ -2400,10 +2522,12 @@
   {
     "name": "Cybernetic Labs",
     "ats": "ashby",
-    "slug": "netic",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/netic/d9bcb6a2-0e54-4cb3-baec-43f2d74db18f/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Dallas Fort Worth International Airport",
@@ -2420,17 +2544,21 @@
     "name": "Dark Wolf Solutions",
     "ats": "greenhouse",
     "slug": "darkwolfsolutions",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/darkwolfsolutions",
     "sample": "https://job-boards.greenhouse.io/darkwolfsolutions/jobs/7886153003?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Data Cloud Merge",
     "ats": "smartrecruiters",
-    "slug": "DataCloudMerge",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "datacloudmerge",
+    "careersUrl": "https://jobs.smartrecruiters.com/datacloudmerge",
     "sample": "https://jobs.smartrecruiters.com/DataCloudMerge/744000039093905?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Datadog",
@@ -2446,9 +2574,11 @@
     "name": "Datalab USA",
     "ats": "lever",
     "slug": "datalabusa",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/datalabusa",
     "sample": "https://jobs.lever.co/datalabusa/dd9a80d9-a296-4ea9-a231-b68bf268e8ea/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Deloitte",
@@ -2470,13 +2600,13 @@
   },
   {
     "name": "Dimensional Fund Advisors",
-    "ats": "workday",
-    "slug": "dfa_careers",
-    "careersUrl": "https://dimensional.wd5.myworkdayjobs.com",
+    "ats": "ashby",
+    "slug": "dimensional",
+    "careersUrl": "https://jobs.ashbyhq.com/dimensional",
     "sample": "https://dimensional.wd5.myworkdayjobs.com/dfa_careers/job/Austin/Internship-in-Technology---Software-Engineer_2026-9022?utm_source=Simplify&ref=Simplify",
     "roles": 2,
-    "tenant": "dimensional",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -2517,7 +2647,7 @@
     "name": "Fannie Mae",
     "ats": "workday",
     "slug": "FannieMaeCareers",
-    "careersUrl": "https://fanniemae.wd1.myworkdayjobs.com",
+    "careersUrl": "https://fanniemae.wd1.myworkdayjobs.com/FannieMaeCareers",
     "sample": "https://fanniemae.wd1.myworkdayjobs.com/FannieMaeCareers/job/Washington-DC/Campus---Finance-Analytics-Intern--Analytics---Modeling-Program-_JR2814?utm_source=Simplify&ref=Simplify",
     "roles": 2,
     "tenant": "fanniemae",
@@ -2528,9 +2658,11 @@
     "name": "Figma",
     "ats": "greenhouse",
     "slug": "figma",
-    "careersUrl": "https://boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/figma",
     "sample": "https://boards.greenhouse.io/figma/jobs/6152695004?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "GE Aerospace",
@@ -2547,9 +2679,11 @@
     "name": "Geneva Trading",
     "ats": "greenhouse",
     "slug": "genevatrading",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/genevatrading",
     "sample": "https://job-boards.greenhouse.io/genevatrading/jobs/5240107007?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Genworth Financial",
@@ -2584,18 +2718,22 @@
   {
     "name": "Hadrian",
     "ats": "ashby",
-    "slug": "hadrian-automation",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/hadrian-automation/2b0423c6-947d-4226-8d23-90743bd5e63e/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hermeus",
     "ats": "lever",
     "slug": "hermeus",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/hermeus",
     "sample": "https://jobs.lever.co/hermeus/5b08e2df-c9db-4831-aece-67d89e744796/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "HF Sinclair",
@@ -2658,9 +2796,11 @@
     "name": "Hudl",
     "ats": "greenhouse",
     "slug": "hudl",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/hudl",
     "sample": "https://job-boards.greenhouse.io/hudl/jobs/8114314?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hudson River Trading",
@@ -2686,18 +2826,22 @@
   {
     "name": "ibotta",
     "ats": "ashby",
-    "slug": "ibotta",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/ibotta/3130669e-16aa-4f63-834d-b83571c8d269/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "InfiniteQuant",
     "ats": "smartrecruiters",
-    "slug": "InfiniteQuant",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "infinitequant",
+    "careersUrl": "https://jobs.smartrecruiters.com/infinitequant",
     "sample": "https://jobs.smartrecruiters.com/InfiniteQuant/744000145263134?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Jobsbridge",
@@ -2740,10 +2884,12 @@
   {
     "name": "Lightfield",
     "ats": "ashby",
-    "slug": "Lightfield",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Lightfield/9a7ef2f9-577a-4242-b884-719e3cdf4420/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Live Oak Bank",
@@ -2770,8 +2916,8 @@
   {
     "name": "Marsh",
     "ats": "workday",
-    "slug": "MMC",
-    "careersUrl": "https://mmc.wd1.myworkdayjobs.com",
+    "slug": "careers",
+    "careersUrl": "https://mmc.wd1.myworkdayjobs.com/careers",
     "sample": "https://mmc.wd1.myworkdayjobs.com/en-US/MMC/job/Raleigh---1-Glenwood/Oliver-Wyman---Summer-Analyst-2027---Data-and-Analytics--DNA----Raleigh--NC_R_363696?utm_source=Simplify&ref=Simplify",
     "roles": 2,
     "tenant": "mmc",
@@ -2811,10 +2957,12 @@
   {
     "name": "National Software Management",
     "ats": "smartrecruiters",
-    "slug": "NationalSoftwareManagement1",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "nationalsoftwaremanagement",
+    "careersUrl": "https://jobs.smartrecruiters.com/nationalsoftwaremanagement",
     "sample": "https://jobs.smartrecruiters.com/NationalSoftwareManagement1/744000146255004?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "NJM Insurance Group",
@@ -2859,13 +3007,13 @@
   },
   {
     "name": "Northwestern Mutual",
-    "ats": "workday",
-    "slug": "corporate-careers",
-    "careersUrl": "https://northwesternmutual.wd5.myworkdayjobs.com",
+    "ats": "icims",
+    "slug": "opportunities-northwesternmutual",
+    "careersUrl": "https://opportunities-northwesternmutual.icims.com",
     "sample": "https://northwesternmutual.wd5.myworkdayjobs.com/corporate-careers/job/Milwaukee-WI-Corporate/Investment-Data---Analytics-Intern--Summer-2027_JR-46050?utm_source=Simplify&ref=Simplify",
     "roles": 2,
-    "tenant": "northwesternmutual",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -2909,23 +3057,29 @@
     "slug": "careers-peraton",
     "careersUrl": "https://careers-peraton.icims.com",
     "sample": "https://careers-peraton.icims.com/jobs/169665/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Perry Homes",
     "ats": "workable",
-    "slug": "perryhomes",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/perryhomes/j/D309E69A5B/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Persona AI",
     "ats": "ashby",
-    "slug": "persona.ai",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/persona.ai/1e8d195c-e28e-423d-a06a-9eeb401ed4fc/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Publicis Groupe",
@@ -2939,11 +3093,13 @@
   },
   {
     "name": "Relay",
-    "ats": "greenhouse",
-    "slug": "relaypro",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "ats": "lever",
+    "slug": "relay",
+    "careersUrl": "https://jobs.lever.co/relay",
     "sample": "https://job-boards.greenhouse.io/relaypro/jobs/8180836?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Republic Airways",
@@ -2959,10 +3115,12 @@
   {
     "name": "Rivian and Volkswagen Group Technologies",
     "ats": "ashby",
-    "slug": "rivianvw.tech",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/rivianvw.tech/e00c49b7-44c1-4f0c-af3c-2c7a7402185b/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "RSM",
@@ -3008,10 +3166,12 @@
   {
     "name": "Saronic",
     "ats": "ashby",
-    "slug": "saronic",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/saronic/cffe4bc2-5f34-45bf-904d-e9a6c8a8e5ce/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SECURE",
@@ -3019,31 +3179,39 @@
     "slug": "careers-canada-secure",
     "careersUrl": "https://careers-canada-secure.icims.com",
     "sample": "https://careers-canada-secure.icims.com/jobs/1934/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Sierra",
     "ats": "ashby",
-    "slug": "Sierra",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Sierra/34b31b67-268c-4270-b48f-72e59064c96e/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SimpliSafe",
     "ats": "greenhouse",
     "slug": "simplisafe",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/simplisafe",
     "sample": "https://job-boards.greenhouse.io/simplisafe/jobs/8095181?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SingleStore",
     "ats": "greenhouse",
     "slug": "singlestore",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/singlestore",
     "sample": "https://job-boards.greenhouse.io/singlestore/jobs/8205427?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Smith+Nephew",
@@ -3082,15 +3250,19 @@
     "slug": "careers-steeldynamics",
     "careersUrl": "https://careers-steeldynamics.icims.com",
     "sample": "https://careers-steeldynamics.icims.com/jobs/8017/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SteerBridge",
     "ats": "lever",
     "slug": "steerbridge",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/steerbridge",
     "sample": "https://jobs.lever.co/steerbridge/718b3135-d15d-4cbc-9541-1cbb8a6f5ec5/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Stryten",
@@ -3103,20 +3275,22 @@
   {
     "name": "TELUS Digital",
     "ats": "ashby",
-    "slug": "telus-digital",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/telus-digital/32ee6ede-d3cf-4827-b7af-f8d64f2bca11/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "The Aerospace Corporation",
-    "ats": "workday",
-    "slug": "external",
-    "careersUrl": "https://aero.wd5.myworkdayjobs.com",
+    "ats": "lever",
+    "slug": "aero",
+    "careersUrl": "https://jobs.lever.co/aero",
     "sample": "https://aero.wd5.myworkdayjobs.com/external/job/El-Segundo-CA/XMLNAME-2027-Machine-Learning-Engineering-Graduate-Intern_R016432?utm_source=Simplify&ref=Simplify",
     "roles": 2,
-    "tenant": "aero",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -3221,7 +3395,9 @@
     "slug": "homeoffice-na-urbn",
     "careersUrl": "https://homeoffice-na-urbn.icims.com",
     "sample": "https://homeoffice-na-urbn.icims.com/jobs/30602/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Varsity Brands",
@@ -3245,9 +3421,11 @@
     "name": "Virtu Financial",
     "ats": "greenhouse",
     "slug": "virtu",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/virtu",
     "sample": "https://job-boards.greenhouse.io/virtu/jobs/8624424002?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Visier Solutions",
@@ -3263,7 +3441,9 @@
     "slug": "careers-berkley",
     "careersUrl": "https://careers-berkley.icims.com",
     "sample": "https://careers-berkley.icims.com/jobs/14437/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "WEC Energy Group",
@@ -3276,10 +3456,12 @@
   {
     "name": "WhatNot",
     "ats": "ashby",
-    "slug": "whatnot",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/whatnot/928ffdca-b316-40ce-b82b-94b570919bcd/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "WTW",
@@ -3301,9 +3483,11 @@
     "name": "Xantium",
     "ats": "greenhouse",
     "slug": "xantium",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/xantium",
     "sample": "https://job-boards.greenhouse.io/xantium/jobs/4360768009?utm_source=Simplify&ref=Simplify",
-    "roles": 2
+    "roles": 2,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "3M",
@@ -3366,17 +3550,21 @@
     "name": "Affirm",
     "ats": "greenhouse",
     "slug": "affirm",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/affirm",
     "sample": "https://job-boards.greenhouse.io/affirm/jobs/7985907003?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Alarm.com",
     "ats": "greenhouse",
     "slug": "alarmcom",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/alarmcom",
     "sample": "https://job-boards.greenhouse.io/alarmcom/jobs/8622530002?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Alation",
@@ -3422,8 +3610,8 @@
   {
     "name": "American Family Insurance Group",
     "ats": "workday",
-    "slug": "AmFamGroupInternCareers",
-    "careersUrl": "https://amfam.wd1.myworkdayjobs.com",
+    "slug": "careers",
+    "careersUrl": "https://amfam.wd1.myworkdayjobs.com/careers",
     "sample": "https://amfam.wd1.myworkdayjobs.com/AmFamGroupInternCareers/job/WI-Madison/Internal-Data-and-Analytics-Intern---Summer-2027_R39401?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "amfam",
@@ -3436,7 +3624,9 @@
     "slug": "careers-americansystems",
     "careersUrl": "https://careers-americansystems.icims.com",
     "sample": "https://careers-americansystems.icims.com/jobs/4391/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ameriprise Financial",
@@ -3471,26 +3661,32 @@
   {
     "name": "Antares Nuclear",
     "ats": "ashby",
-    "slug": "Antares",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Antares/419ef2df-f0aa-4b68-994a-077e08a959e3/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Anthelion Capital",
     "ats": "ashby",
-    "slug": "anthelioncap",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/anthelioncap/5e2ea37b-2369-474e-b717-c24c60976e96/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Anysphere",
     "ats": "ashby",
-    "slug": "cursor",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/cursor/d0e5b41d-84ab-4887-bd3a-55589b11dd7b/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Aon",
@@ -3508,29 +3704,35 @@
     "slug": "careers-apogeeusa",
     "careersUrl": "https://careers-apogeeusa.icims.com",
     "sample": "https://careers-apogeeusa.icims.com/jobs/1442/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Aquatic Capital Management",
     "ats": "greenhouse",
     "slug": "aquaticcapitalmanagement",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/aquaticcapitalmanagement",
     "sample": "https://job-boards.greenhouse.io/aquaticcapitalmanagement/jobs/8489226002?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Arch",
     "ats": "ashby",
-    "slug": "arch.co",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/arch.co/9fde8d03-9f47-44ac-bd14-53829722c06d/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Arch Capital Group",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://archgroup.wd1.myworkdayjobs.com",
+    "careersUrl": "https://archgroup.wd1.myworkdayjobs.com/careers",
     "sample": "https://archgroup.wd1.myworkdayjobs.com/careers/job/Farmington-CT-United-States-of-America/Data-and-Analytics-Intern_R26_845?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "archgroup",
@@ -3540,10 +3742,12 @@
   {
     "name": "Arondite",
     "ats": "workable",
-    "slug": "arondite",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/arondite/j/5C5C551ADA/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Arthur J. Gallagher & Co.",
@@ -3586,20 +3790,20 @@
   },
   {
     "name": "Athene",
-    "ats": "workday",
-    "slug": "athene_careers",
-    "careersUrl": "https://athene.wd5.myworkdayjobs.com",
+    "ats": "smartrecruiters",
+    "slug": "athene",
+    "careersUrl": "https://jobs.smartrecruiters.com/athene",
     "sample": "https://athene.wd5.myworkdayjobs.com/athene_careers/job/West-Des-Moines-Iowa/Software-Developer-Internship-_R255125?utm_source=Simplify&ref=Simplify",
     "roles": 1,
-    "tenant": "athene",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
     "name": "AtkinsRéalis",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://slihrms.wd3.myworkdayjobs.com",
+    "careersUrl": "https://slihrms.wd3.myworkdayjobs.com/careers",
     "sample": "https://slihrms.wd3.myworkdayjobs.com/careers/job/USAZTempe/Data-Scientist-Intern---Summer-2027_R-161183-1?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "slihrms",
@@ -3619,30 +3823,34 @@
   },
   {
     "name": "Axiom Space",
-    "ats": "workday",
-    "slug": "External_Career_Site",
-    "careersUrl": "https://axiomspace.wd5.myworkdayjobs.com",
+    "ats": "greenhouse",
+    "slug": "axiom",
+    "careersUrl": "https://job-boards.greenhouse.io/axiom",
     "sample": "https://axiomspace.wd5.myworkdayjobs.com/External_Career_Site/job/Software-Engineering-Intern--Summer-2026-_JR100691?utm_source=Simplify&ref=Simplify",
     "roles": 1,
-    "tenant": "axiomspace",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
     "name": "AXQ Capital",
     "ats": "greenhouse",
     "slug": "axq",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/axq",
     "sample": "https://job-boards.greenhouse.io/axq/jobs/6181069004?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Backbone Systems",
     "ats": "ashby",
-    "slug": "backbone",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/backbone/cbfce5dc-e2c7-452e-bb23-2dac1198df7d/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Barry-Wehmiller",
@@ -3659,7 +3867,7 @@
     "name": "Bass Pro Shops",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://basspro.wd1.myworkdayjobs.com",
+    "careersUrl": "https://basspro.wd1.myworkdayjobs.com/careers",
     "sample": "https://basspro.wd1.myworkdayjobs.com/careers/job/Springfield-MO-Bass-Pro-Shops-Base-Camp/IT-Developer-Intern-Summer-2027_R267441-1?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "basspro",
@@ -3699,25 +3907,31 @@
     "name": "Blenheim Chalcot",
     "ats": "greenhouse",
     "slug": "blenheimchalcot",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/blenheimchalcot",
     "sample": "https://job-boards.greenhouse.io/blenheimchalcot/jobs/8207847?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Blissway",
     "ats": "ashby",
-    "slug": "blissway",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/blissway/51d6d839-9801-4436-bfc2-918bae428ed8/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Bloxd",
     "ats": "ashby",
-    "slug": "bloxd",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/bloxd/1c9d0167-b9b4-4aaa-af4f-8eccd89bf8a3/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Blue Cross and Blue Shield of Kansas",
@@ -3749,10 +3963,12 @@
   {
     "name": "Bridger",
     "ats": "ashby",
-    "slug": "bridger",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/bridger/5a4a77e4-31a0-40c6-8e3d-9b5c6205943f/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "BTI360",
@@ -3786,30 +4002,34 @@
   },
   {
     "name": "Capital Health",
-    "ats": "workday",
-    "slug": "CapitalHealthCareers",
-    "careersUrl": "https://capitalhealth.wd1.myworkdayjobs.com",
+    "ats": "lever",
+    "slug": "capital",
+    "careersUrl": "https://jobs.lever.co/capital",
     "sample": "https://capitalhealth.wd1.myworkdayjobs.com/CapitalHealthCareers/job/Pennington-NJ/IT-Product-Engineer-I_JR110768?utm_source=Simplify&ref=Simplify",
     "roles": 1,
-    "tenant": "capitalhealth",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
     "name": "Captivation",
     "ats": "greenhouse",
     "slug": "captivation",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/captivation",
     "sample": "https://job-boards.greenhouse.io/captivation/jobs/5426523008?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Capula",
     "ats": "workable",
-    "slug": "capula-investment-management-ltd",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/capula-investment-management-ltd/j/A15A62A8BE/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cardinal Health",
@@ -3899,7 +4119,7 @@
     "name": "Cleveland-Cliffs",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://aksteel.wd1.myworkdayjobs.com",
+    "careersUrl": "https://aksteel.wd1.myworkdayjobs.com/careers",
     "sample": "https://aksteel.wd1.myworkdayjobs.com/careers/job/Rockport-Works/Computer-Science-Engineering-Intern_R13553?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "aksteel",
@@ -3928,18 +4148,22 @@
   {
     "name": "Cogna",
     "ats": "workable",
-    "slug": "cogna",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/cogna/j/45A6283F88/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Color",
     "ats": "ashby",
-    "slug": "color-health",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/color-health/41fa6f16-b2f2-46c6-bdb4-9aae3b9b5b96/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Commerce Bank",
@@ -3955,18 +4179,22 @@
   {
     "name": "Composio",
     "ats": "ashby",
-    "slug": "composio",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/composio/01e0e7ad-44a2-44e8-9340-64ca70eff491/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Confido",
     "ats": "ashby",
-    "slug": "confido",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/confido/69c0e572-b2f4-442f-beb8-1240155c629e/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "ConocoPhillips",
@@ -3989,13 +4217,13 @@
   },
   {
     "name": "Continental Resources",
-    "ats": "workday",
-    "slug": "CLR_Careers",
-    "careersUrl": "https://clr.wd5.myworkdayjobs.com",
+    "ats": "smartrecruiters",
+    "slug": "continental",
+    "careersUrl": "https://jobs.smartrecruiters.com/continental",
     "sample": "https://clr.wd5.myworkdayjobs.com/CLR_Careers/job/Oklahoma-City-OK/Data-Analyst-Intern--Summer-2027-_R02591-1?utm_source=Simplify&ref=Simplify",
     "roles": 1,
-    "tenant": "clr",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -4013,9 +4241,11 @@
     "name": "CoVar",
     "ats": "greenhouse",
     "slug": "covar",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/covar",
     "sample": "https://job-boards.greenhouse.io/covar/jobs/5240360007?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Covestro",
@@ -4049,18 +4279,22 @@
   {
     "name": "Cylake",
     "ats": "ashby",
-    "slug": "cylake-inc",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/cylake-inc/1d1ac42e-299c-42af-bd7c-b8c5fb07f735/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cyvl",
     "ats": "ashby",
-    "slug": "cyvl",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/cyvl/f44bb1cf-7100-46f7-b3c2-6d2a566d4b0d/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Daktronics",
@@ -4068,7 +4302,9 @@
     "slug": "careers-daktronics",
     "careersUrl": "https://careers-daktronics.icims.com",
     "sample": "https://careers-daktronics.icims.com/jobs/7518/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Danaher",
@@ -4084,26 +4320,32 @@
   {
     "name": "Databricks",
     "ats": "greenhouse",
-    "slug": "embed",
-    "careersUrl": "https://boards.greenhouse.io",
+    "slug": "databricks",
+    "careersUrl": "https://job-boards.greenhouse.io/databricks",
     "sample": "https://boards.greenhouse.io/embed/job_app?token=7586263002&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "DatologyAI",
     "ats": "ashby",
-    "slug": "DatologyAI",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/DatologyAI/0ced19c2-21ec-4bcc-92d2-68d448279f3f/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Decagon",
     "ats": "ashby",
-    "slug": "decagon",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/decagon/16529089-a048-4bc3-8456-3f197135e00b/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Dee Zee",
@@ -4143,10 +4385,12 @@
   {
     "name": "Dropbox",
     "ats": "greenhouse",
-    "slug": "embed",
-    "careersUrl": "https://boards.greenhouse.io",
+    "slug": "dropbox",
+    "careersUrl": "https://job-boards.greenhouse.io/dropbox",
     "sample": "https://boards.greenhouse.io/embed/job_app?token=8106224&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "DuCharme, McMillen & Associates",
@@ -4181,10 +4425,12 @@
   {
     "name": "Ellipsis Labs",
     "ats": "ashby",
-    "slug": "ellipsislabs",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/ellipsislabs/256c2ec2-01c8-4ff6-9ad0-b926fe40472d/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "EMC Insurance",
@@ -4203,7 +4449,9 @@
     "slug": "careers-empiricalfoods",
     "careersUrl": "https://careers-empiricalfoods.icims.com",
     "sample": "https://careers-empiricalfoods.icims.com/jobs/4161/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Enact Mortgage Insurance",
@@ -4219,10 +4467,12 @@
   {
     "name": "ENFOS",
     "ats": "workable",
-    "slug": "enfos-inc",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/enfos-inc/j/CA15908E0A/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ensign-Bickford Aerospace & Defense Company",
@@ -4252,7 +4502,9 @@
     "slug": "us-erac",
     "careersUrl": "https://us-erac.icims.com",
     "sample": "https://us-erac.icims.com/jobs/566721/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ercot",
@@ -4269,25 +4521,31 @@
     "name": "Eulerity",
     "ats": "greenhouse",
     "slug": "eulerity",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/eulerity",
     "sample": "https://job-boards.greenhouse.io/eulerity/jobs/4709040006?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "EvenUp",
     "ats": "ashby",
-    "slug": "evenup",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/evenup/41488eae-50a9-4ad3-b6e0-2fd28efb238e/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Everlaw",
     "ats": "greenhouse",
     "slug": "everlaw",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/everlaw",
     "sample": "https://job-boards.greenhouse.io/everlaw/jobs/4705236006?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Exelon",
@@ -4321,10 +4579,12 @@
   {
     "name": "Faros AI",
     "ats": "ashby",
-    "slug": "faros-ai",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/faros-ai/622e1f1e-4a39-4e7c-8526-1189ca588066/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "FAST Enterprises",
@@ -4342,7 +4602,9 @@
     "slug": "careers-federatedinsurance",
     "careersUrl": "https://careers-federatedinsurance.icims.com",
     "sample": "https://careers-federatedinsurance.icims.com/jobs/5718/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Fifth Third Bank",
@@ -4358,10 +4620,12 @@
   {
     "name": "Firetiger",
     "ats": "ashby",
-    "slug": "firetiger",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/firetiger/a65c30a8-6bdb-4258-9d6a-5e6e90ff86e6/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Five Rings Capital",
@@ -4374,8 +4638,8 @@
   {
     "name": "Flex",
     "ats": "workday",
-    "slug": "Careers",
-    "careersUrl": "https://flextronics.wd1.myworkdayjobs.com",
+    "slug": "careers",
+    "careersUrl": "https://flextronics.wd1.myworkdayjobs.com/careers",
     "sample": "https://flextronics.wd1.myworkdayjobs.com/Careers/job/USA-IL-Libertyville/Manufacturing-Data---Analytics-Co-Op---Spring-2027_WD229700?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "flextronics",
@@ -4435,19 +4699,23 @@
   },
   {
     "name": "General Dynamics",
-    "ats": "icims",
-    "slug": "careers-gdeb",
-    "careersUrl": "https://careers-gdeb.icims.com",
+    "ats": "greenhouse",
+    "slug": "general",
+    "careersUrl": "https://job-boards.greenhouse.io/general",
     "sample": "https://careers-gdeb.icims.com/jobs/20341/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Giga AI",
     "ats": "ashby",
-    "slug": "gigaml",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/gigaml/ba9b543d-e85c-4bd1-978b-f838d7a4062f/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Greenheck Group",
@@ -4463,8 +4731,8 @@
   {
     "name": "Guidehouse",
     "ats": "workday",
-    "slug": "external",
-    "careersUrl": "https://guidehouse.wd1.myworkdayjobs.com",
+    "slug": "External",
+    "careersUrl": "https://guidehouse.wd1.myworkdayjobs.com/External",
     "sample": "https://guidehouse.wd1.myworkdayjobs.com/external/job/US---TX-San-Antonio/Data-Engineer_42995?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "guidehouse",
@@ -4491,9 +4759,11 @@
     "name": "Hatch IT",
     "ats": "lever",
     "slug": "hatchit",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/hatchit",
     "sample": "https://jobs.lever.co/hatchit/7f2e771d-2363-4e85-b62f-ca130c478a97/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "HD Supply",
@@ -4517,10 +4787,12 @@
   {
     "name": "Heliux",
     "ats": "ashby",
-    "slug": "heliux",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/heliux/ff2b6f4b-00d0-4afe-b4f5-2dbf443409ef/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hewlett Packard",
@@ -4539,23 +4811,29 @@
     "slug": "externalhourly-highgate",
     "careersUrl": "https://externalhourly-highgate.icims.com",
     "sample": "https://externalhourly-highgate.icims.com/jobs/82546/job?hub=7&mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hiive",
     "ats": "ashby",
-    "slug": "hiive",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/hiive/8e2a6a7b-a02a-4b51-8d4b-1ebd79027469/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hipp Health",
     "ats": "ashby",
-    "slug": "hipp",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/hipp/ea04e914-674c-4c05-b40a-7e8a035bad14/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Hitachi",
@@ -4571,10 +4849,12 @@
   {
     "name": "Homey",
     "ats": "workable",
-    "slug": "homey",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/homey/j/50DF9B3D53/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Howmet Aerospace",
@@ -4636,10 +4916,12 @@
   {
     "name": "Icon",
     "ats": "ashby",
-    "slug": "icon",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/icon/8de569c7-814f-4ffe-9c21-a92d7b806be2/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Illinois Tool Works",
@@ -4655,17 +4937,21 @@
     "name": "IMC Trading",
     "ats": "greenhouse",
     "slug": "imc",
-    "careersUrl": "https://job-boards.eu.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/imc",
     "sample": "https://job-boards.eu.greenhouse.io/imc/jobs/4842595101?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "incident.io",
     "ats": "ashby",
-    "slug": "incident",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/incident/35461290-c0fe-449a-bed4-5ee873f868fd/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ingredion",
@@ -4728,9 +5014,11 @@
     "name": "InterSystems",
     "ats": "greenhouse",
     "slug": "intersystems",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/intersystems",
     "sample": "https://job-boards.greenhouse.io/intersystems/jobs/7827894003?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "ITT",
@@ -4738,7 +5026,9 @@
     "slug": "careersenus-itt-inc",
     "careersUrl": "https://careersenus-itt-inc.icims.com",
     "sample": "https://careersenus-itt-inc.icims.com/jobs/17451/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "J.M. Smucker",
@@ -4776,18 +5066,22 @@
   {
     "name": "Julius AI",
     "ats": "ashby",
-    "slug": "julius",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/julius/5e0b677a-f677-44de-93c6-f7848ab5a8e6/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Katalyst Space Technologies",
     "ats": "greenhouse",
     "slug": "katalyst",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/katalyst",
     "sample": "https://job-boards.greenhouse.io/katalyst/jobs/6176710004?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ketjen",
@@ -4815,17 +5109,21 @@
     "name": "Kikoff",
     "ats": "greenhouse",
     "slug": "kikoff",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/kikoff",
     "sample": "https://job-boards.greenhouse.io/kikoff/jobs/4393822009?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Koah",
     "ats": "ashby",
-    "slug": "koahlabs",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/koahlabs/197c931d-3cda-44b3-b26b-470976730808/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Konrad Group",
@@ -4845,13 +5143,13 @@
   },
   {
     "name": "Land O'Lakes",
-    "ats": "workday",
+    "ats": "smartrecruiters",
     "slug": "landolakes",
-    "careersUrl": "https://landolakes.wd1.myworkdayjobs.com",
+    "careersUrl": "https://jobs.smartrecruiters.com/landolakes",
     "sample": "https://landolakes.wd1.myworkdayjobs.com/landolakes/job/Arden-Hills-MN-USA/Business-Insights---Analytics-Intern---Animal-Nutrition_R-40421?utm_source=Simplify&ref=Simplify",
     "roles": 1,
-    "tenant": "landolakes",
-    "wdn": 1,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
@@ -4885,9 +5183,11 @@
     "name": "Lexington Medical",
     "ats": "greenhouse",
     "slug": "lexingtonmedical",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/lexingtonmedical",
     "sample": "https://job-boards.greenhouse.io/lexingtonmedical/jobs/5400236008?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "LiveScore Group",
@@ -4903,7 +5203,9 @@
     "slug": "careers-lmi",
     "careersUrl": "https://careers-lmi.icims.com",
     "sample": "https://careers-lmi.icims.com/jobs/14418/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "ManTech",
@@ -4932,16 +5234,18 @@
   {
     "name": "Maximor AI",
     "ats": "ashby",
-    "slug": "maximor",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/maximor/67d0c7d0-fddb-4b8d-aed8-0647337a988e/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Medtronic",
     "ats": "workday",
-    "slug": "redeploymentmedtroniccareers",
-    "careersUrl": "https://medtronic.wd1.myworkdayjobs.com",
+    "slug": "MedtronicCareers",
+    "careersUrl": "https://medtronic.wd1.myworkdayjobs.com/MedtronicCareers",
     "sample": "https://medtronic.wd1.myworkdayjobs.com/redeploymentmedtroniccareers/job/Fridley-Minnesota-United-States-of-America/Software-Engineering-Intern---Summer-2027_R73630?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "medtronic",
@@ -4951,26 +5255,32 @@
   {
     "name": "MegazoneCloud",
     "ats": "ashby",
-    "slug": "megazone",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/megazone/e2889469-cf20-4227-bf24-2a6e885f8dca/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Melius",
     "ats": "ashby",
-    "slug": "melius",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/melius/b61f063a-4f94-4e50-a4ef-05aaab552280/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Meow",
     "ats": "ashby",
-    "slug": "meow",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/meow/56e3b840-11a0-4e98-baca-44e8e26b5218/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Merchants Bank of Indiana",
@@ -5022,9 +5332,11 @@
     "name": "Mitratech",
     "ats": "greenhouse",
     "slug": "mitratech",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/mitratech",
     "sample": "https://job-boards.greenhouse.io/mitratech/jobs/8060928?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "MSA Safety",
@@ -5039,10 +5351,12 @@
   {
     "name": "N1",
     "ats": "ashby",
-    "slug": "n1",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/n1/a3e25c84-0846-454a-b2fc-a356c2a713bd/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Nakupuna Companies",
@@ -5050,7 +5364,9 @@
     "slug": "careers-nakupuna",
     "careersUrl": "https://careers-nakupuna.icims.com",
     "sample": "https://careers-nakupuna.icims.com/jobs/6788/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "National Life",
@@ -5075,15 +5391,17 @@
     "name": "Neighbor",
     "ats": "lever",
     "slug": "neighbor",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/neighbor",
     "sample": "https://jobs.lever.co/neighbor/7d66629f-3f4b-41ee-a324-fe0154e13c46/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Netsmart",
     "ats": "workday",
     "slug": "careers",
-    "careersUrl": "https://ntst.wd1.myworkdayjobs.com",
+    "careersUrl": "https://ntst.wd1.myworkdayjobs.com/careers",
     "sample": "https://ntst.wd1.myworkdayjobs.com/careers/job/Overland-Park-KS/Software-Engineer-Intern--Summer-2027-Internship-_R015667?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "ntst",
@@ -5105,9 +5423,11 @@
     "name": "NewsBreak",
     "ats": "greenhouse",
     "slug": "newsbreak",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/newsbreak",
     "sample": "https://job-boards.greenhouse.io/newsbreak/jobs/4615879006?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Nidec",
@@ -5135,7 +5455,7 @@
     "name": "Nike",
     "ats": "workday",
     "slug": "nke",
-    "careersUrl": "https://nike.wd1.myworkdayjobs.com",
+    "careersUrl": "https://nike.wd1.myworkdayjobs.com/nke",
     "sample": "https://nike.wd1.myworkdayjobs.com/nke/job/Beaverton-Oregon/NIKE--Inc-Software-Engineering-Undergraduate-Internship_R-91111?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "nike",
@@ -5145,10 +5465,12 @@
   {
     "name": "Nooks",
     "ats": "ashby",
-    "slug": "nooks",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/nooks/311d6e70-5cfa-4e80-89f6-fe00ac1f9f53/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Nova-Tech",
@@ -5179,10 +5501,12 @@
   {
     "name": "OpenGov",
     "ats": "ashby",
-    "slug": "opengov",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/opengov/2581c459-07f2-4bd8-9cbd-1d242beaac66/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Oracle",
@@ -5206,18 +5530,22 @@
   {
     "name": "Pace",
     "ats": "ashby",
-    "slug": "withpace",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/withpace/9acdae91-3834-4c08-8579-fd14ff40a76b/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Pacific Fusion",
     "ats": "greenhouse",
     "slug": "pacificfusion",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/pacificfusion",
     "sample": "https://job-boards.greenhouse.io/pacificfusion/jobs/4398373009?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Panasonic Holdings",
@@ -5232,45 +5560,53 @@
   {
     "name": "Parallel Web Systems",
     "ats": "ashby",
-    "slug": "parallel",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/parallel/056e41f8-7d5f-41c1-99fd-bf002dc072fd/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Pariveda Solutions",
     "ats": "ashby",
-    "slug": "pariveda",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/pariveda/cc4fc0be-c414-4aba-a15d-64daa03476a0/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "PDT Partners",
     "ats": "greenhouse",
     "slug": "pdtpartners",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/pdtpartners",
     "sample": "https://job-boards.greenhouse.io/pdtpartners/jobs/8077685?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Pentair",
-    "ats": "workday",
-    "slug": "pentair_careers",
-    "careersUrl": "https://pentair.wd5.myworkdayjobs.com",
+    "ats": "smartrecruiters",
+    "slug": "pentair",
+    "careersUrl": "https://jobs.smartrecruiters.com/pentair",
     "sample": "https://pentair.wd5.myworkdayjobs.com/pentair_careers/job/Golden-Valley-MN/Product-Management-Leadership-Development-Internship-Program---Summer-2027_R23713?utm_source=Simplify&ref=Simplify",
     "roles": 1,
-    "tenant": "pentair",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
     "name": "People Culture Talent",
     "ats": "ashby",
-    "slug": "people-culture-talent",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/people-culture-talent/c1049c49-aea6-4862-a711-a4c78cf6e959?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Perseus Group",
@@ -5286,10 +5622,12 @@
   {
     "name": "Persona",
     "ats": "ashby",
-    "slug": "persona",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/persona/eb77c97c-fa9d-4bf0-9566-e5ba4453b7d3/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Peterson Technologies",
@@ -5322,30 +5660,34 @@
   },
   {
     "name": "Polaris",
-    "ats": "workday",
-    "slug": "PolarisJobs",
-    "careersUrl": "https://polaris.wd5.myworkdayjobs.com",
+    "ats": "greenhouse",
+    "slug": "polaris",
+    "careersUrl": "https://job-boards.greenhouse.io/polaris",
     "sample": "https://polaris.wd5.myworkdayjobs.com/PolarisJobs/job/Medina-MN-USA/Digital---IT---Predictive-Data-Science-Internship---Summer-2027_R30525?utm_source=Simplify&ref=Simplify",
     "roles": 1,
-    "tenant": "polaris",
-    "wdn": 5,
+    "tenant": null,
+    "wdn": null,
     "locale": null
   },
   {
     "name": "Preference Model",
     "ats": "ashby",
-    "slug": "Preference-Model",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Preference-Model/44642065-e592-44ba-810d-a019703463b6/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Primer",
     "ats": "ashby",
-    "slug": "primer",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/primer/edd1667b-6323-444a-adc1-40bae5b9a3b0/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "PROS Holdings, Inc.",
@@ -5362,9 +5704,11 @@
     "name": "Protective Life",
     "ats": "lever",
     "slug": "protective",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/protective",
     "sample": "https://jobs.lever.co/protective/40354575-2b06-42cd-93fb-f9ea82bdec7c/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "PSP Investments",
@@ -5380,10 +5724,12 @@
   {
     "name": "Pylon",
     "ats": "ashby",
-    "slug": "pylon-labs",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/pylon-labs/38814ce7-217b-40f2-9ba5-8a7733a5691d/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Qorvo",
@@ -5407,26 +5753,32 @@
   {
     "name": "Quadrillion",
     "ats": "ashby",
-    "slug": "quadrillion-labs",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/quadrillion-labs/a4acc44c-31ce-41a0-ab44-2500487b4d05/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Radiant",
     "ats": "ashby",
-    "slug": "radiant-industries",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/radiant-industries/1ec29cec-d18f-417d-adc6-31adda87c687/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "RAVE Aerospace",
     "ats": "workable",
-    "slug": "raveaerospace",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/raveaerospace/j/739753C003/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Raymond James Financial",
@@ -5453,18 +5805,22 @@
   {
     "name": "Realm",
     "ats": "ashby",
-    "slug": "realmalliance",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/realmalliance/56d8b433-31ad-43a2-997e-b8538f5f2c9f/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Replit",
     "ats": "ashby",
-    "slug": "replit",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/replit/b5e81eae-06f9-4798-8988-2d06ca936dbc/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Resideo",
@@ -5477,10 +5833,12 @@
   {
     "name": "Retell AI",
     "ats": "ashby",
-    "slug": "retell-ai",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/retell-ai/ea775189-0496-43d8-a386-df8148265463/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "REV Robotics",
@@ -5503,10 +5861,12 @@
   {
     "name": "Rollout",
     "ats": "ashby",
-    "slug": "rollout",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/rollout/ac255ccb-888f-46d9-8d57-5e7334a5ee46/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Rolls-Royce",
@@ -5541,24 +5901,28 @@
   {
     "name": "Rystad Energy",
     "ats": "workable",
-    "slug": "rystad-energy",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/rystad-energy/j/74A4CBBC6B/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Saalex",
     "ats": "workable",
-    "slug": "saalex",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/saalex/j/758C0628C9/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Sallie Mae",
     "ats": "workday",
-    "slug": "Careers",
-    "careersUrl": "https://sallie-mae.wd5.myworkdayjobs.com",
+    "slug": "careers",
+    "careersUrl": "https://sallie-mae.wd5.myworkdayjobs.com/careers",
     "sample": "https://sallie-mae.wd5.myworkdayjobs.com/Careers/job/Newark-DE/Associate--Analytics---Early-Career-Development-Program_R26_000512?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "sallie-mae",
@@ -5587,26 +5951,32 @@
   {
     "name": "Semgrep",
     "ats": "ashby",
-    "slug": "semgrep",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/semgrep/8e64dc7f-e925-4361-86d5-b01ee518c987/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SEP",
     "ats": "lever",
     "slug": "sep",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/sep",
     "sample": "https://jobs.lever.co/sep/4efbdbce-a753-41b5-8ed7-0661cd193178/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Shield AI",
     "ats": "lever",
     "slug": "shieldai",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/shieldai",
     "sample": "https://jobs.lever.co/shieldai/8c850c75-081d-4d09-bebf-096379a93010/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Shirley Ryan AbilityLab",
@@ -5622,18 +5992,22 @@
   {
     "name": "SIFT",
     "ats": "ashby",
-    "slug": "siftstack",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/siftstack/0d65481e-e762-4d8f-ae38-5040754a5134/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Sigma Computing",
     "ats": "greenhouse",
     "slug": "sigmacomputing",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/sigmacomputing",
     "sample": "https://job-boards.greenhouse.io/sigmacomputing/jobs/7690411003?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Silicon Laboratories",
@@ -5659,10 +6033,12 @@
   {
     "name": "Skydio",
     "ats": "ashby",
-    "slug": "skydio",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/skydio/ae4a6f7d-a240-4fa2-8c8e-04cc906e4ef9/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Skyward",
@@ -5675,10 +6051,12 @@
   {
     "name": "Smarter Agent",
     "ats": "smartrecruiters",
-    "slug": "SmarterAgent",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "smarteragent",
+    "careersUrl": "https://jobs.smartrecruiters.com/smarteragent",
     "sample": "https://jobs.smartrecruiters.com/SmarterAgent/743999706496509?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SMX",
@@ -5694,17 +6072,21 @@
     "name": "Snowflake",
     "ats": "ashby",
     "slug": "snowflake",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "careersUrl": "https://jobs.ashbyhq.com/snowflake",
     "sample": "https://jobs.ashbyhq.com/snowflake/1bad12df-f443-426f-9d09-e96fc780d698/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "SOCOTEC Global",
     "ats": "smartrecruiters",
-    "slug": "Socotec",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "socotec",
+    "careersUrl": "https://jobs.smartrecruiters.com/socotec",
     "sample": "https://jobs.smartrecruiters.com/Socotec/744000141326319?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Software Quality Experts",
@@ -5728,7 +6110,9 @@
     "slug": "careers-sscgp",
     "careersUrl": "https://careers-sscgp.icims.com",
     "sample": "https://careers-sscgp.icims.com/jobs/3036/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Specter Aerospace",
@@ -5746,15 +6130,19 @@
     "slug": "careers-sri",
     "careersUrl": "https://careers-sri.icims.com",
     "sample": "https://careers-sri.icims.com/jobs/6505/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Stand Together",
     "ats": "lever",
     "slug": "standtogether",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/standtogether",
     "sample": "https://jobs.lever.co/standtogether/e4dd1d3c-79a0-435d-87b3-eac542b4c2b5/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Stanley Black & Decker",
@@ -5770,10 +6158,12 @@
   {
     "name": "StepStone Group",
     "ats": "greenhouse",
-    "slug": "embed",
-    "careersUrl": "https://boards.greenhouse.io",
+    "slug": "stepstone",
+    "careersUrl": "https://job-boards.greenhouse.io/stepstone",
     "sample": "https://boards.greenhouse.io/embed/job_app?token=8096268&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Steven's Capital Management",
@@ -5796,10 +6186,12 @@
   {
     "name": "Strada",
     "ats": "ashby",
-    "slug": "stradahq",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/stradahq/626411c6-808e-4eb2-b28d-76f5d88e0af6/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Study.com",
@@ -5821,7 +6213,7 @@
     "name": "T. Rowe Price",
     "ats": "workday",
     "slug": "TRowePrice",
-    "careersUrl": "https://troweprice.wd5.myworkdayjobs.com",
+    "careersUrl": "https://troweprice.wd5.myworkdayjobs.com/TRowePrice",
     "sample": "https://troweprice.wd5.myworkdayjobs.com/en-US/TRowePrice/job/Baltimore-MD/XMLNAME-2027-Technology-and-Data-Internship_82677?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "troweprice",
@@ -5832,15 +6224,17 @@
     "name": "Tanium",
     "ats": "greenhouse",
     "slug": "tanium",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/tanium",
     "sample": "https://job-boards.greenhouse.io/tanium/jobs/8181017?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Target",
     "ats": "workday",
     "slug": "targetcareers",
-    "careersUrl": "https://target.wd5.myworkdayjobs.com",
+    "careersUrl": "https://target.wd5.myworkdayjobs.com/targetcareers",
     "sample": "https://target.wd5.myworkdayjobs.com/targetcareers/job/7000-Target-Pkwy-NNCD-0375-Brooklyn-ParkMN-55445/Software-Engineering-Summer-Internship-Minneapolis--MN--Starting-June-2027-_R0000451082?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "target",
@@ -5862,25 +6256,31 @@
     "name": "Tax Relief Advocates",
     "ats": "greenhouse",
     "slug": "taxreliefadvocates",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/taxreliefadvocates",
     "sample": "https://job-boards.greenhouse.io/taxreliefadvocates/jobs/4759563008?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Tebra",
     "ats": "greenhouse",
     "slug": "tebra",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/tebra",
     "sample": "https://job-boards.greenhouse.io/tebra/jobs/4726985005?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "The Exploration Company",
     "ats": "ashby",
-    "slug": "the-exploration-company",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/the-exploration-company/86270058-8eec-4692-b49d-97ce59fd54ac/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "The Friedkin Group",
@@ -5888,7 +6288,9 @@
     "slug": "external-careers-friedkin",
     "careersUrl": "https://external-careers-friedkin.icims.com",
     "sample": "https://external-careers-friedkin.icims.com/jobs/6759/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "The MJ Companies",
@@ -5901,10 +6303,12 @@
   {
     "name": "The Voleon Group",
     "ats": "ashby",
-    "slug": "voleon",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/voleon/57f1b666-2f4b-4bad-aac0-fa42a1c8fdf6/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Thermo Fisher Scientific",
@@ -5923,7 +6327,9 @@
     "slug": "careers-tighebond",
     "careersUrl": "https://careers-tighebond.icims.com",
     "sample": "https://careers-tighebond.icims.com/jobs/1892/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Tive",
@@ -5936,16 +6342,18 @@
   {
     "name": "TMEIC Corporation Americas",
     "ats": "workable",
-    "slug": "tmeic-corporation-americas",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/tmeic-corporation-americas/j/6FDBF2FD32/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Toyota",
     "ats": "workday",
-    "slug": "tmna",
-    "careersUrl": "https://toyota.wd503.myworkdayjobs.com",
+    "slug": "TMNA",
+    "careersUrl": "https://toyota.wd503.myworkdayjobs.com/TMNA",
     "sample": "https://toyota.wd503.myworkdayjobs.com/tmna/job/Plano-Texas/Software-Engineer--Early-Career-Professional-_10325071?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "toyota",
@@ -5955,18 +6363,22 @@
   {
     "name": "TP-Link Systems",
     "ats": "workable",
-    "slug": "tp-link-usa-corp",
-    "careersUrl": "https://apply.workable.com",
+    "slug": "careers",
+    "careersUrl": "https://apply.workable.com/careers",
     "sample": "https://apply.workable.com/tp-link-usa-corp/j/F943A617EC/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Tracebit",
     "ats": "ashby",
-    "slug": "tracebit",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/tracebit/b15236d9-29fa-4d7c-9873-1a23ca5cc034/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "TransMarket Group",
@@ -5980,7 +6392,7 @@
     "name": "Travelers",
     "ats": "workday",
     "slug": "External",
-    "careersUrl": "https://travelers.wd5.myworkdayjobs.com",
+    "careersUrl": "https://travelers.wd5.myworkdayjobs.com/External",
     "sample": "https://travelers.wd5.myworkdayjobs.com/External/job/CT---Hartford/Business-Insights---Analytics-Leadership-Development-Program--BI-A-LDP--Intern_R-52304?utm_source=Simplify&ref=Simplify",
     "roles": 1,
     "tenant": "travelers",
@@ -6008,10 +6420,12 @@
   {
     "name": "Trulioo",
     "ats": "ashby",
-    "slug": "trulioo",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/trulioo/51347dfe-5ba8-4480-a225-ffd7f641613e/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "TSC",
@@ -6028,25 +6442,31 @@
     "name": "Uare.ai",
     "ats": "greenhouse",
     "slug": "uareai",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/uareai",
     "sample": "https://job-boards.greenhouse.io/uareai/jobs/4036519009?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Uncountable",
     "ats": "ashby",
-    "slug": "uncountable",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/uncountable/1f8425be-cd39-4397-a9c1-6511ecfc39fc/application?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Uniswap",
     "ats": "ashby",
-    "slug": "uniswap",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/uniswap/fb4d4137-f003-4669-beb7-2a5caca88012/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "United Launch Alliance",
@@ -6069,10 +6489,12 @@
   {
     "name": "Valon",
     "ats": "ashby",
-    "slug": "Valon",
-    "careersUrl": "https://jobs.ashbyhq.com",
+    "slug": "careers",
+    "careersUrl": "https://jobs.ashbyhq.com/careers",
     "sample": "https://jobs.ashbyhq.com/Valon/e08ad09a-4408-4210-8c1b-da6510f83324/application?embed=true&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Viam",
@@ -6101,10 +6523,12 @@
   {
     "name": "Wabash Valley Power Alliance",
     "ats": "smartrecruiters",
-    "slug": "WabashValleyPowerAlliance",
-    "careersUrl": "https://jobs.smartrecruiters.com",
+    "slug": "wabashvalleypoweralliance",
+    "careersUrl": "https://jobs.smartrecruiters.com/wabashvalleypoweralliance",
     "sample": "https://jobs.smartrecruiters.com/WabashValleyPowerAlliance/744000149873771?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Walgreens",
@@ -6129,17 +6553,21 @@
     "name": "WeRide",
     "ats": "lever",
     "slug": "weride",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/weride",
     "sample": "https://jobs.lever.co/weride/5a7cbc83-2381-482e-9d6d-e9c9d59ad63b/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "WhiteWater Midstream",
     "ats": "greenhouse",
     "slug": "whitewatermidstream",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/whitewatermidstream",
     "sample": "https://job-boards.greenhouse.io/whitewatermidstream/jobs/5217853007?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Williams-Sonoma",
@@ -6155,7 +6583,9 @@
     "slug": "careers-wipfli",
     "careersUrl": "https://careers-wipfli.icims.com",
     "sample": "https://careers-wipfli.icims.com/jobs/8295/job?mobile=true&needsRedirect=false&utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "WonderBotz",
@@ -6169,25 +6599,31 @@
     "name": "Wonderschool",
     "ats": "greenhouse",
     "slug": "wonderschool",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/wonderschool",
     "sample": "https://job-boards.greenhouse.io/wonderschool/jobs/6359139003?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Workshop",
     "ats": "greenhouse",
     "slug": "workshop",
-    "careersUrl": "https://job-boards.greenhouse.io",
+    "careersUrl": "https://job-boards.greenhouse.io/workshop",
     "sample": "https://job-boards.greenhouse.io/workshop/jobs/5237900007?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Xcimer Energy",
     "ats": "lever",
     "slug": "xcimer",
-    "careersUrl": "https://jobs.lever.co",
+    "careersUrl": "https://jobs.lever.co/xcimer",
     "sample": "https://jobs.lever.co/xcimer/fee9965c-8040-4614-8fd1-10bddfe3b911/apply?utm_source=Simplify&ref=Simplify",
-    "roles": 1
+    "roles": 1,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Zions Bank",
@@ -6444,11 +6880,13 @@
   },
   {
     "name": "Kimley-Horn",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "jobs-kimley-horn",
+    "careersUrl": "https://jobs-kimley-horn.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Stantec",
@@ -6468,27 +6906,33 @@
   },
   {
     "name": "Turner Construction",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "turnerconstruction",
+    "careersUrl": "https://jobs.smartrecruiters.com/turnerconstruction",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Skanska",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-skanska",
+    "careersUrl": "https://careers-skanska.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Clark Construction",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "ClarkExternal",
+    "careersUrl": "https://clark.wd503.myworkdayjobs.com/ClarkExternal",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "clark",
+    "wdn": 503
   },
   {
     "name": "Whiting-Turner",
@@ -6500,59 +6944,73 @@
   },
   {
     "name": "Gilbane",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-gilbaneco",
+    "careersUrl": "https://careers-gilbaneco.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Dewberry",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-dewberry",
+    "careersUrl": "https://careers-dewberry.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Gannett Fleming",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-gannettfleming",
+    "careersUrl": "https://careers-gannettfleming.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Arcadis",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://ebcs.fa.em2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Tetra Tech",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "tetra",
+    "careersUrl": "https://job-boards.greenhouse.io/tetra",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Michael Baker International",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_2",
+    "careersUrl": "https://ebxs.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ford",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://efds.fa.em5.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Stellantis",
@@ -6572,19 +7030,23 @@
   },
   {
     "name": "Emerson",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://hdjq.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Rockwell Automation",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "External_Rockwell_Automation",
+    "careersUrl": "https://rockwellautomation.wd1.myworkdayjobs.com/External_Rockwell_Automation",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "rockwellautomation",
+    "wdn": 1
   },
   {
     "name": "Siemens",
@@ -6604,11 +7066,13 @@
   },
   {
     "name": "Carrier",
-    "ats": "unknown",
+    "ats": "workday",
     "slug": null,
-    "careersUrl": null,
+    "careersUrl": "https://carrier.wd5.myworkdayjobs.com/jobs",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "carrier",
+    "wdn": 5
   },
   {
     "name": "Johnson Controls",
@@ -6628,11 +7092,13 @@
   },
   {
     "name": "Dow",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "ExternalCareers",
+    "careersUrl": "https://dow.wd1.myworkdayjobs.com/ExternalCareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "dow",
+    "wdn": 1
   },
   {
     "name": "DuPont",
@@ -6660,19 +7126,23 @@
   },
   {
     "name": "Celanese",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "celanese",
+    "careersUrl": "https://jobs.smartrecruiters.com/celanese",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Air Products",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "air",
+    "careersUrl": "https://job-boards.greenhouse.io/air",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Linde",
@@ -6732,11 +7202,13 @@
   },
   {
     "name": "Southern Company",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "SouthernCompanyJobs",
+    "careersUrl": "https://emje.fa.us6.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "L3Harris",
@@ -6780,19 +7252,23 @@
   },
   {
     "name": "Rocket Lab",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "rocketlab",
+    "careersUrl": "https://job-boards.greenhouse.io/rocketlab",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Relativity Space",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "relativity",
+    "careersUrl": "https://job-boards.greenhouse.io/relativity",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Analog Devices",
@@ -6804,19 +7280,23 @@
   },
   {
     "name": "Microchip",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "microchip",
+    "careersUrl": "https://jobs.smartrecruiters.com/microchip",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "ON Semiconductor",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1001",
+    "careersUrl": "https://hctz.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Skyworks",
@@ -6836,11 +7316,13 @@
   },
   {
     "name": "KLA",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Search",
+    "careersUrl": "https://kla.wd1.myworkdayjobs.com/Search",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "kla",
+    "wdn": 1
   },
   {
     "name": "Seagate",
@@ -6868,43 +7350,53 @@
   },
   {
     "name": "Boston Dynamics",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Boston_Dynamics",
+    "careersUrl": "https://bostondynamics.wd1.myworkdayjobs.com/Boston_Dynamics",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "bostondynamics",
+    "wdn": 1
   },
   {
     "name": "Lucid Motors",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "lucidmotors",
+    "careersUrl": "https://job-boards.greenhouse.io/lucidmotors",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ford Pro",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://efds.fa.em5.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Pfizer",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "PfizerCareers",
+    "careersUrl": "https://pfizer.wd1.myworkdayjobs.com/PfizerCareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "pfizer",
+    "wdn": 1
   },
   {
     "name": "Gilead",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "gileadcareers",
+    "careersUrl": "https://gilead.wd1.myworkdayjobs.com/gileadcareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "gilead",
+    "wdn": 1
   },
   {
     "name": "Regeneron",
@@ -6916,19 +7408,23 @@
   },
   {
     "name": "Moderna",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "M_tx",
+    "careersUrl": "https://modernatx.wd1.myworkdayjobs.com/M_tx",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "modernatx",
+    "wdn": 1
   },
   {
     "name": "Genentech",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "ROG-A2O-GENE",
+    "careersUrl": "https://roche.wd3.myworkdayjobs.com/ROG-A2O-GENE",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "roche",
+    "wdn": 3
   },
   {
     "name": "Eli Lilly",
@@ -6940,11 +7436,13 @@
   },
   {
     "name": "Bristol Myers Squibb",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "BMS",
+    "careersUrl": "https://bristolmyerssquibb.wd5.myworkdayjobs.com/BMS",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "bristolmyerssquibb",
+    "wdn": 5
   },
   {
     "name": "Vertex",
@@ -6964,59 +7462,73 @@
   },
   {
     "name": "Illumina",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "illumina-careers",
+    "careersUrl": "https://illumina.wd1.myworkdayjobs.com/illumina-careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "illumina",
+    "wdn": 1
   },
   {
     "name": "Agilent",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Agilent_Student_Careers",
+    "careersUrl": "https://agilent.wd5.myworkdayjobs.com/Agilent_Student_Careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "agilent",
+    "wdn": 5
   },
   {
     "name": "Bio-Rad",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-biorad",
+    "careersUrl": "https://careers-biorad.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Charles River Laboratories",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "charles",
+    "careersUrl": "https://job-boards.greenhouse.io/charles",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "IQVIA",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "IQVIA",
+    "careersUrl": "https://iqvia.wd1.myworkdayjobs.com/IQVIA",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "iqvia",
+    "wdn": 1
   },
   {
     "name": "Quest Diagnostics",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://hdox.fa.us6.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Novartis",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Internal_Careers_for_Acquired_Entities",
+    "careersUrl": "https://novartis.wd3.myworkdayjobs.com/Internal_Careers_for_Acquired_Entities",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "novartis",
+    "wdn": 3
   },
   {
     "name": "AstraZeneca",
@@ -7060,11 +7572,13 @@
   },
   {
     "name": "Abbott",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "abbottcareers",
+    "careersUrl": "https://abbott.wd5.myworkdayjobs.com/abbottcareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "abbott",
+    "wdn": 5
   },
   {
     "name": "Becton Dickinson",
@@ -7076,19 +7590,23 @@
   },
   {
     "name": "Edwards Lifesciences",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "edwardscareers",
+    "careersUrl": "https://edwards.wd5.myworkdayjobs.com/edwardscareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "edwards",
+    "wdn": 5
   },
   {
     "name": "Intuitive",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "intuitive",
+    "careersUrl": "https://jobs.smartrecruiters.com/intuitive",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Zimmer Biomet",
@@ -7100,11 +7618,13 @@
   },
   {
     "name": "Ginkgo Bioworks",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "ginkgobioworks",
+    "careersUrl": "https://job-boards.greenhouse.io/ginkgobioworks",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "10x Genomics",
@@ -7116,19 +7636,23 @@
   },
   {
     "name": "Twist Bioscience",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "twistbioscience",
+    "careersUrl": "https://job-boards.greenhouse.io/twistbioscience",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Recursion",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "recursionpharmaceuticals",
+    "careersUrl": "https://job-boards.greenhouse.io/recursionpharmaceuticals",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Tempus",
@@ -7164,19 +7688,23 @@
   },
   {
     "name": "Oak Ridge National Laboratory",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "oakridgenationallaboratory",
+    "careersUrl": "https://jobs.smartrecruiters.com/oakridgenationallaboratory",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Lawrence Livermore National Laboratory",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "LLNL",
+    "careersUrl": "https://jobs.smartrecruiters.com/LLNL",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Los Alamos National Laboratory",
@@ -7204,19 +7732,23 @@
   },
   {
     "name": "Brookhaven National Laboratory",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Externa",
+    "careersUrl": "https://bnl.wd1.myworkdayjobs.com/Externa",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "bnl",
+    "wdn": 1
   },
   {
     "name": "Pacific Northwest National Laboratory",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-pnnl",
+    "careersUrl": "https://careers-pnnl.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "NREL",
@@ -7252,11 +7784,13 @@
   },
   {
     "name": "Liberty Mutual",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-libertymutual",
+    "careersUrl": "https://careers-libertymutual.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Prudential",
@@ -7268,11 +7802,13 @@
   },
   {
     "name": "MetLife",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "lever",
+    "slug": "metlife",
+    "careersUrl": "https://jobs.lever.co/metlife",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Aflac",
@@ -7300,19 +7836,23 @@
   },
   {
     "name": "GEICO",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "geico",
+    "careersUrl": "https://jobs.smartrecruiters.com/geico",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cigna",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "cignacareers",
+    "careersUrl": "https://cigna.wd5.myworkdayjobs.com/cignacareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "cigna",
+    "wdn": 5
   },
   {
     "name": "UnitedHealth Group",
@@ -7324,19 +7864,23 @@
   },
   {
     "name": "Elevance Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "ANT",
+    "careersUrl": "https://elevancehealth.wd1.myworkdayjobs.com/ANT",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "elevancehealth",
+    "wdn": 1
   },
   {
     "name": "New York Life",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "new",
+    "careersUrl": "https://job-boards.greenhouse.io/new",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "MassMutual",
@@ -7348,19 +7892,23 @@
   },
   {
     "name": "Lincoln Financial",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "lincoln",
+    "careersUrl": "https://job-boards.greenhouse.io/lincoln",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Principal",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-principal",
+    "careersUrl": "https://careers-principal.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Fidelity",
@@ -7380,19 +7928,23 @@
   },
   {
     "name": "FINRA",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "FINRA",
+    "careersUrl": "https://finra.wd1.myworkdayjobs.com/FINRA",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "finra",
+    "wdn": 1
   },
   {
     "name": "RAND",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "External_Career_Site",
+    "careersUrl": "https://rand.wd5.myworkdayjobs.com/External_Career_Site",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "rand",
+    "wdn": 5
   },
   {
     "name": "Mathematica",
@@ -7412,11 +7964,13 @@
   },
   {
     "name": "Nielsen",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "TheNielsenCompany",
+    "careersUrl": "https://jobs.smartrecruiters.com/TheNielsenCompany",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "HCA Healthcare",
@@ -7428,11 +7982,13 @@
   },
   {
     "name": "Inova",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://elar.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Kaiser Permanente",
@@ -7444,19 +8000,23 @@
   },
   {
     "name": "Mayo Clinic",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://fa-euwp-saasfaprod1.fa.ocs.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cleveland Clinic",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "ClevelandClinicCareers",
+    "careersUrl": "https://ccf.wd1.myworkdayjobs.com/ClevelandClinicCareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "ccf",
+    "wdn": 1
   },
   {
     "name": "Johns Hopkins Medicine",
@@ -7468,43 +8028,53 @@
   },
   {
     "name": "MedStar Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-medstarhealth",
+    "careersUrl": "https://careers-medstarhealth.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Sentara",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "SCS",
+    "careersUrl": "https://sentara.wd1.myworkdayjobs.com/SCS",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "sentara",
+    "wdn": 1
   },
   {
     "name": "UVA Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://fa-euzb-saasfaprod1.fa.ocs.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "VCU Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "VCUHealth_careers",
+    "careersUrl": "https://vcuhealth.wd1.myworkdayjobs.com/VCUHealth_careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "vcuhealth",
+    "wdn": 1
   },
   {
     "name": "CommonSpirit Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-commonspirit",
+    "careersUrl": "https://careers-commonspirit.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ascension",
@@ -7516,11 +8086,13 @@
   },
   {
     "name": "Providence",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://evac.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Banner Health",
@@ -7532,43 +8104,53 @@
   },
   {
     "name": "Northwell Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_2",
+    "careersUrl": "https://eppr.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "NYU Langone",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-nyu",
+    "careersUrl": "https://careers-nyu.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Mass General Brigham",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "MGBExternal",
+    "careersUrl": "https://massgeneralbrigham.wd1.myworkdayjobs.com/MGBExternal",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "massgeneralbrigham",
+    "wdn": 1
   },
   {
     "name": "Stanford Health Care",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "SHC_External_Career_Site",
+    "careersUrl": "https://stanfordmedicine.wd115.myworkdayjobs.com/SHC_External_Career_Site",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "stanfordmedicine",
+    "wdn": 115
   },
   {
     "name": "UCSF Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1",
+    "careersUrl": "https://iazuqy.fa.ocs.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Duke Health",
@@ -7588,59 +8170,73 @@
   },
   {
     "name": "Advocate Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "lever",
+    "slug": "advocate",
+    "careersUrl": "https://jobs.lever.co/advocate",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Intermountain Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "IntermountainCareers",
+    "careersUrl": "https://imh.wd108.myworkdayjobs.com/IntermountainCareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "imh",
+    "wdn": 108
   },
   {
     "name": "Geisinger",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "GeisingerExternal",
+    "careersUrl": "https://geisinger.wd5.myworkdayjobs.com/GeisingerExternal",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "geisinger",
+    "wdn": 5
   },
   {
     "name": "Mount Sinai",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX",
+    "careersUrl": "https://ejis.fa.us6.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Penn Medicine",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "pennmedicine",
+    "careersUrl": "https://jobs.smartrecruiters.com/pennmedicine",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Children's National",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "CN_Careers",
+    "careersUrl": "https://childrensnational.wd108.myworkdayjobs.com/CN_Careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "childrensnational",
+    "wdn": 108
   },
   {
     "name": "Children's Hospital of Philadelphia",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "CHOPExternalCareers",
+    "careersUrl": "https://chop.wd108.myworkdayjobs.com/CHOPExternalCareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "chop",
+    "wdn": 108
   },
   {
     "name": "Cedars-Sinai",
@@ -7668,19 +8264,23 @@
   },
   {
     "name": "Houston Methodist",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "GTI",
+    "careersUrl": "https://houstonmethodist.wd12.myworkdayjobs.com/GTI",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "houstonmethodist",
+    "wdn": 12
   },
   {
     "name": "Memorial Sloan Kettering",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "MSKCC_Careers_Primary",
+    "careersUrl": "https://msk.wd108.myworkdayjobs.com/MSKCC_Careers_Primary",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "msk",
+    "wdn": 108
   },
   {
     "name": "MD Anderson",
@@ -7692,19 +8292,23 @@
   },
   {
     "name": "Sutter Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "sutterhealth",
+    "careersUrl": "https://jobs.smartrecruiters.com/sutterhealth",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Novant Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "novanthealth",
+    "careersUrl": "https://novanthealth.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Valley Health",
@@ -7732,11 +8336,13 @@
   },
   {
     "name": "Adventist HealthCare",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "AdventistHealthCareCareers",
+    "careersUrl": "https://adventisthealthcare.wd1.myworkdayjobs.com/AdventistHealthCareCareers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "adventisthealthcare",
+    "wdn": 1
   },
   {
     "name": "Holy Cross Health",
@@ -7748,11 +8354,13 @@
   },
   {
     "name": "George Washington University Hospital",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-uhsinc",
+    "careersUrl": "https://careers-uhsinc.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Department of Veterans Affairs",
@@ -7764,27 +8372,33 @@
   },
   {
     "name": "DaVita",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "DKC_External",
+    "careersUrl": "https://davita.wd1.myworkdayjobs.com/DKC_External",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "davita",
+    "wdn": 1
   },
   {
     "name": "Fresenius",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "fme",
+    "careersUrl": "https://freseniusmedicalcare.wd3.myworkdayjobs.com/fme",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "freseniusmedicalcare",
+    "wdn": 3
   },
   {
     "name": "Encompass Health",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX",
+    "careersUrl": "https://ibwsjb.fa.ocs.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Select Medical",
@@ -7796,19 +8410,23 @@
   },
   {
     "name": "Tenet Healthcare",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "CX_1001",
+    "careersUrl": "https://eodr.fa.us2.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Community Health Systems",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "community",
+    "careersUrl": "https://job-boards.greenhouse.io/community",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "CVS Health",
@@ -7852,11 +8470,13 @@
   },
   {
     "name": "BCG",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "bcg",
+    "careersUrl": "https://job-boards.greenhouse.io/bcg",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Bain",
@@ -7892,11 +8512,13 @@
   },
   {
     "name": "Home Depot",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "CareerDepot",
+    "careersUrl": "https://homedepot.wd5.myworkdayjobs.com/CareerDepot",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "homedepot",
+    "wdn": 5
   },
   {
     "name": "Costco",
@@ -7956,19 +8578,23 @@
   },
   {
     "name": "Disney",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "disney",
+    "careersUrl": "https://job-boards.greenhouse.io/disney",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Comcast",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "smartrecruiters",
+    "slug": "comcastcorporation",
+    "careersUrl": "https://jobs.smartrecruiters.com/comcastcorporation",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "AT&T",
@@ -7988,19 +8614,23 @@
   },
   {
     "name": "PepsiCo",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "pepjobs-pepsico",
+    "careersUrl": "https://pepjobs-pepsico.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Coca-Cola",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "coca-cola-careers",
+    "careersUrl": "https://coke.wd1.myworkdayjobs.com/coca-cola-careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "coke",
+    "wdn": 1
   },
   {
     "name": "Mars",
@@ -8012,11 +8642,13 @@
   },
   {
     "name": "General Mills",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "GMI_External_Careers",
+    "careersUrl": "https://genmills.wd1.myworkdayjobs.com/GMI_External_Careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "genmills",
+    "wdn": 1
   },
   {
     "name": "Anheuser-Busch",
@@ -8046,33 +8678,41 @@
     "name": "Airbnb",
     "ats": "greenhouse",
     "slug": "airbnb",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/airbnb",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Uber",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "oracle",
+    "slug": "UberCareers",
+    "careersUrl": "https://iaziqy.fa.ocs.oraclecloud.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "OpenAI",
     "ats": "ashby",
     "slug": "openai",
-    "careersUrl": null,
+    "careersUrl": "https://jobs.ashbyhq.com/openai",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Anthropic",
     "ats": "greenhouse",
     "slug": "anthropic",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/anthropic",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "IBM",
@@ -8084,11 +8724,13 @@
   },
   {
     "name": "Cisco",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Cisco_Careers",
+    "careersUrl": "https://cisco.wd5.myworkdayjobs.com/Cisco_Careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "cisco",
+    "wdn": 5
   },
   {
     "name": "Snap",
@@ -8102,33 +8744,41 @@
     "name": "Pinterest",
     "ats": "greenhouse",
     "slug": "pinterest",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/pinterest",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Discord",
     "ats": "greenhouse",
     "slug": "discord",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/discord",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Twitch",
     "ats": "greenhouse",
     "slug": "twitch",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/twitch",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Reddit",
     "ats": "greenhouse",
     "slug": "reddit",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/reddit",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Electronic Arts",
@@ -8140,19 +8790,23 @@
   },
   {
     "name": "Riot Games",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "riotgames",
+    "careersUrl": "https://job-boards.greenhouse.io/riotgames",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Unity",
-    "ats": "greenhouse",
-    "slug": "unity3d",
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Unity",
+    "careersUrl": "https://unitytech.wd1.myworkdayjobs.com/Unity",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "unitytech",
+    "wdn": 1
   },
   {
     "name": "Bloomberg",
@@ -8180,19 +8834,23 @@
   },
   {
     "name": "Jane Street",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "janestreet",
+    "careersUrl": "https://job-boards.greenhouse.io/janestreet",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Jump Trading",
     "ats": "greenhouse",
-    "slug": "jumptrading",
-    "careersUrl": null,
+    "slug": "talent_community",
+    "careersUrl": "https://job-boards.greenhouse.io/talent_community",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "D. E. Shaw",
@@ -8205,34 +8863,42 @@
   {
     "name": "Susquehanna (SIG)",
     "ats": "icims",
-    "slug": "careers-sig",
-    "careersUrl": null,
+    "slug": "sig",
+    "careersUrl": "https://sig.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Akuna Capital",
     "ats": "greenhouse",
     "slug": "akunacapital",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/akunacapital",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Five Rings",
     "ats": "greenhouse",
     "slug": "fiveringsllc",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/fiveringsllc",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Point72",
     "ats": "greenhouse",
     "slug": "point72",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/point72",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Millennium",
@@ -8246,9 +8912,11 @@
     "name": "RTX (Raytheon)",
     "ats": "workday",
     "slug": "REC_RTX_Ext_Gateway",
-    "careersUrl": null,
+    "careersUrl": "https://globalhr.wd5.myworkdayjobs.com/REC_RTX_Ext_Gateway",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "globalhr",
+    "wdn": 5
   },
   {
     "name": "Shopify",
@@ -8260,51 +8928,63 @@
   },
   {
     "name": "LinkedIn",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "linkedin",
+    "careersUrl": "https://job-boards.greenhouse.io/linkedin",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Ramp",
     "ats": "ashby",
     "slug": "ramp",
-    "careersUrl": null,
+    "careersUrl": "https://jobs.ashbyhq.com/ramp",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "MongoDB",
     "ats": "greenhouse",
     "slug": "mongodb",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/mongodb",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Twilio",
     "ats": "greenhouse",
     "slug": "twilio",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/twilio",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Block",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "block",
+    "careersUrl": "https://job-boards.greenhouse.io/block",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "PayPal",
-    "ats": "unknown",
+    "ats": "workday",
     "slug": null,
-    "careersUrl": null,
+    "careersUrl": "https://paypal.wd1.myworkdayjobs.com/jobs",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "paypal",
+    "wdn": 1
   },
   {
     "name": "Dell",
@@ -8334,9 +9014,11 @@
     "name": "Micron",
     "ats": "workday",
     "slug": "External",
-    "careersUrl": null,
+    "careersUrl": "https://micron.wd1.myworkdayjobs.com/External",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "micron",
+    "wdn": 1
   },
   {
     "name": "Texas Instruments",
@@ -8348,19 +9030,23 @@
   },
   {
     "name": "Arm",
-    "ats": "workday",
-    "slug": "Arm",
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "experienced-arm",
+    "careersUrl": "https://experienced-arm.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Samsung",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "workday",
+    "slug": "Samsung_Careers",
+    "careersUrl": "https://sec.wd3.myworkdayjobs.com/Samsung_Careers",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": "sec",
+    "wdn": 3
   },
   {
     "name": "Sony",
@@ -8372,11 +9058,13 @@
   },
   {
     "name": "Nintendo",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "greenhouse",
+    "slug": "nintendo",
+    "careersUrl": "https://job-boards.greenhouse.io/nintendo",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Booz Allen Hamilton",
@@ -8388,11 +9076,13 @@
   },
   {
     "name": "Johns Hopkins APL",
-    "ats": "unknown",
-    "slug": null,
-    "careersUrl": null,
+    "ats": "icims",
+    "slug": "careers-jhuapl",
+    "careersUrl": "https://careers-jhuapl.icims.com",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "NASA",
@@ -8406,9 +9096,11 @@
     "name": "Samsara",
     "ats": "greenhouse",
     "slug": "samsara",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/samsara",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Rippling",
@@ -8420,51 +9112,63 @@
   },
   {
     "name": "Plaid",
-    "ats": "lever",
+    "ats": "ashby",
     "slug": "plaid",
-    "careersUrl": null,
+    "careersUrl": "https://jobs.ashbyhq.com/plaid",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Brex",
     "ats": "greenhouse",
     "slug": "brex",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/brex",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Vercel",
-    "ats": "ashby",
+    "ats": "greenhouse",
     "slug": "vercel",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/vercel",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Linear",
     "ats": "ashby",
-    "slug": "linear",
-    "careersUrl": null,
+    "slug": "Linear",
+    "careersUrl": "https://jobs.ashbyhq.com/Linear",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Perplexity",
     "ats": "ashby",
     "slug": "perplexity",
-    "careersUrl": null,
+    "careersUrl": "https://jobs.ashbyhq.com/perplexity",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Cursor (Anysphere)",
     "ats": "ashby",
-    "slug": "anysphere",
-    "careersUrl": null,
+    "slug": "cursor",
+    "careersUrl": "https://jobs.ashbyhq.com/cursor",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "HashiCorp",
@@ -8478,64 +9182,80 @@
     "name": "GitLab",
     "ats": "greenhouse",
     "slug": "gitlab",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/gitlab",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Okta",
     "ats": "greenhouse",
     "slug": "okta",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/okta",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Asana",
     "ats": "greenhouse",
     "slug": "asana",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/asana",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Instacart",
     "ats": "greenhouse",
     "slug": "instacart",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/instacart",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Chime",
     "ats": "greenhouse",
     "slug": "chime",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/chime",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Gusto",
     "ats": "greenhouse",
     "slug": "gusto",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/gusto",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Zoox",
     "ats": "lever",
     "slug": "zoox",
-    "careersUrl": null,
+    "careersUrl": "https://jobs.lever.co/zoox",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   },
   {
     "name": "Nuro",
     "ats": "greenhouse",
     "slug": "nuro",
-    "careersUrl": null,
+    "careersUrl": "https://job-boards.greenhouse.io/nuro",
     "sample": null,
-    "roles": 0
+    "roles": 0,
+    "tenant": null,
+    "wdn": null
   }
 ]

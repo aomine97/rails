@@ -3,7 +3,7 @@ import type { ScannedField } from "./scan";
 /** The checklist the panel shows while and after autofill: every question on the page, its state, and a control for the ones left. */
 export type RowState = "todo" | "filling" | "done" | "left" | "skip" | "failed";
 export type Row = { f: ScannedField; s: RowState; why?: string; value?: string };
-export type FormState = { rows: Row[]; running: boolean; step: string; url: string; tabId: number; filledAt?: number; error?: string; summaryText?: string; wdStep?: { index: number; total: number; label: string; key: string } };
+export type FormState = { rows: Row[]; running: boolean; step: string; url: string; tabId: number; filledAt?: number; error?: string; summaryText?: string; wdStep?: { index: number; total: number; label: string; key: string }; account?: { email: string; password: string; mode: "signin" | "create" } };
 
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 /** Saved answers are keyed by the question text, lower-cased and stripped of punctuation, so the same question on another site matches. */
