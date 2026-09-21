@@ -95,10 +95,15 @@ export function labelTextFor(el: Element, root: Document | ShadowRoot): string {
   const aria = el.getAttribute("aria-label"); if (aria) parts.push(aria);
   const by = el.getAttribute("aria-labelledby"); if (by) for (const i of by.split(/\s+/)) parts.push((root as Document).getElementById?.(i)?.textContent ?? "");
   if (parts.join("").trim() === "") {
-    // widgets without a real label: nearest label-like text in the enclosing block
-    const block = el.closest("div, fieldset, li, section");
-    const lab = block?.querySelector("label, legend, [class*='label' i], [id$='-label']");
-    if (lab) parts.push(lab.textContent ?? "");
+    // Widgets whose label is not wired to them: climb a few ancestors and take the first label-like text.
+    // Workday puts the <label> in div[data-automation-id="formField-*"], two or three levels above the control,
+    // so stopping at the nearest div (what this used to do) found nothing and the field was never identified.
+    let node: Element | null = el.parentElement;
+    for (let depth = 0; node && depth < 5 && parts.join("").trim() === ""; depth++, node = node.parentElement) {
+      const lab = node.querySelector("label, legend, [class*='label' i]:not(input):not(select):not(textarea), [id$='-label'], [data-automation-id$='Label']");
+      if (lab && !lab.contains(el)) { const t = clean(lab.textContent); if (t && t.length < 300) parts.push(t); }
+      if (node.matches?.("[data-automation-id^='formField-'], fieldset, [role='group']")) break;
+    }
   }
   // the same text often arrives twice (label[for] + aria-label): keep each distinct piece once
   const seen = new Set<string>(); const uniq: string[] = [];

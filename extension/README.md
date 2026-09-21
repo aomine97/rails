@@ -13,7 +13,21 @@ Load unpacked: chrome://extensions -> Developer mode -> Load unpacked -> extensi
 ## Accounts (v1.6)
 `lib/accounts.ts`: ATS accounts behave like a password manager. On a create-account form Rails fills the profile email and a 16-character generated password (both stored only in this browser's extension storage, keyed by tenant), shows the password in the drawer with Copy/Show, and leaves the terms box and the Create Account click to the user; on a sign-in form it fills the saved pair. "Create accounts for me" (off by default) also ticks the box and clicks; some employers' terms forbid automated account creation, so it is the user's choice. Passwords never reach Rails' servers. Email verification codes are pasted by the user.
 
-## Workday (v1.6)
+## Workday (v1.7, selectors verified against a working automator)
+Facts the adapter relies on, and why each one matters, are in ../WORKDAY.md. In short: fields live in
+`div[data-automation-id="formField-<name>"]` with the label two or three levels above the control (so the label
+reader climbs ancestors now); dropdown options render in a `position: fixed` portal and also answer to
+type-ahead + Enter (both paths, short wait before the fallback); search prompts need Enter to search and Enter
+to accept, and the result shows as a chip; dates are `dateSectionMonth-input` / `dateSectionYear-input` inside
+the wrapper; education is `formField-{schoolItem,field-of-study,gradeAverage,firstYearAttended,lastYearAttended}`
+plus `button[data-automation-id="degree"]`; rows are `workExperience-N` / `education-N` / `websitePanelSet-N`
+added by `[data-automation-id*="add" i]`; steps are known from page markers (`contactInformationPage`,
+`myExperiencePage`, `voluntaryDisclosuresPage`, `selfIdentificationPage`), not the progress bar; forward is
+`bottom-navigation-next-button` or a button whose words are Save and Continue / Continue / Next. Advancing waits
+for the page to actually change, surfaces Workday's validation errors as rows, and re-runs the fill on the new
+step. `lib/workday-fixture.ts` builds a page that behaves this way so the tests catch a selector regression.
+
+## Workday (v1.6 notes)
 `lib/workday.ts` is one adapter for every tenant: Workday stamps controls with `data-automation-id` (legalNameSection_firstName, addressSection_countryRegion, phone-device-type, workExperienceSection/workExperience-N, educationSection/education-N, file-upload-input-ref, progressBar, bottom-navigation-next-button). Drivers: `wdListbox` (button[aria-haspopup=listbox] -> portal ul[role=listbox]), `wdSearch` (type-ahead selects: school, field of study, skills, phone country), `wdDate` (split month/year spinbuttons), `wdEnsureRows` (clicks Add / Add Another until the section has the rows the profile needs), radios, checkboxes. Steps: `wdStep()` reads the progress bar; the runner fills My Information, My Experience (work rows, education rows, skills, websites, resume), Voluntary Disclosures (saved answers only); Application Questions go through the generic scanner, which now sees listbox buttons. `watchSteps` notices SPA step changes; with "Fill every step" on, the drawer fills a step, clicks Workday's Save and Continue, reads back `errorMessage`s as ! rows, and stops before Review. Account creation and Submit are always the user's.
 
 ## How it works (v1.5: everything runs inside the tab)

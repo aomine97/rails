@@ -2,25 +2,39 @@
  *  Nvidia, Lockheed, Capital One, Salesforce, ... The apply flow is a multi-step SPA: My Information -> My Experience ->
  *  Application Questions -> Voluntary Disclosures -> Self Identify -> Review. This file fills one step; the runner is told which. */
 import { clean, sleep, setValue, mouse, clickLike, pressKey, type Values } from "./fill";
-import { pickFromListbox, closeLists } from "./listbox";
+import { pickFromListbox, closeLists, openOptions as listboxOptions } from "./listbox";
 import type { Me, MeExperience, MeEducation } from "./api";
 
 export const isWorkday = (host = location.hostname) => /myworkdayjobs\.com$|myworkdaysite\.com$|myworkday\.com$/.test(host);
 export type WdStep = { index: number; total: number; label: string; key: "start" | "account" | "info" | "experience" | "questions" | "disclosures" | "identify" | "review" | "unknown" };
 
+const PAGE_MARKERS: [string, WdStep["key"]][] = [
+  ["contactInformationPage", "info"], ["myExperiencePage", "experience"], ["voluntaryDisclosuresPage", "disclosures"],
+  ["selfIdentificationPage", "identify"], ["reviewPage", "review"], ["applicationQuestionsPage", "questions"], ["questionnairePage", "questions"],
+];
+/** Which step this is. Page markers are reliable across tenants; the progress bar is only a label source. */
 export function wdStep(): WdStep {
   const bar = document.querySelector('[data-automation-id="progressBar"]');
   const items = bar ? [...bar.querySelectorAll('[data-automation-id="progressBarActiveStep"], [data-automation-id="progressBarInactiveStep"], [data-automation-id="progressBarCompletedStep"], li')] : [];
   const active = bar?.querySelector('[data-automation-id="progressBarActiveStep"]') ?? bar?.querySelector('[aria-current="step"], [aria-current="true"]');
   const label = clean(active?.textContent) || clean(document.querySelector('h2[data-automation-id="pageHeaderTitle"], h2, h1')?.textContent) || "";
-  const key: WdStep["key"] = /information/i.test(label) ? "info" : /experience/i.test(label) ? "experience" : /question/i.test(label) ? "questions" : /disclosure/i.test(label) ? "disclosures" : /identify/i.test(label) ? "identify" : /review/i.test(label) ? "review"
-    : document.querySelector('[data-automation-id="createAccountSubmitButton"], [data-automation-id="signInSubmitButton"], input[type="password"]') ? "account"
-    : document.querySelector('[data-automation-id="applyManually"], [data-automation-id="autofillWithResume"]') ? "start" : "unknown";
+  let key: WdStep["key"] = "unknown";
+  for (const [marker, k] of PAGE_MARKERS) if (document.querySelector(`[data-automation-id="${marker}"]`)) { key = k; break; }
+  if (key === "unknown") {
+    key = document.querySelector('[data-automation-id="createAccountSubmitButton"], [data-automation-id="signInSubmitButton"]') || document.querySelector('input[type="password"]') ? "account"
+      : document.querySelector('[data-automation-id="applyManually"], [data-automation-id="autofillWithResume"], [data-automation-id="adventureButton"]') ? "start"
+      : /information/i.test(label) ? "info" : /experience/i.test(label) ? "experience" : /question/i.test(label) ? "questions"
+      : /disclosure/i.test(label) ? "disclosures" : /identify/i.test(label) ? "identify" : /review/i.test(label) ? "review" : "unknown";
+  }
   const idx = items.findIndex((i) => i === active || i.contains(active as Node));
   return { index: idx >= 0 ? idx + 1 : 0, total: items.length, label, key };
 }
 
 const byAuto = (id: string, root: ParentNode = document) => root.querySelector<HTMLElement>(`[data-automation-id="${id}"]`);
+/** Workday wraps each field in div[data-automation-id="formField-<name>"] with the control nested inside. */
+export const byField = (name: string, root: ParentNode = document) => root.querySelector<HTMLElement>(`[data-automation-id="formField-${name}"]`);
+/** The control for a field, whether the tenant stamps the id on the control or only on the wrapper. */
+const controlFor = (name: string, root: ParentNode = document): HTMLElement | null => byAuto(name, root) ?? byField(name, root);
 const inputOf = (el: Element | null): HTMLInputElement | HTMLTextAreaElement | null => !el ? null : el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement ? el : el.querySelector("input, textarea");
 const norm = (s: string | null | undefined) => clean(s).toLowerCase();
 const matches = (t: string, w: string) => { const a = norm(t), b = norm(w); if (!a || !b) return false; return a === b || a.startsWith(b) || (b.length > 3 && a.includes(b)) || (a.length > 3 && b.startsWith(a)) || (/^(yes|no)$/.test(b) && new RegExp(`^${b}\\b`).test(a)); };
@@ -30,7 +44,7 @@ const degreeGuesses = (name: string | null | undefined, code: string | null | un
 /** Text input by automation id (or within a row). */
 export type Tri = boolean | null; // null = that control is not on this page, so it is not the user's problem
 export function wdText(id: string, value: string | null | undefined, root: ParentNode = document): Tri {
-  const el = inputOf(byAuto(id, root)); if (!el) return null;
+  const el = inputOf(controlFor(id, root)); if (!el) return null;
   if (value == null || value === "") return false;
   if (el.value && el.value.trim() && el.value.trim() !== value) return true; // never overwrite what the user typed
   return setValue(el, value);
@@ -38,47 +52,59 @@ export function wdText(id: string, value: string | null | undefined, root: Paren
 
 /** Workday dropdown. Driving it lives in lib/listbox.ts so the generic scanner and this adapter behave identically. */
 export async function wdListbox(id: string, want: string | null | undefined, root: ParentNode = document, budgetMs = 3000): Promise<Tri> {
-  const btn = (byAuto(id, root) ?? root.querySelector(`[data-automation-id="${id}"] button`)) as HTMLElement | null; if (!btn) return null;
+  const host = controlFor(id, root);
+  const btn = (host?.matches("button") ? host : host?.querySelector("button")) as HTMLElement | null; if (!btn) return null;
   if (want == null || want === "") return false;
   return pickFromListbox(btn, want, { budgetMs });
 }
 
 /** Search-as-you-type multi/single select (school, field of study, country phone code, skills): type, wait for promptOption, pick, verify the chip. */
 export async function wdSearch(id: string, want: string | null | undefined, root: ParentNode = document, budgetMs = 6000): Promise<Tri> {
-  const box = byAuto(id, root); const input = inputOf(box) ?? (box?.matches("input") ? (box as HTMLInputElement) : null); if (!input) return null;
+  const box = controlFor(id, root); const input = inputOf(box) ?? (box?.matches("input") ? (box as HTMLInputElement) : null); if (!input) return null;
   if (want == null || want === "") return false;
-  const chips = () => [...(box?.parentElement?.querySelectorAll('[data-automation-id="selectedItem"], [data-automation-id="selectedItemList"] li') ?? [])].map((c) => norm(c.textContent));
-  if (chips().some((c) => matches(c, want))) return true;
+  const scope = box ?? input.parentElement ?? document;
+  const chips = () => [...scope.querySelectorAll('[data-automation-id="selectedItem"], [data-automation-id="selectedItemList"] li, [data-automation-id="DELETE_charm"]')].map((c) => norm(c.textContent)).filter(Boolean);
+  const chosen = () => chips().some((c) => matches(c, want)) || /\b[1-9]\d* items? selected/.test(clean(scope.textContent));
+  if (chosen()) return true;
   await closeLists();
   try { input.scrollIntoView({ block: "center" }); } catch { /* jsdom */ }
-  input.focus(); setValue(input, want); input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+  input.focus(); setValue(input, want);
+  // Workday searches on the first Enter and accepts the highlighted result on the second.
+  pressKey(input, "Enter");
   const t0 = Date.now(); let opts: HTMLElement[] = [];
-  while (Date.now() - t0 < budgetMs) { await sleep(250); opts = [...document.querySelectorAll<HTMLElement>('[data-automation-id="promptOption"], [role="listbox"] [role="option"]')]; if (opts.length) break; }
+  while (Date.now() - t0 < budgetMs) { await sleep(200); opts = listboxOptions(); if (opts.length) break; if (chosen()) return true; }
   const hit = opts.find((o) => norm(o.textContent) === norm(want)) ?? opts.find((o) => matches(o.textContent ?? "", want)) ?? (opts.length === 1 ? opts[0] : null);
-  if (!hit) { input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); return false; }
-  clickLike(hit); await sleep(200);
-  return chips().some((c) => matches(c, want)) || !!input.value;
+  if (hit) { clickLike(hit); await sleep(250); if (chosen()) return true; }
+  pressKey(input, "Enter"); await sleep(400);
+  if (chosen()) return true;
+  await closeLists();
+  return false;
 }
 
 /** Split date: <prefix>-dateSectionMonth-input / -dateSectionYear-input (spinbuttons that take typed digits). ym = "2025-08" or "2027". */
-export function wdDate(prefix: string, ym: string | null | undefined, root: ParentNode = document): Tri {
-  const yEl = inputOf(byAuto(`${prefix}-dateSectionYear-input`, root)); const mEl = inputOf(byAuto(`${prefix}-dateSectionMonth-input`, root));
-  if (!yEl && !mEl) return null;
+export function wdDate(field: string, ym: string | null | undefined, root: ParentNode = document): Tri {
+  // The prefix is on the wrapper (formField-startDate); the spinbuttons inside are dateSectionMonth-input / -Year-input.
+  const scope: ParentNode = byField(field, root) ?? byAuto(field, root) ?? root;
+  const yEl = inputOf(scope.querySelector('[data-automation-id="dateSectionYear-input"]') ?? byAuto(`${field}-dateSectionYear-input`, root));
+  const mEl = inputOf(scope.querySelector('[data-automation-id="dateSectionMonth-input"]') ?? byAuto(`${field}-dateSectionMonth-input`, root));
+  const plain = !yEl && !mEl ? inputOf(scope === root ? null : (scope as HTMLElement)) : null; // education years are a single plain input
+  if (!yEl && !mEl && !plain) return null;
   if (!ym) return false;
   const [y, m] = ym.split("-");
+  const type = (el: HTMLInputElement | HTMLTextAreaElement | null, v: string) => { if (!el) return false; el.focus(); const r = setValue(el, v); pressKey(el, v.slice(-1)); el.blur(); return r; };
+  if (plain) return type(plain, y ?? ym);
   let ok = false;
-  const type = (el: HTMLInputElement | HTMLTextAreaElement | null, v: string) => { if (!el) return false; el.focus(); el.dispatchEvent(new KeyboardEvent("keydown", { key: "a", ctrlKey: true, bubbles: true })); const r = setValue(el, v); el.dispatchEvent(new KeyboardEvent("keyup", { key: v.slice(-1), bubbles: true })); el.blur(); return r; };
   if (mEl && m) ok = type(mEl, String(Number(m))) || ok;
   if (yEl && y) ok = type(yEl, y) || ok;
   return ok;
 }
 
 export function wdCheckbox(id: string, want: boolean, root: ParentNode = document): Tri {
-  const el = inputOf(byAuto(id, root)) as HTMLInputElement | null; if (!el || el.type !== "checkbox") return null;
+  const el = inputOf(controlFor(id, root)) as HTMLInputElement | null; if (!el || el.type !== "checkbox") return null;
   if (el.checked !== want) el.click(); return el.checked === want;
 }
 export function wdRadio(id: string, want: string, root: ParentNode = document): Tri {
-  const group = byAuto(id, root); if (!group) return null;
+  const group = controlFor(id, root); if (!group) return null;
   const radios = [...group.querySelectorAll<HTMLInputElement>('input[type="radio"]')];
   const hit = radios.find((r) => matches(r.closest("label")?.textContent ?? group.querySelector(`label[for="${r.id}"]`)?.textContent ?? "", want) || matches(r.value, want));
   if (!hit) return false; if (!hit.checked) hit.click(); return hit.checked;
@@ -89,7 +115,7 @@ export async function wdEnsureRows(sectionId: string, rowPrefix: string, n: numb
   const section = byAuto(sectionId); if (!section) return [];
   const rows = () => [...section.querySelectorAll<HTMLElement>(`[data-automation-id^="${rowPrefix}-"]`)].filter((r) => /-\d+$/.test(r.getAttribute("data-automation-id") ?? ""));
   for (let i = 0; i < 6 && rows().length < n; i++) {
-    const add = [...section.querySelectorAll<HTMLElement>('button[data-automation-id="Add"], button[data-automation-id="Add Another"], button[aria-label*="Add" i]')].pop(); if (!add) break;
+    const add = [...section.querySelectorAll<HTMLElement>('button[data-automation-id*="add" i], button[aria-label*="add" i]')].filter((b) => /add/i.test(b.textContent ?? b.getAttribute("aria-label") ?? "") || /add/i.test(b.getAttribute("data-automation-id") ?? "")).pop(); if (!add) break;
     clickLike(add); await sleep(400);
   }
   return rows().slice(0, n);
@@ -144,18 +170,23 @@ export async function wdFillExperience(me: Me, files: { kind: string; file: File
     const rows = await wdEnsureRows("educationSection", "education", edus.length);
     for (let i = 0; i < rows.length; i++) {
       const r = rows[i]!, e = edus[i]!;
-      const s1 = await wdSearch("school", e.school, r); const school: Tri = s1 === true ? true : s1 === null ? wdText("schoolName", e.school, r) : (wdText("schoolName", e.school, r) === true);
+      const s1 = await wdSearch("schoolItem", e.school, r); const school: Tri = s1 === true ? true : s1 === null ? (await wdSearch("school", e.school, r) === true ? true : wdText("schoolName", e.school, r)) : (wdText("schoolName", e.school, r) === true);
       for (const g of degreeGuesses(e.degreeName, e.degree)) if (await wdListbox("degree", g, r)) break;
-      if (e.field) await wdSearch("fieldOfStudy", e.field, r, 5000);
-      if (e.gpa != null) wdText("gpa", String(e.gpa), r);
+      if (e.field) { const f1 = await wdSearch("field-of-study", e.field, r, 5000); if (f1 === null) await wdSearch("fieldOfStudy", e.field, r, 5000); }
+      if (e.gpa != null) { if (wdText("gradeAverage", String(e.gpa), r) === null) wdText("gpa", String(e.gpa), r); }
       if (e.startYear) wdDate("firstYearAttended", String(e.startYear), r);
       if (e.gradYear) wdDate("lastYearAttended", String(e.gradYear), r);
       push(rep, `edu-${i + 1}`, school, `Education ${i + 1}: ${e.school}`);
     }
   }
-  const skillsBox = byAuto("skillsSection"); if (skillsBox) { let n = 0; for (const s of me.skills.slice(0, 15)) { if (await wdSearch("skillsSection", s, document, 2500)) n++; } push(rep, "skills", n > 0, `Skills (${n} added)`); }
+  const skillsBox = byField("skillsPrompt") ?? byAuto("skillsSection");
+  if (skillsBox) { let n = 0; for (const s of me.skills.slice(0, 12)) { if ((await wdSearch(byField("skillsPrompt") ? "skillsPrompt" : "skillsSection", s, document, 3000)) === true) n++; } push(rep, "skills", n > 0, `Skills (${n} added)`); }
   const sites = [f.linkedin, f.github, f.portfolio].filter(Boolean) as string[];
-  if (sites.length && byAuto("websiteSection")) { const rows = await wdEnsureRows("websiteSection", "website", sites.length); rows.forEach((r, i) => wdText("website", sites[i]!, r)); push(rep, "websites", rows.length > 0, "Websites"); }
+  if (sites.length && byAuto("websiteSection")) {
+    const rows = await wdEnsureRows("websiteSection", "websitePanelSet", sites.length);
+    rows.forEach((r, i) => { const inp = inputOf(r); if (inp) setValue(inp, sites[i]!); });
+    push(rep, "websites", rows.length > 0, "Websites");
+  }
   if (f.linkedin) push(rep, "linkedin", wdText("linkedinQuestion", f.linkedin as string), "LinkedIn");
   if (byAuto("skillsSection") === null && byAuto("websiteSection") === null && !jobs.length && !edus.length) return rep;
   const resume = files.find((x) => x.kind === "resume");
@@ -176,8 +207,14 @@ export async function wdFillDisclosures(saved: Record<string, unknown>): Promise
 
 /** Workday's own Next button. Rails never clicks Submit; "Save and Continue" is navigation the user asks for. */
 export function wdNextButton(): HTMLElement | null {
-  return document.querySelector<HTMLElement>('button[data-automation-id="bottom-navigation-next-button"], button[data-automation-id="pageFooterNextButton"]');
+  const byId = document.querySelector<HTMLElement>('button[data-automation-id="bottom-navigation-next-button"], button[data-automation-id="pageFooterNextButton"], button[data-automation-id="wd-CommandButton_uic_nextButton"]');
+  if (byId) return byId;
+  const buttons = [...document.querySelectorAll<HTMLElement>("button")].filter((b) => !b.closest("#rails-drawer-host") && !(b as HTMLButtonElement).disabled);
+  return buttons.find((b) => /^(save and continue|continue|next|save & continue)$/i.test(clean(b.textContent))) ?? null;
 }
+/** True when this page's forward button would submit the application rather than advance a step. */
+export const wdIsSubmit = (b: HTMLElement | null) => !!b && /submit/i.test(clean(b.textContent));
+
 export function wdErrors(): string[] {
   return [...document.querySelectorAll('[data-automation-id="errorMessage"], [data-automation-id="fieldErrorMessage"], [role="alert"]')].map((e) => clean(e.textContent)).filter((t) => t && t.length < 200);
 }

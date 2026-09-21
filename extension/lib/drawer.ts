@@ -1,9 +1,10 @@
 /** In-page Rails drawer: the Jobright pattern (UI lives inside the tab, so it keeps working when you switch tabs), in Rails' skin. */
 import { api, SITE, type JobInfo, type Me } from "./api";
 import { ring, meter, logo, bandLabel, BAND, bandOf, levelLabel, logoUrl } from "./ui";
+import { clean } from "./fill";
 import { renderForm, summary, debugReport, type FormState } from "./form";
 import { prepare, run, fillOne, listOptions, learnCorrections, type RunInput } from "./runner";
-import { isWorkday, wdStep, wdNextButton, wdErrors, watchSteps } from "./workday";
+import { isWorkday, wdStep, wdNextButton, wdIsSubmit, wdErrors, watchSteps } from "./workday";
 
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
@@ -118,7 +119,7 @@ function tailorCard(): string {
 /** Workday: which step we are on, whether to fill every step on its own, and its Save and Continue (Submit stays the user's). */
 function workdayCard(): string {
   if (!isWorkday() || !state.me) return "";
-  const st = wdStep(); const done = !!state.form && !state.form.running;
+  const st = wdStep(); const done = !!state.form && !state.form.running; const next = wdNextButton();
   const names: Record<string, string> = { start: "Start", account: "Sign in / Create account", info: "My Information", experience: "My Experience", questions: "Application Questions", disclosures: "Voluntary Disclosures", identify: "Self Identify", review: "Review", unknown: "Application" };
   return `<div class="card">
     <div class="row" style="justify-content:space-between"><div><h2>Workday</h2><div class="ink" style="font-size:14px;margin-top:2px">${st.index ? `Step ${st.index} of ${st.total} · ` : ""}${esc(st.label || names[st.key])}</div></div>
@@ -128,7 +129,8 @@ function workdayCard(): string {
     ${state.form?.account ? `<div style="margin-top:10px;background:#F5F7FB;border:1px solid #E6EAF2;border-radius:10px;padding:8px 10px;font-size:12px"><div class="row" style="justify-content:space-between"><span class="ink">${state.form.account.mode === "create" ? "New account" : "Saved account"}</span><button class="btn ghost sm" id="pw-copy">Copy password</button></div><div class="muted" style="margin-top:2px">${esc(state.form.account.email)}</div><div style="font-family:ui-monospace,monospace;margin-top:2px">${state.showPw ? esc(state.form.account.password) : "••••••••••••••••"} <button class="btn ghost sm" id="pw-show">${state.showPw ? "Hide" : "Show"}</button></div><div class="note" style="margin-top:4px">Stored only in this browser's extension storage. If the site emails a verification code, paste it yourself.</div></div>` : ""}
     ${st.key === "review" ? `<p class="note" style="margin:8px 0 0">Read it through. Submit is yours.</p>` : ""}
     ${st.key === "identify" ? `<p class="note" style="margin:8px 0 0">Self-identification needs your own signature and date; Rails leaves it to you.</p>` : ""}
-    ${done && st.key !== "review" && wdNextButton() ? `<button class="btn secondary" id="wd-next" style="margin-top:10px;width:100%">Save and Continue →</button>` : ""}
+    ${next && !wdIsSubmit(next) ? `<button class="btn secondary" id="wd-next" style="margin-top:10px;width:100%">${esc(clean(next.textContent) || "Save and Continue")} →</button>${done ? "" : `<p class="note" style="margin:6px 0 0">You can move on before the fill finishes; it will pick up the next page.</p>`}` : ""}
+    ${next && wdIsSubmit(next) ? `<p class="note" style="margin:10px 0 0">The button on this page submits the application. That click is yours.</p>` : ""}
   </div>`;
 }
 
@@ -275,14 +277,33 @@ async function markApplied(yes: boolean) {
   render();
 }
 
-async function wdNext() {
-  const b = wdNextButton(); if (!b) return;
-  b.click(); state.status = "Saving this step…"; render();
-  await new Promise((r) => setTimeout(r, 1800));
-  const errs = wdErrors();
-  if (errs.length) { state.status = `Workday flagged: ${errs.slice(0, 3).join(" · ")}`; if (state.form) { for (const e of errs) state.form.rows.unshift({ f: { id: `wderr:${e.slice(0, 40)}`, label: e, kind: "text", required: true, filled: false, sensitive: false, conditional: false }, s: "left", why: "Fix this on the page, then Save and Continue." }); } }
-  else state.status = null;
+async function wdNext(auto = false): Promise<boolean> {
+  const b = wdNextButton();
+  if (!b || wdIsSubmit(b)) return false;
+  const before = `${wdStep().key}|${location.href}|${document.querySelectorAll("[data-automation-id]").length}`;
+  state.status = "Saving this step…"; render();
+  b.click();
+  // Workday validates, then swaps the page in place. Wait for either the page to change or errors to appear.
+  const t0 = Date.now(); let errs: string[] = [];
+  while (Date.now() - t0 < 12000) {
+    await new Promise((r) => setTimeout(r, 400));
+    errs = wdErrors();
+    if (errs.length) break;
+    const now = `${wdStep().key}|${location.href}|${document.querySelectorAll("[data-automation-id]").length}`;
+    if (now !== before) {
+      state.form = null; state.input = null; state.status = null; render();
+      await new Promise((r) => setTimeout(r, 600));           // let the new step finish rendering
+      if (auto || state.wdAuto) { setOpen(true); await startFill(); }
+      else { state.status = `Next step: ${wdStep().label || "loaded"}. Autofill fills it.`; render(); }
+      return true;
+    }
+  }
+  if (errs.length) {
+    state.status = `Workday needs these fixed: ${errs.slice(0, 3).join(" · ")}`;
+    if (state.form) for (const e of errs) if (!state.form.rows.some((r) => r.f.id === `wderr:${e.slice(0, 40)}`)) state.form.rows.unshift({ f: { id: `wderr:${e.slice(0, 40)}`, label: e, kind: "text", required: true, filled: false, sensitive: false, conditional: false }, s: "left", why: "Workday rejected this. Fix it on the page, then Save and Continue." });
+  } else state.status = "Workday did not move on. Check the page for a message.";
   render();
+  return false;
 }
 
 function broadcast() { try { chrome.runtime.sendMessage({ type: "rails:state", form: state.form, job: state.job, url: location.href }).catch(() => {}); } catch { /* panel closed */ } }
@@ -315,7 +336,14 @@ export function mountDrawer(opts: { openPanel: () => void }) {
     chrome.storage.local.get(["rails_wd_auto", "rails_auto_accounts"]).then((r) => { state.wdAuto = r.rails_wd_auto === true; state.autoAccounts = r.rails_auto_accounts === true; render(); }).catch(() => {});
     watchSteps((step) => {
       state.form = null; state.input = null; state.status = null; render();
-      if (state.wdAuto && state.me && (["info", "experience", "questions", "disclosures"].includes(step.key) || (step.key === "account" && state.autoAccounts))) { setOpen(true); void startFill().then(async () => { if (state.wdAuto && state.form && !state.form.error && state.form.rows.every((r) => r.s !== "left" && r.s !== "failed")) await wdNext(); }); }
+      if (state.wdAuto && state.me && (["info", "experience", "questions", "disclosures"].includes(step.key) || (step.key === "account" && state.autoAccounts))) {
+        setOpen(true);
+        void startFill().then(async () => {
+          const blocked = state.form?.rows.some((r) => (r.s === "left" || r.s === "failed") && r.f.required);
+          if (state.wdAuto && !state.form?.error && !blocked) await wdNext(true);
+          else if (blocked) { state.status = "Stopped: some required answers still need you."; render(); }
+        });
+      }
       else if (["info", "experience", "questions", "disclosures"].includes(step.key)) { state.status = `New step: ${step.label}. Autofill fills it.`; setOpen(true); render(); }
     });
   }

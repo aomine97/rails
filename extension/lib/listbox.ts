@@ -34,38 +34,46 @@ export const shownText = (btn: Element) => clean(btn.textContent);
 const scrollTo = (el: Element, block: ScrollLogicalPosition) => { try { el.scrollIntoView({ block }); } catch { /* jsdom */ } };
 const isPlaceholder = (t: string) => !t || /^(select one|select\.\.\.|select|choose|please select|-+|search)$/i.test(t);
 
-/** Pick `want` from the list `btn` opens. Returns true only when the button shows it afterwards. */
-export async function pickFromListbox(btn: HTMLElement, want: string, opts: { budgetMs?: number; typeAhead?: boolean } = {}): Promise<boolean> {
-  const budget = opts.budgetMs ?? 3000;
-  if (optionMatches(shownText(btn), want) && !isPlaceholder(shownText(btn))) return true;
+/** Pick `want` from the list `btn` opens. Returns true only when the button shows it afterwards.
+ *  Two paths, because Workday uses both: click the option when it is rendered, otherwise type and press Enter
+ *  (long lists are virtualized and render nothing until you type). The wait before falling back is short on
+ *  purpose — a list that has not appeared in under a second is not going to. */
+export async function pickFromListbox(btn: HTMLElement, want: string, opts: { budgetMs?: number } = {}): Promise<boolean> {
+  const settled = () => optionMatches(shownText(btn), want) && !isPlaceholder(shownText(btn));
+  if (settled()) return true;
+  const openWait = Math.min(opts.budgetMs ?? 1000, 1200);
   for (let attempt = 0; attempt < 2; attempt++) {
     await closeLists();
     scrollTo(btn, "center");
     btn.focus(); clickLike(btn);
     const t0 = Date.now();
-    while (Date.now() - t0 < budget && !openOptions(btn).length) await sleep(100);
-    if (!openOptions(btn).length) { pressKey(btn, "Enter"); await sleep(300); }
+    while (Date.now() - t0 < openWait && !openOptions(btn).length) await sleep(80);
+
     let list = openOptions(btn);
-    if (!list.length) continue;
-    let hit = list.find((o) => norm(o.textContent) === norm(want)) ?? list.find((o) => optionMatches(o.textContent ?? "", want));
-    if (!hit && opts.typeAhead !== false) {
-      // virtualized list (states, countries): type and let the widget filter or jump
-      const target = (document.activeElement as HTMLElement | null) ?? btn;
-      typeKeys(target, want.slice(0, 8)); await sleep(400);
-      list = openOptions(btn);
-      hit = list.find((o) => norm(o.textContent) === norm(want)) ?? list.find((o) => optionMatches(o.textContent ?? "", want));
-      if (!hit) { const focused = list.find((o) => o.getAttribute("aria-selected") === "true" || o.matches("[data-focused='true'], .focused, [aria-current='true']")); if (focused && optionMatches(focused.textContent ?? "", want.slice(0, 5))) hit = focused; }
+    if (list.length) {
+      let hit = list.find((o) => norm(o.textContent) === norm(want)) ?? list.find((o) => optionMatches(o.textContent ?? "", want));
+      if (!hit) {
+        typeKeys(target(btn), want.slice(0, 12)); await sleep(350);
+        list = openOptions(btn);
+        hit = list.find((o) => norm(o.textContent) === norm(want)) ?? list.find((o) => optionMatches(o.textContent ?? "", want));
+      }
+      if (hit) {
+        scrollTo(hit, "nearest"); clickLike(hit); await sleep(180);
+        if (settled()) return true;
+        pressKey(hit, "Enter"); await sleep(220);
+        if (settled()) return true;
+      }
     }
-    if (!hit) { await closeLists(); continue; }
-    scrollTo(hit, "nearest");
-    clickLike(hit); await sleep(200);
-    if (optionMatches(shownText(btn), want) && !isPlaceholder(shownText(btn))) return true;
-    if (openOptions(btn).length) { pressKey(hit, "Enter"); await sleep(250); }
-    if (optionMatches(shownText(btn), want) && !isPlaceholder(shownText(btn))) return true;
+
+    // keyboard path: works whether or not anything rendered
+    typeKeys(target(btn), want.slice(0, 20)); await sleep(300);
+    pressKey(target(btn), "Enter"); await sleep(250);
+    if (settled()) return true;
     await closeLists();
   }
   return false;
 }
+const target = (btn: HTMLElement) => (document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : btn);
 
 /** The choices this widget offers, read once and left closed. */
 export async function readListbox(btn: HTMLElement, budgetMs = 1500): Promise<string[]> {
