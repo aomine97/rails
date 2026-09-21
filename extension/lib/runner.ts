@@ -67,8 +67,8 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
   const set = (step: string) => { fs.step = step; emit(); };
   fs.running = true; set("Reading the form…");
   const fields = scanAll();
-  let budget = 14;
-  for (const f of fields) if ((f.kind === "combobox" || f.kind === "listbox") && !f.filled && budget > 0) { budget--; f.options = await readComboOptions(rootOf(f.id), f); }
+  let budget = 40;
+  for (const f of fields) if ((f.kind === "combobox" || f.kind === "listbox") && !f.filled && budget > 0) { budget--; try { f.options = await readComboOptions(rootOf(f.id), f, 1200); } catch { /* keep going */ } }
   fs.rows = fields.map((f) => ({ f, s: f.filled ? "done" : f.conditional ? "skip" : "todo", value: f.value }));
   if (!fs.rows.length) { fs.running = false; fs.step = "No form on this page yet."; emit(); return fs; }
   emit();
@@ -143,6 +143,12 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
         emit();
       }
     } catch (e) { for (const r of ask) if (r.s === "todo") { r.s = "left"; r.why = "Answer service unavailable"; } fs.error = `Could not answer questions: ${String((e as Error).message)}`; }
+  }
+  // one retry for anything the page refused the first time (a list that was still closing, a field that appeared late)
+  const retry = fs.rows.filter((r) => r.s === "failed" && r.value);
+  if (retry.length) {
+    set(`Retrying ${retry.length} field${retry.length === 1 ? "" : "s"}…`);
+    for (const r of retry) { const ok = await applyAnswer(rootOf(r.f.id), r.f, r.f.kind === "checkboxes" ? r.value!.split(", ") : r.value!).catch(() => false); if (ok) { r.s = "done"; r.why = undefined; } emit(); }
   }
   for (const r of fs.rows) if (r.s === "todo") r.s = "left";
   refresh(fs);

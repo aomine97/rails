@@ -1,7 +1,8 @@
 /** Workday: one adapter for every tenant. Workday stamps each control with data-automation-id and the ids are the same on
  *  Nvidia, Lockheed, Capital One, Salesforce, ... The apply flow is a multi-step SPA: My Information -> My Experience ->
  *  Application Questions -> Voluntary Disclosures -> Self Identify -> Review. This file fills one step; the runner is told which. */
-import { clean, sleep, setValue, mouse, clickLike, typeKeys, pressKey, type Values } from "./fill";
+import { clean, sleep, setValue, mouse, clickLike, pressKey, type Values } from "./fill";
+import { pickFromListbox, closeLists } from "./listbox";
 import type { Me, MeExperience, MeEducation } from "./api";
 
 export const isWorkday = (host = location.hostname) => /myworkdayjobs\.com$|myworkdaysite\.com$|myworkday\.com$/.test(host);
@@ -35,30 +36,11 @@ export function wdText(id: string, value: string | null | undefined, root: Paren
   return setValue(el, value);
 }
 
-/** Workday dropdown: <button aria-haspopup="listbox"> that opens a ul[role=listbox] in a portal. Long lists (states, countries) are
- *  virtualized, so when the option is not in the DOM we type-ahead (Workday moves the highlight as you type) and press Enter. */
-export const listboxOptions = () => [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li, [data-automation-id="promptOption"]')].filter((o) => !o.closest("#rails-drawer-host"));
+/** Workday dropdown. Driving it lives in lib/listbox.ts so the generic scanner and this adapter behave identically. */
 export async function wdListbox(id: string, want: string | null | undefined, root: ParentNode = document, budgetMs = 3000): Promise<Tri> {
   const btn = (byAuto(id, root) ?? root.querySelector(`[data-automation-id="${id}"] button`)) as HTMLElement | null; if (!btn) return null;
   if (want == null || want === "") return false;
-  if (matches(btn.textContent ?? "", want)) return true;
-  const open = async () => { if (listboxOptions().length) return; btn.focus(); clickLike(btn); const t0 = Date.now(); while (Date.now() - t0 < budgetMs && !listboxOptions().length) await sleep(120); if (!listboxOptions().length) { pressKey(btn, "Enter"); await sleep(250); } };
-  await open();
-  let opts = listboxOptions();
-  let hit = opts.find((o) => norm(o.textContent) === norm(want)) ?? opts.find((o) => matches(o.textContent ?? "", want));
-  if (!hit && opts.length) {
-    // type-ahead on the open list, then read again
-    const target = (document.activeElement as HTMLElement | null) ?? btn;
-    typeKeys(target, want.slice(0, 6)); await sleep(350);
-    opts = listboxOptions(); hit = opts.find((o) => norm(o.textContent) === norm(want)) ?? opts.find((o) => matches(o.textContent ?? "", want)) ?? opts.find((o) => o.getAttribute("aria-selected") === "true" && matches(o.textContent ?? "", want));
-    if (!hit) { const focused = opts.find((o) => o.getAttribute("aria-selected") === "true" || o.matches(":focus, [data-focused='true'], .focused")); if (focused && matches(focused.textContent ?? "", want.slice(0, 4))) hit = focused; }
-  }
-  if (!hit) { pressKey(btn, "Escape"); mouse("mousedown", document.body); return false; }
-  clickLike(hit); await sleep(150);
-  if (matches(btn.textContent ?? "", want)) return true;
-  // some tenants select on Enter rather than click
-  if (listboxOptions().length) { pressKey(hit, "Enter"); await sleep(200); }
-  return matches(btn.textContent ?? "", want) || !listboxOptions().length;
+  return pickFromListbox(btn, want, { budgetMs });
 }
 
 /** Search-as-you-type multi/single select (school, field of study, country phone code, skills): type, wait for promptOption, pick, verify the chip. */
@@ -67,6 +49,8 @@ export async function wdSearch(id: string, want: string | null | undefined, root
   if (want == null || want === "") return false;
   const chips = () => [...(box?.parentElement?.querySelectorAll('[data-automation-id="selectedItem"], [data-automation-id="selectedItemList"] li') ?? [])].map((c) => norm(c.textContent));
   if (chips().some((c) => matches(c, want))) return true;
+  await closeLists();
+  try { input.scrollIntoView({ block: "center" }); } catch { /* jsdom */ }
   input.focus(); setValue(input, want); input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
   const t0 = Date.now(); let opts: HTMLElement[] = [];
   while (Date.now() - t0 < budgetMs) { await sleep(250); opts = [...document.querySelectorAll<HTMLElement>('[data-automation-id="promptOption"], [role="listbox"] [role="option"]')]; if (opts.length) break; }

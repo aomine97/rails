@@ -1,4 +1,5 @@
-import { clean, isCombobox, isFillable, controlOf, shownValue, clickLike, mouse, typeKeys, pressKey, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
+import { clean, isCombobox, isFillable, controlOf, shownValue, clickLike, mouse, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
+import { pickFromListbox, readListbox, closeLists } from "./listbox";
 
 /** Everything the form asks, as the panel's checklist sees it. Built once per page; ids are stable data attributes. */
 export type Kind = "text" | "textarea" | "number" | "date" | "select" | "combobox" | "listbox" | "radio" | "checkbox" | "checkboxes" | "file";
@@ -110,12 +111,8 @@ export function scanFields(root: Document | ShadowRoot): ScannedField[] {
 /** Open a react-select once, read its options, close it. Server-searched lists come back empty and are flagged searchable. */
 export async function readComboOptions(root: Document | ShadowRoot, field: ScannedField, budgetMs = 900): Promise<string[]> {
   const el = byId(root, field.id) as HTMLInputElement | null; if (!el) return [];
-  if (field.kind === "listbox") {
-    clickLike(el); const t0 = Date.now(); let opts: string[] = [];
-    while (Date.now() - t0 < Math.max(budgetMs, 1500)) { await sleep(120); opts = [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li')].map((o) => clean(o.textContent)).filter(Boolean); if (opts.length) break; }
-    el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); mouse("mousedown", document.body); await sleep(60);
-    return opts.slice(0, 80);
-  }
+  if (field.kind === "listbox") return readListbox(el, Math.max(budgetMs, 1500));
+  await closeLists();
   clickLike(controlOf(el)); await sleep(150);
   let opts = listboxFor(el, root).map((o) => clean(o.textContent)).filter((t) => t && !/^(loading|no options|type to search|start typing)/i.test(t));
   const t0 = Date.now();
@@ -138,19 +135,7 @@ export async function applyAnswer(root: Document | ShadowRoot, field: ScannedFie
       for (const w of wantList) { const hit = group.find((r) => matches(clean(labelTextFor(r, root)), w) || matches(r.value, w)); if (hit) { if (!hit.checked) hit.click(); any = any || hit.checked; } }
       return any;
     }
-    case "listbox": {
-      const btn = el; const want = wantList[0]!; if (matches(clean(btn.textContent), want)) return true;
-      const opts = () => [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li, [data-automation-id="promptOption"]')].filter((o) => !o.closest("#rails-drawer-host"));
-      btn.focus(); clickLike(btn); const t0 = Date.now(); while (Date.now() - t0 < 3000 && !opts().length) await sleep(120);
-      if (!opts().length) { pressKey(btn, "Enter"); await sleep(250); }
-      let list = opts(); let hit = list.find((o) => clean(o.textContent).toLowerCase() === want.toLowerCase()) ?? list.find((o) => matches(clean(o.textContent), want));
-      if (!hit && list.length) { typeKeys((document.activeElement as HTMLElement | null) ?? btn, want.slice(0, 6)); await sleep(350); list = opts(); hit = list.find((o) => clean(o.textContent).toLowerCase() === want.toLowerCase()) ?? list.find((o) => matches(clean(o.textContent), want)); }
-      if (!hit) { pressKey(btn, "Escape"); return false; }
-      clickLike(hit); await sleep(150);
-      if (matches(clean(btn.textContent), want)) return true;
-      if (opts().length) { pressKey(hit, "Enter"); await sleep(200); }
-      return matches(clean(btn.textContent), want) || !opts().length;
-    }
+    case "listbox": return pickFromListbox(el, wantList[0]!, { budgetMs: 3000 });
     case "checkbox": { const want = typeof value === "boolean" ? value : /^(yes|true|1|agree|accept)$/i.test(String(value)); return setValue(el as HTMLInputElement, want); }
     case "select": return wantList.map((w) => setValue(el as HTMLSelectElement, w)).some(Boolean);
     case "combobox": { let any = false; for (const w of wantList) any = (await pickCombobox(el as HTMLInputElement, w, root, { type: !!field.searchable || (field.options?.length ?? 0) > 12, budgetMs: field.searchable ? 6000 : 3000 })) || any; return any; }

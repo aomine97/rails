@@ -100,5 +100,21 @@ describe("workday", () => {
     const rep2 = await wdFillExperience(me, []);
     expect(rep2.some((r) => /skills|websites|linkedin|resume/.test(r.key))).toBe(false);
   });
+  it("a list left open by the previous field is never read as this field's options", async () => {
+    document.body.innerHTML = "";
+    const a = listboxButton("q_a", ["Alpha", "Beta"], "First question");
+    const b = listboxButton("q_b", ["Yes", "No"], "Second question");
+    a.click(); // leave the first list hanging open, the way a half-finished pick does
+    expect(document.querySelectorAll('[role="option"]').length).toBe(2);
+    expect(await wdListbox("q_b", "Yes")).toBe(true);
+    expect(b.textContent).toBe("Yes");
+    expect(a.textContent).toBe("Select One"); // the stale list was closed, not picked from
+  });
+  it("options inside a fixed-position portal still count (offsetParent is null there)", async () => {
+    document.body.innerHTML = "";
+    const btn = listboxButton("q_fixed", ["Mobile", "Home"]);
+    btn.addEventListener("click", () => { const p = document.querySelector<HTMLElement>("#portal"); if (p) p.style.position = "fixed"; });
+    expect(await wdListbox("q_fixed", "Mobile")).toBe(true);
+  });
   it("reads Workday validation errors", () => { document.body.innerHTML = `<div data-automation-id="errorMessage">Phone Number is required.</div>`; expect(wdErrors()).toEqual(["Phone Number is required."]); });
 });
