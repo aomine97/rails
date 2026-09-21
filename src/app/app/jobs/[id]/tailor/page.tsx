@@ -32,11 +32,11 @@ export default async function TailorPage({ params }: { params: Promise<{ id: str
 
   return (
     <AppShell active="/app" name={profile.full_name} credits={plan === "free" ? credits?.balance ?? 3 : null}>
-      <div className="mx-auto w-full max-w-5xl px-6 py-6">
+      <div className="pb-10">
         <Link href={`/app/jobs/${id}`} className="text-sm font-semibold text-muted hover:text-ink">← {job.title}</Link>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="font-display text-2xl font-extrabold tracking-tight">Tailor for {company}</h1>
+            <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Tailor for {company}</h1>
             <p className="mt-1 max-w-2xl text-[14px] leading-relaxed text-text">Your bullets, reworded toward what this posting asks for. Every line shows where it came from. Nothing is added that isn&apos;t on your profile; the gap plan tells you what would move the number.</p>
           </div>
           {t && (

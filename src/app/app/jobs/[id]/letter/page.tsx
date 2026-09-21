@@ -24,7 +24,7 @@ export default async function LetterPage({ params }: { params: Promise<{ id: str
   const sources: string[] = typeof app?.notes === "string" && app.notes.startsWith("Letter sources: ") ? app.notes.slice(16).split(" | ") : [];
   return (
     <AppShell active="/app" name={profile.full_name} credits={plan === "free" ? credits?.balance ?? 3 : null}>
-      <div className="mx-auto w-full max-w-4xl px-6 py-6">
+      <div className="pb-10">
         <Link href={`/app/jobs/${id}`} className="text-sm font-semibold text-muted hover:text-ink">← {job.title}</Link>
         <h1 className="mt-2 font-display text-2xl font-extrabold tracking-tight">Cover letter for {company}</h1>
         <p className="mt-1 max-w-2xl text-[14px] leading-relaxed text-text">Three short paragraphs, plain voice, one honest line about a gap. Every fact comes from your profile and is listed underneath so you can check it.</p>

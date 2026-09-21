@@ -21,8 +21,8 @@ export default async function SettingsPage() {
   const WHERE: [string, string][] = [["near", "Near me"], ["us", "United States"], ["remote", "Remote only"], ...COUNTRY_CHIPS, ["anywhere", "Anywhere"]];
   return (
     <AppShell active="/app/settings" name={p.full_name}>
-      <div className="mx-auto w-full max-w-2xl px-6 py-6">
-        <h1 className="font-display text-2xl font-extrabold tracking-tight">Settings</h1>
+      <div className="max-w-[720px] pb-10">
+        <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Settings</h1>
         <form action={saveAlertSettings} className="mt-6 rounded-2xl border border-line bg-surface p-6 text-[14px]">
           <div className="text-[11px] font-bold uppercase tracking-wide text-muted">New-job alerts</div>
           <p className="mt-1 text-text">{plan === "free" ? "One email a day with the new jobs that clear your fit floor. Pro sends them the hour they post." : "You get an email within the hour when a new job clears your fit floor."} Sent to <span className="font-semibold text-ink">{p.email}</span>.</p>

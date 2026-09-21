@@ -31,8 +31,8 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
 
   return (
     <AppShell active="/app/billing" name={profile?.full_name} credits={plan === "free" ? credits?.balance ?? 3 : null}>
-      <div className="mx-auto w-full max-w-3xl px-6 py-6">
-        <h1 className="font-display text-2xl font-extrabold tracking-tight">Billing</h1>
+      <div className="max-w-[860px] pb-10">
+        <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Billing</h1>
         {sp.welcome && <div className="mt-4 rounded-xl border border-green-chip-text/30 bg-green-chip px-4 py-3 text-[13px] text-green-chip-text"><span className="font-bold">You are on {plan === "free" ? "your way" : plan === "pro" ? "Rails Pro" : "the Semester Pass"}.</span> {plan === "free" ? "Stripe is confirming the payment; this page updates within a minute." : "Credits are unlimited now. Go tailor something."}</div>}
         {sp.hired && <div className="mt-4 rounded-xl border border-green-chip-text/30 bg-green-chip px-4 py-3 text-[13px] text-green-chip-text"><span className="font-bold">Congratulations.</span> {plan === "pro" ? "Pro stays on until the end of this period and does not renew." : "Your pass is paused; the remaining days are kept for when you need them."}</div>}
 

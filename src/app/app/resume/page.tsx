@@ -23,9 +23,9 @@ export default async function ResumePage() {
   const potential = Math.min(100, s.total + s.fixes.reduce((a, f) => a + f.points, 0));
   return (
     <AppShell active="/app/resume" name={profile.full_name} credits={credits?.balance ?? 3}>
-      <div className="mx-auto w-full max-w-5xl px-6 py-6">
+      <div className="pb-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <div><h1 className="font-display text-2xl font-extrabold tracking-tight">Resume score</h1><p className="mt-1 max-w-2xl text-[14px] leading-relaxed text-text">How your base resume reads as a document, before any job. Instant, explainable, and the fixes are ranked by how many points each is worth.</p></div>
+          <div><h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Resume score</h1><p className="mt-1 max-w-2xl text-[14px] leading-relaxed text-text">How your base resume reads as a document, before any job. Instant, explainable, and the fixes are ranked by how many points each is worth.</p></div>
           <Link href="/onboarding/confirm" className="rounded-full border border-line bg-surface px-4 py-2 text-[13px] font-semibold text-ink">Edit my profile</Link>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr]">

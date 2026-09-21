@@ -11,8 +11,8 @@ export default async function PastePage() {
   if (!profile?.onboarding_done) redirect("/onboarding");
   return (
     <AppShell active="/app" name={profile.full_name}>
-      <div className="mx-auto w-full max-w-2xl px-6 py-8">
-        <h1 className="font-display text-2xl font-extrabold tracking-tight">Add a job from anywhere</h1>
+      <div className="max-w-[720px] pb-10">
+        <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Add a job from anywhere</h1>
         <p className="mt-1 text-[14px] leading-relaxed text-text">Paste a posting link from LinkedIn, Handshake, a company site, anywhere. Rails reads it, scores it against your profile, and it shows up under External with everything the feed has.</p>
         <div className="mt-6"><PasteForm /></div>
       </div>

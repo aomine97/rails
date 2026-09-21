@@ -60,10 +60,10 @@ export default async function AutopilotPage() {
 
   return (
     <AppShell active="/app/autopilot" name={p.full_name} credits={plan === "free" ? credits?.balance ?? 3 : null}>
-      <div className="mx-auto w-full max-w-4xl px-6 py-6">
+      <div className="pb-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="font-display text-2xl font-extrabold tracking-tight">Autopilot</h1>
+            <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Autopilot</h1>
             <p className="mt-1 max-w-2xl text-[14px] leading-relaxed text-text">Every night Rails picks the new jobs above your fit floor, one per company, and {cap.prepare ? `tailors a resume for up to ${cap.count}` : "shows what it would prepare"}. You approve, the board opens with everything ready, and you click Submit. Rails never submits.</p>
           </div>
           <form action={saveAutopilotSettings} className="flex items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3 text-[13px]">
