@@ -1,7 +1,7 @@
 import { clean, isCombobox, isFillable, controlOf, shownValue, clickLike, mouse, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
 
 /** Everything the form asks, as the panel's checklist sees it. Built once per page; ids are stable data attributes. */
-export type Kind = "text" | "textarea" | "number" | "date" | "select" | "combobox" | "radio" | "checkbox" | "checkboxes" | "file";
+export type Kind = "text" | "textarea" | "number" | "date" | "select" | "combobox" | "listbox" | "radio" | "checkbox" | "checkboxes" | "file";
 export type ScannedField = {
   id: string; label: string; kind: Kind; options?: string[]; required: boolean; filled: boolean; value?: string;
   /** EEO / pronouns / self-identification: never leaves the extension. */ sensitive: boolean;
@@ -40,6 +40,15 @@ const groupLabel = (el: Element, root: Document | ShadowRoot): string => {
 /** Read the DOM into fields. Does not open anything; combobox options come from readComboOptions. */
 export function scanFields(root: Document | ShadowRoot): ScannedField[] {
   const out: ScannedField[] = []; const seenGroups = new Set<string>();
+  // Workday-style dropdowns: a button that opens a listbox. Label comes from the surrounding form field.
+  for (const btn of root.querySelectorAll<HTMLElement>('button[aria-haspopup="listbox"]')) {
+    if (btn.closest("#rails-drawer-host")) continue;
+    const wrap = btn.closest('[data-automation-id^="formField-"], [data-automation-id$="Section"], div');
+    const label = clean(btn.getAttribute("aria-label")) && !/select one/i.test(btn.getAttribute("aria-label") ?? "") ? clean(btn.getAttribute("aria-label")) : labelTextFor(btn, root) || clean(wrap?.querySelector("label, legend")?.textContent);
+    if (!label || label.length > 220) continue;
+    const cur = clean(btn.textContent); const filled = !!cur && !/^(select one|select|choose|please select)/i.test(cur);
+    out.push({ id: mark(btn), label, kind: "listbox", required: isRequired(btn, root, label) || !!wrap?.querySelector("abbr[title='required'], .required, [aria-required='true']"), filled, value: filled ? cur : "", sensitive: SENSITIVE.test(label), conditional: CONDITIONAL.test(label) });
+  }
   const nodes = [...root.querySelectorAll<HTMLElement>("input, textarea, select")];
   for (const el of nodes) {
     if (el instanceof HTMLInputElement && ["hidden", "submit", "button", "image", "reset", "password", "search"].includes(el.type)) continue;
@@ -90,6 +99,12 @@ export function scanFields(root: Document | ShadowRoot): ScannedField[] {
 /** Open a react-select once, read its options, close it. Server-searched lists come back empty and are flagged searchable. */
 export async function readComboOptions(root: Document | ShadowRoot, field: ScannedField, budgetMs = 900): Promise<string[]> {
   const el = byId(root, field.id) as HTMLInputElement | null; if (!el) return [];
+  if (field.kind === "listbox") {
+    clickLike(el); const t0 = Date.now(); let opts: string[] = [];
+    while (Date.now() - t0 < Math.max(budgetMs, 1500)) { await sleep(120); opts = [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li')].map((o) => clean(o.textContent)).filter(Boolean); if (opts.length) break; }
+    el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); mouse("mousedown", document.body); await sleep(60);
+    return opts.slice(0, 80);
+  }
   clickLike(controlOf(el)); await sleep(150);
   let opts = listboxFor(el, root).map((o) => clean(o.textContent)).filter((t) => t && !/^(loading|no options|type to search|start typing)/i.test(t));
   const t0 = Date.now();
@@ -111,6 +126,14 @@ export async function applyAnswer(root: Document | ShadowRoot, field: ScannedFie
       let any = false;
       for (const w of wantList) { const hit = group.find((r) => matches(clean(labelTextFor(r, root)), w) || matches(r.value, w)); if (hit) { if (!hit.checked) hit.click(); any = any || hit.checked; } }
       return any;
+    }
+    case "listbox": {
+      const btn = el; if (matches(clean(btn.textContent), wantList[0]!)) return true;
+      clickLike(btn); const t0 = Date.now(); let opts: HTMLElement[] = [];
+      while (Date.now() - t0 < 3000) { await sleep(120); opts = [...document.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"], ul[role="listbox"] li')]; if (opts.length) break; }
+      const hit = opts.find((o) => clean(o.textContent).toLowerCase() === wantList[0]!.toLowerCase()) ?? opts.find((o) => matches(clean(o.textContent), wantList[0]!));
+      if (!hit) { btn.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); return false; }
+      clickLike(hit); await sleep(150); return matches(clean(btn.textContent), wantList[0]!) || !document.querySelector('[role="listbox"]');
     }
     case "checkbox": { const want = typeof value === "boolean" ? value : /^(yes|true|1|agree|accept)$/i.test(String(value)); return setValue(el as HTMLInputElement, want); }
     case "select": return wantList.map((w) => setValue(el as HTMLSelectElement, w)).some(Boolean);

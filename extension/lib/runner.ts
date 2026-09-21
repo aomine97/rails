@@ -4,6 +4,7 @@ import { api, getToken, type JobInfo, type Me } from "./api";
 import { fillForm, atsOf, attachFile, type Values, type FillResult } from "./fill";
 import { scanFields, readComboOptions, applyAnswer, type ScannedField } from "./scan";
 import { answerKey, summary, type FormState, type Row } from "./form";
+import { isWorkday, wdStep, wdFillInfo, wdFillExperience, wdFillDisclosures, wdText, type WdReport } from "./workday";
 
 export type RunFile = { kind: "resume" | "letter"; name: string; type: string; bytes: ArrayBuffer };
 export type RunInput = { me: Me; job: JobInfo | null; files: RunFile[]; learned: Record<string, string[]> };
@@ -69,6 +70,23 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
   fs.rows = fields.map((f) => ({ f, s: f.filled ? "done" : f.conditional ? "skip" : "todo", value: f.value }));
   if (!fs.rows.length) { fs.running = false; fs.step = "No form on this page yet."; emit(); return fs; }
   emit();
+
+  // 0. Workday: the step's known controls first (listbox buttons, search selects, split dates, Add Another rows)
+  if (isWorkday()) {
+    const step = wdStep(); fs.wdStep = step;
+    set(`Workday · ${step.label || step.key}…`);
+    let rep: WdReport = [];
+    const files = input.files.map((f) => ({ kind: f.kind, file: new File([f.bytes], f.name, { type: f.type }) }));
+    try {
+      if (step.key === "info") rep = await wdFillInfo(input.me, await loadSaved());
+      else if (step.key === "experience") rep = await wdFillExperience(input.me, files);
+      else if (step.key === "disclosures") rep = await wdFillDisclosures(await loadSaved());
+      else if (step.key === "account") { rep = [{ key: "email", success: wdText("email", input.me.fields.email as string), label: "Email" }]; fs.error = "Create the account yourself (Rails never types passwords), then come back to this drawer."; }
+      else if (step.key === "start") { const r = files.find((x) => x.kind === "resume"); const inp = document.querySelector<HTMLInputElement>('input[data-automation-id="file-upload-input-ref"], input[type="file"]'); if (r && inp) { try { const dt = new DataTransfer(); dt.items.add(r.file); inp.files = dt.files; inp.dispatchEvent(new Event("change", { bubbles: true })); rep = [{ key: "resume", success: true, label: `Resume uploaded for Workday's own parser: ${r.file.name}` }]; } catch { /* left */ } } }
+    } catch (e) { fs.error = `Workday step failed: ${String((e as Error).message)}`; }
+    for (const r of rep) fs.rows.unshift({ f: { id: `wd:${r.key}`, label: r.label, kind: "text", required: true, filled: r.success, sensitive: false, conditional: false }, s: r.success ? "done" : "left", why: r.success ? undefined : "Set this one on the page." });
+    emit();
+  }
 
   // 1. rules + files
   set("Filling your details…");

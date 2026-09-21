@@ -2,7 +2,8 @@
 import { api, SITE, type JobInfo, type Me } from "./api";
 import { ring, meter, logo, bandLabel, BAND, bandOf, levelLabel, logoUrl } from "./ui";
 import { renderForm, summary, type FormState } from "./form";
-import { prepare, run, fillOne, listOptions, learnCorrections, remember, type RunInput } from "./runner";
+import { prepare, run, fillOne, listOptions, learnCorrections, type RunInput } from "./runner";
+import { isWorkday, wdStep, wdNextButton, wdErrors, watchSteps } from "./workday";
 
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
@@ -10,8 +11,9 @@ type Tailor = { stage: "offer" | "working" | "preview" | "done" | "skipped"; tex
 type State = {
   open: boolean; busy: string | null; me: Me | null; job: JobInfo | null; input: RunInput | null; form: FormState | null; formOpen: boolean;
   tailor: Tailor; applied: "unknown" | "asked" | "yes" | "no"; pageKind: "job" | "confirmation" | "other"; status: string | null;
+  wdAuto: boolean;
 };
-const state: State = { open: false, busy: null, me: null, job: null, input: null, form: null, formOpen: true, tailor: { stage: "offer", added: new Set(), evidenceFor: null }, applied: "unknown", pageKind: "other", status: null };
+const state: State = { open: false, busy: null, me: null, job: null, input: null, form: null, formOpen: true, tailor: { stage: "offer", added: new Set(), evidenceFor: null }, applied: "unknown", pageKind: "other", status: null, wdAuto: false };
 
 let host: HTMLElement | null = null; let root: ShadowRoot | null = null; let onOpenPanel: (() => void) | null = null;
 
@@ -113,6 +115,21 @@ function tailorCard(): string {
   return "";
 }
 
+/** Workday: which step we are on, whether to fill every step on its own, and its Save and Continue (Submit stays the user's). */
+function workdayCard(): string {
+  if (!isWorkday() || !state.me) return "";
+  const st = wdStep(); const done = !!state.form && !state.form.running;
+  const names: Record<string, string> = { start: "Start", account: "Sign in / Create account", info: "My Information", experience: "My Experience", questions: "Application Questions", disclosures: "Voluntary Disclosures", identify: "Self Identify", review: "Review", unknown: "Application" };
+  return `<div class="card">
+    <div class="row" style="justify-content:space-between"><div><h2>Workday</h2><div class="ink" style="font-size:14px;margin-top:2px">${st.index ? `Step ${st.index} of ${st.total} · ` : ""}${esc(st.label || names[st.key])}</div></div>
+      <label class="remember" title="After each step is filled, Rails clicks Workday's Save and Continue and fills the next step. Stops before Review."><input type="checkbox" id="wd-auto" ${state.wdAuto ? "checked" : ""}> Fill every step</label></div>
+    ${st.key === "account" ? `<p class="note" style="margin:8px 0 0">Create the account yourself; Rails never types passwords. Once you're in, the drawer fills My Information.</p>` : ""}
+    ${st.key === "review" ? `<p class="note" style="margin:8px 0 0">Read it through. Submit is yours.</p>` : ""}
+    ${st.key === "identify" ? `<p class="note" style="margin:8px 0 0">Self-identification needs your own signature and date; Rails leaves it to you.</p>` : ""}
+    ${done && st.key !== "review" && wdNextButton() ? `<button class="btn secondary" id="wd-next" style="margin-top:10px;width:100%">Save and Continue →</button>` : ""}
+  </div>`;
+}
+
 function appliedPrompt(): string {
   if (state.applied !== "asked") return "";
   return `<div class="prompt" id="applied-prompt">${logo(22)}<span>Did you submit this application?</span><button class="btn" id="applied-yes">Yes, applied</button><button class="btn ghost" id="applied-no">Not yet</button></div>`;
@@ -131,6 +148,7 @@ function render() {
     <div class="top"><span class="wm">${logo(24)} Rails</span><span class="row" style="gap:6px">${me ? `<span class="pill"><span class="av">${esc(initials)}</span>${me.plan === "free" ? `Free · ${me.credits} credits` : esc(me.plan === "pro" ? "Pro" : "Semester Pass")}</span>` : ""}<button class="x" id="close" title="Close">×</button></span></div>
     <div class="body">
       ${jobCard()}
+      ${workdayCard()}
       ${canFill ? `<button class="btn primary" id="fill" ${busy || form?.running ? "disabled" : ""}>${fillLabel}</button>${form?.running ? `<p class="note" style="margin:-4px 2px 0;text-align:center">Runs inside this tab. You can switch tabs; it keeps going.</p>` : ""}` : ""}
       ${showTailor ? tailorCard() : ""}
       ${state.status ? `<p class="note">${esc(state.status)}</p>` : ""}
@@ -167,6 +185,8 @@ function bind() {
   q<HTMLButtonElement>("#applied-yes")?.addEventListener("click", () => void markApplied(true));
   q<HTMLButtonElement>("#applied-no")?.addEventListener("click", () => void markApplied(false));
   q<HTMLElement>("#form-head")?.addEventListener("click", () => { state.formOpen = !state.formOpen; render(); });
+  q<HTMLInputElement>("#wd-auto")?.addEventListener("change", (e) => { state.wdAuto = (e.target as HTMLInputElement).checked; chrome.storage.local.set({ rails_wd_auto: state.wdAuto }).catch(() => {}); });
+  q<HTMLButtonElement>("#wd-next")?.addEventListener("click", () => void wdNext());
   for (const img of root?.querySelectorAll<HTMLImageElement>(".clogo img") ?? []) img.onerror = () => { const d = img.parentElement!; d.style.background = "#0B1B3A"; d.textContent = img.dataset.fb ?? "•"; };
   const fs = state.form; if (!fs) return;
   for (const sel of root?.querySelectorAll<HTMLSelectElement>(".pick:not([multiple])") ?? []) sel.onchange = () => { if (sel.value) void one(sel.dataset.id!, sel.value); };
@@ -249,6 +269,16 @@ async function markApplied(yes: boolean) {
   render();
 }
 
+async function wdNext() {
+  const b = wdNextButton(); if (!b) return;
+  b.click(); state.status = "Saving this step…"; render();
+  await new Promise((r) => setTimeout(r, 1800));
+  const errs = wdErrors();
+  if (errs.length) { state.status = `Workday flagged: ${errs.slice(0, 3).join(" · ")}`; if (state.form) { for (const e of errs) state.form.rows.unshift({ f: { id: `wderr:${e.slice(0, 40)}`, label: e, kind: "text", required: true, filled: false, sensitive: false, conditional: false }, s: "left", why: "Fix this on the page, then Save and Continue." }); } }
+  else state.status = null;
+  render();
+}
+
 function broadcast() { try { chrome.runtime.sendMessage({ type: "rails:state", form: state.form, job: state.job, url: location.href }).catch(() => {}); } catch { /* panel closed */ } }
 
 export function setOpen(open: boolean) { state.open = open; render(); }
@@ -275,6 +305,14 @@ export function mountDrawer(opts: { openPanel: () => void }) {
   const style = document.createElement("style"); style.textContent = CSS; root.appendChild(style);
   (document.body ?? document.documentElement).appendChild(host);
   render();
+  if (isWorkday()) {
+    chrome.storage.local.get("rails_wd_auto").then((r) => { state.wdAuto = r.rails_wd_auto === true; render(); }).catch(() => {});
+    watchSteps((step) => {
+      state.form = null; state.input = null; state.status = null; render();
+      if (state.wdAuto && state.me && ["info", "experience", "questions", "disclosures"].includes(step.key)) { setOpen(true); void startFill().then(async () => { if (state.wdAuto && state.form && !state.form.error && state.form.rows.every((r) => r.s !== "left" && r.s !== "failed")) await wdNext(); }); }
+      else if (["info", "experience", "questions", "disclosures"].includes(step.key)) { state.status = `New step: ${step.label}. Autofill fills it.`; setOpen(true); render(); }
+    });
+  }
   chrome.runtime.onMessage.addListener((msg, _s, send) => {
     if (msg?.type === "rails:run") { setOpen(true); void startFill(); send({ ok: true }); return false; }
     if (msg?.type === "rails:open-drawer") { setOpen(!state.open); send({ ok: true }); return false; }

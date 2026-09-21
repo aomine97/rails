@@ -20,5 +20,12 @@ export async function GET(req: Request) {
   ]);
   const parsed = CanonicalProfile.safeParse(p?.canonical);
   if (!p?.onboarding_done || !parsed.success) return NextResponse.json({ error: "onboarding_incomplete" }, { status: 409, headers: CORS });
-  return NextResponse.json({ name: p.full_name, email: p.email, plan, credits: plan === "free" ? credits?.balance ?? 3 : "unlimited", fields: fillFields(parsed.data), skills: parsed.data.skills.map((s) => s.name) }, { headers: CORS });
+  const d = parsed.data;
+  const DEGREE: Record<string, string> = { AAS: "Associate's Degree", AS: "Associate's Degree", AA: "Associate's Degree", BS: "Bachelor's Degree", BA: "Bachelor's Degree", BAS: "Bachelor's Degree", BSC: "Bachelor's Degree", MS: "Master's Degree", MA: "Master's Degree", MBA: "Master's Degree", PHD: "Doctorate" };
+  return NextResponse.json({
+    name: p.full_name, email: p.email, plan, credits: plan === "free" ? credits?.balance ?? 3 : "unlimited", fields: fillFields(d), skills: d.skills.map((s) => s.name),
+    // full lists for multi-row forms (Workday "Add Another"): jobs and internships first, then projects; every education entry
+    experience: d.experience.filter((e) => e.kind === "job" || e.kind === "internship").concat(d.experience.filter((e) => e.kind !== "job" && e.kind !== "internship")).map((e) => ({ title: e.title, org: e.org, kind: e.kind, start: e.start, end: e.end, current: !e.end, bullets: e.bullets })),
+    education: d.education.map((e) => ({ school: e.school, degree: e.degree, degreeName: DEGREE[(e.degree ?? "").replace(/[.\s]/g, "").toUpperCase()] ?? e.degree, field: e.field, startYear: e.startYear, gradYear: e.gradYear, gpa: e.gpa })),
+  }, { headers: CORS });
 }
