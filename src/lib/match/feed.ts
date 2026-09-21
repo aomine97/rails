@@ -9,7 +9,7 @@ export interface FeedJobRow {
   posted_at: string | null; first_seen_at: string; tags: unknown; pay_min: number | null; pay_max: number | null; pay_period: string | null; pay_currency?: string | null;
   description_text?: string | null;
   source?: string;
-  companies: { name: string; ats: string; domain?: string | null; logo_url?: string | null } | null;
+  companies: { name: string; ats: string; domain?: string | null; logo_url?: string | null; tier?: number | null } | null;
 }
 
 export interface FeedFilters {
@@ -20,6 +20,8 @@ export interface FeedFilters {
   q?: string | null;
   minFit?: number;
   sort?: "fit" | "new" | null;
+  /** only tier-1 employers (FAANG, top quant, hot startups) */
+  top?: boolean;
 }
 
 export interface FeedItem { job: FeedJobRow; tags: JobTags; score: Score; isNew: boolean; ageDays: number | null; region: Region; otherLocations: string[] }
@@ -27,6 +29,9 @@ export interface FeedItem { job: FeedJobRow; tags: JobTags; score: Score; isNew:
 const LEVEL_TO_TYPE: Record<string, CanonicalProfile["constraints"]["employmentTypes"][number]> = {
   internship: "internship", new_grad: "new_grad", entry: "entry", mid: "mid", senior: "senior", unknown: "entry",
 };
+
+/** Same fit band, marquee employer first; the fit number itself never moves. */
+const bandRank = (fit: number) => (fit >= 85 ? 2 : fit >= 70 ? 1 : 0);
 
 /** Pure: profile + rows -> ranked feed. Excludes mid/senior and roles the user isn't looking for; scores the rest. */
 export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: FeedFilters = {}, now = new Date()): { items: FeedItem[]; total: number; newToday: number } {
@@ -40,6 +45,7 @@ export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: Feed
     const type = LEVEL_TO_TYPE[tags.level];
     if (wants.size && !wants.has(type) && !(tags.employmentType === "part_time" && wants.has("part_time")) && !(tags.employmentType === "contract" && wants.has("contract"))) continue;
     if (tags.field === "other") continue; // STEM + nursing only; everything else stays out of every feed
+    if (f.top && (job.companies?.tier ?? 3) !== 1) continue;
     if (f.field && tags.field !== f.field) continue;
     if (f.level && tags.level !== f.level) continue;
     const region = regionOf(job.location, tags.country, job.remote ?? (tags.remote === "remote"));
@@ -69,7 +75,7 @@ export function buildFeed(profile: CanonicalProfile, rows: FeedJobRow[], f: Feed
   }
   const deduped = [...byKey.values()];
   if (f.sort === "new") deduped.sort((a, b) => (b.job.posted_at ?? b.job.first_seen_at).localeCompare(a.job.posted_at ?? a.job.first_seen_at));
-  else deduped.sort((a, b) => b.score.fit - a.score.fit || (b.job.posted_at ?? "").localeCompare(a.job.posted_at ?? ""));
+  else deduped.sort((a, b) => bandRank(b.score.fit) - bandRank(a.score.fit) || (a.job.companies?.tier ?? 3) - (b.job.companies?.tier ?? 3) || b.score.fit - a.score.fit || (b.job.posted_at ?? "").localeCompare(a.job.posted_at ?? ""));
   return { items: deduped, total: deduped.length, newToday: deduped.filter((i) => i.isNew).length };
 }
 

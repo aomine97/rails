@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 type Opt = readonly [string, string];
 /** Three dropdowns instead of three rows of chips. Each change updates the URL; the page re-renders on the server. */
-export function FeedFilters({ levels, fields, where, current, base }: { levels: readonly Opt[]; fields: readonly Opt[]; where: readonly Opt[]; current: { level?: string; field?: string; where?: string }; base: Record<string, string | undefined> }) {
+export function FeedFilters({ levels, fields, where, current, base }: { levels: readonly Opt[]; fields: readonly Opt[]; where: readonly Opt[]; current: { level?: string; field?: string; where?: string; top?: boolean }; base: Record<string, string | undefined> }) {
   const router = useRouter();
   const go = (patch: Record<string, string>) => {
     const p = new URLSearchParams();
@@ -25,7 +25,8 @@ export function FeedFilters({ levels, fields, where, current, base }: { levels: 
       <select aria-label="Where" value={current.where ?? "us"} onChange={(e) => go({ where: e.target.value })} className={`${cls} ${current.where && current.where !== "us" ? active : ""}`} style={arrow}>
         {where.map(([k, l]) => <option key={k} value={k}>{l}</option>)}
       </select>
-      {(current.level || current.field || (current.where && current.where !== "us")) && <button type="button" onClick={() => go({ level: "", field: "", where: "" })} className="text-xs font-semibold text-muted hover:text-ink">Clear</button>}
+      <button type="button" onClick={() => go({ top: current.top ? "" : "1" })} className={`h-9 rounded-full border px-3 text-xs font-semibold ${current.top ? active : "border-line bg-surface text-ink"}`} title="FAANG, top quant and trading firms, the startups everyone applies to">★ Top companies</button>
+      {(current.level || current.field || current.top || (current.where && current.where !== "us")) && <button type="button" onClick={() => go({ level: "", field: "", where: "", top: "" })} className="text-xs font-semibold text-muted hover:text-ink">Clear</button>}
     </div>
   );
 }

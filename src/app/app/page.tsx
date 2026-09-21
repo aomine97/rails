@@ -17,7 +17,7 @@ const FIELDS = [["software", "Software"], ["data", "Data"], ["cloud", "Cloud"], 
 const LEVELS = [["internship", "Internship"], ["new_grad", "New Grad"], ["entry", "Entry Level"], ["mid", "Mid-Level"], ["senior", "Senior"]] as const;
 const WHERE = [["near", "Near me"], ["us", "US"], ["remote", "Remote"], ...COUNTRY_CHIPS, ["anywhere", "Anywhere"]] as [string, string][];
 
-type SP = { tab?: string; field?: string; level?: string; where?: string; sort?: string; q?: string; page?: string };
+type SP = { tab?: string; field?: string; level?: string; where?: string; sort?: string; q?: string; page?: string; top?: string };
 
 export default async function Feed({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
@@ -34,7 +34,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   const me = parsed.data;
 
   const [{ data: rows }, { data: marks }, { data: apps }] = await Promise.all([
-    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats,domain,logo_url)")
+    supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats,domain,logo_url,tier)")
       .is("closed_at", null).not("tagged_at", "is", null).order("first_seen_at", { ascending: false }).limit(3000),
     supabase.from("matches").select("job_id,liked,hidden").eq("user_id", user.id),
     supabase.from("applications").select("id,job_id,title,company_name,url,stage,applied_at,last_activity_at,next_action,next_action_at,notes,created_at").eq("user_id", user.id).order("last_activity_at", { ascending: false }),
@@ -46,7 +46,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   const tab = sp.tab ?? "recommended";
   const mine = new Set((marks ?? []).map((m) => m.job_id));
   const visibleRows = ((rows ?? []) as unknown as FeedJobRow[]).filter((r) => r.source !== "paste" || mine.has(r.id));
-  const feed = buildFeed(me, visibleRows, { field: sp.field, level: sp.level, where: sp.where ?? "us", q: sp.q, sort: sp.sort === "new" ? "new" : "fit" });
+  const feed = buildFeed(me, visibleRows, { field: sp.field, level: sp.level, where: sp.where ?? "us", q: sp.q, sort: sp.sort === "new" ? "new" : "fit", top: sp.top === "1" });
   let items = tab === "hidden" ? feed.items.filter((i) => hidden.has(i.job.id)) : feed.items.filter((i) => !hidden.has(i.job.id));
   if (tab === "liked") items = items.filter((i) => liked.has(i.job.id));
   if (tab === "external") items = items.filter((i) => i.job.id && (i.job as unknown as { source?: string }).source === "paste");
@@ -73,7 +73,7 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
           </Link>
         )}
 
-        <FeedFilters levels={LEVELS} fields={FIELDS} where={WHERE} current={{ level: sp.level, field: sp.field, where: sp.where }} base={{ tab: sp.tab, q: sp.q, sort: sp.sort }} />
+        <FeedFilters levels={LEVELS} fields={FIELDS} where={WHERE} current={{ level: sp.level, field: sp.field, where: sp.where, top: sp.top === "1" }} base={{ tab: sp.tab, q: sp.q, sort: sp.sort }} />
 
         <div className="flex items-center justify-between px-6 pb-2 pt-3 text-[13px] text-text">
           <div><span className="font-bold text-ink">{items.length.toLocaleString()} results</span> for your profile · <span className="font-semibold text-blue">{feed.newToday} new since yesterday</span> · all verified live</div>
