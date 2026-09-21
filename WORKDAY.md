@@ -52,3 +52,19 @@ Vanguard run. Everything below is a verified fact about Workday's DOM or a decis
 5. **Self-identify and Submit stay the user's.** Account creation stays opt-in.
 6. **Tests**: a jsdom fixture that behaves like Workday (portal options, type-ahead + Enter, two-Enter
    prompts, formField wrappers, add-another rows) so these regressions are caught without a live tenant.
+
+## Found by the real-browser suite (2026-09-21)
+
+Running the engine in real Chromium against Vanguard-shaped pages turned up three bugs that every jsdom test had
+passed, all of the same kind — a field that is never identified is never filled, and never even listed as missing:
+
+1. **A radio group took its first option's label.** The question ("Do you currently work, or have you ever worked
+   for or with Vanguard...") sits in the formField wrapper *above* the `role="radiogroup"`, and `closest()` with a
+   selector list returns the nearest match, which was the radiogroup. The group label now climbs ancestors and
+   skips any label that wraps one of the group's own inputs.
+2. **A checkbox group did the same**, so the FINRA exam question was labelled "SIE".
+3. **Three length caps dropped long questions**: 220 in the scanner (twice) and 300 in the label reader. Vanguard's
+   political-contributions question is 377 characters. Long labels are now kept and truncated for display only.
+
+Before: 14 of 17 questions seen, 13 filled. After: 17 seen, 16 filled (the 17th is a conditional free-text box that
+is correctly left alone). My Information fills 13 of 13.

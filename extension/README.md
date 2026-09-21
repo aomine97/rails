@@ -13,6 +13,13 @@ Load unpacked: chrome://extensions -> Developer mode -> Load unpacked -> extensi
 ## Accounts (v1.6)
 `lib/accounts.ts`: ATS accounts behave like a password manager. On a create-account form Rails fills the profile email and a 16-character generated password (both stored only in this browser's extension storage, keyed by tenant), shows the password in the drawer with Copy/Show, and leaves the terms box and the Create Account click to the user; on a sign-in form it fills the saved pair. "Create accounts for me" (off by default) also ticks the box and clicks; some employers' terms forbid automated account creation, so it is the user's choice. Passwords never reach Rails' servers. Email verification codes are pasted by the user.
 
+## Real-browser tests (extension/e2e)
+`npm run e2e` drives the fill engine in real Chromium against Workday-shaped fixtures built from the Vanguard
+application we have a full field list for. jsdom is where every bug that reached a user passed first: it has no
+layout engine (so `offsetParent` is always null and fixed-position portal options look invisible) and only
+approximates focus, portals and key handling. The suite found and now guards three label bugs that were silently
+dropping fields, and it fails if a selector rots. See e2e/README.md for what a fixture can and cannot catch.
+
 ## Workday (v1.7, selectors verified against a working automator)
 Facts the adapter relies on, and why each one matters, are in ../WORKDAY.md. In short: fields live in
 `div[data-automation-id="formField-<name>"]` with the label two or three levels above the control (so the label

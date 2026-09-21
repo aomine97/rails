@@ -1,4 +1,4 @@
-import { clean, isCombobox, isFillable, controlOf, shownValue, clickLike, mouse, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
+import { cssEscape, clean, isCombobox, isFillable, controlOf, shownValue, clickLike, mouse, listboxFor, bestOption, pickCombobox, sleep, labelTextFor, setValue, type El } from "./fill";
 import { pickFromListbox, readListbox, closeLists } from "./listbox";
 
 /** Everything the form asks, as the panel's checklist sees it. Built once per page; ids are stable data attributes. */
@@ -31,11 +31,24 @@ function rawLabel(el: Element, root: Document | ShadowRoot): string {
   const id = el.getAttribute("id"); const l = id ? root.querySelector(`label[for="${id.replace(/"/g, '\\"')}"]`) : el.closest("label");
   return (l?.textContent ?? "").replace(/\s+/g, " ").trim();
 }
+/** The question a radio/checkbox group asks. An option's own label is never it ("Yes", "SIE"), and the question
+ *  usually sits outside the role=radiogroup element — in Workday it is in the formField wrapper above it — so this
+ *  climbs ancestors and takes the first label-like text that does not wrap one of the group's own inputs. */
 const groupLabel = (el: Element, root: Document | ShadowRoot): string => {
-  const box = el.closest("fieldset, [role='group'], [role='radiogroup'], div");
-  const lab = box?.querySelector("legend, [id$='-label'], label:not([for]), p, span, div");
-  const t = clean(box?.querySelector("legend")?.textContent) || clean(el.closest("fieldset, [role='group'], [role='radiogroup']")?.getAttribute("aria-label")) || clean(lab?.textContent);
-  return t.length > 200 ? "" : t;
+  const name = el.getAttribute("name");
+  const siblings = name ? [...(root.querySelectorAll(`input[name="${cssEscape(name)}"]`) as unknown as Element[])] : [el];
+  const isOptionLabel = (l: Element) => siblings.some((s) => l.contains(s));
+  let node: Element | null = el.parentElement;
+  for (let depth = 0; node && depth < 6; depth++, node = node.parentElement) {
+    const hit = [...node.querySelectorAll("legend, label, [id$='-label'], [data-automation-id$='Label'], [class*='label' i]")]
+      .filter((l) => !isOptionLabel(l))
+      .map((l) => clean(l.textContent)).find(Boolean);
+    if (hit) return hit;
+    const aria = clean(node.getAttribute("aria-label")); if (aria) return aria;
+    const by = node.getAttribute("aria-labelledby"); if (by) { const t = clean((root as Document).getElementById?.(by)?.textContent); if (t) return t; }
+    if (node.matches?.("[data-automation-id^='formField-']")) break;
+  }
+  return "";
 };
 
 /** Read the DOM into fields. Does not open anything; combobox options come from readComboOptions. */
@@ -46,7 +59,7 @@ export function scanFields(root: Document | ShadowRoot): ScannedField[] {
     if (btn.closest("#rails-drawer-host")) continue;
     const wrap = btn.closest('[data-automation-id^="formField-"], [data-automation-id$="Section"], div');
     const label = clean(btn.getAttribute("aria-label")) && !/select one/i.test(btn.getAttribute("aria-label") ?? "") ? clean(btn.getAttribute("aria-label")) : labelTextFor(btn, root) || clean(wrap?.querySelector("label, legend")?.textContent);
-    if (!label || label.length > 220) continue;
+    if (!label) continue;
     const cur = clean(btn.textContent); const filled = !!cur && !/^(select one|select|choose|please select)/i.test(cur);
     out.push({ id: mark(btn), label, kind: "listbox", required: isRequired(btn, root, label) || !!wrap?.querySelector("abbr[title='required'], .required, [aria-required='true']"), filled, value: filled ? cur : "", sensitive: SENSITIVE.test(label), conditional: CONDITIONAL.test(label) });
   }
@@ -82,7 +95,7 @@ export function scanFields(root: Document | ShadowRoot): ScannedField[] {
     }
     if (!isFillable(el)) continue;
     const label = labelTextFor(el, root);
-    if (!label || label.length > 220) continue;
+    if (!label) continue;
     const base = { id: mark(el), label, required: isRequired(el, root, label), sensitive: SENSITIVE.test(label), conditional: CONDITIONAL.test(label) };
     const multi = el.closest('[data-automation-id="multiSelectContainer"], [data-automation-id="multiselectInputContainer"]') ?? (el.getAttribute("data-automation-id") === "searchBox" ? el.parentElement?.parentElement : null);
     if (multi) {

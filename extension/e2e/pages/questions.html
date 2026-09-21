@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Application Questions - Vanguard</title><link rel="stylesheet" href="style.css"></head>
+<body><script src="wd.js"></script><script>
+const W = window.WD, YN = ["Yes", "No"];
+W.page("applicationQuestionsPage", "Application Questions", [
+  W.dropdown("q1", "Are you a U.S. citizen, lawful permanent resident, refugee, or person granted asylum?", YN),
+  W.dropdown("q2", "Will you now or in the future require sponsorship for employment visa status?", YN, { value: "No" }),
+  W.dropdown("q3", "Have you, or do you currently work for, or with Vanguard?", ["Yes, I currently work for Vanguard as a crew member", "No, I have never worked for Vanguard as a crew member"], { value: "No, I have never worked for Vanguard as a crew member" }),
+  W.dropdown("q4", "Have you ever performed temporary work for Vanguard or any of its subsidiaries?", ["Yes, I have worked for or with Vanguard through an agency or another type of third party vendor", "No, I have never worked for or with Vanguard through an agency or another type of third party vendor"], { value: "No, I have never worked for or with Vanguard through an agency or another type of third party vendor" }),
+  W.dropdown("q5", "Has a search agency submitted your application for consideration within the last 12 months?", YN),
+  W.dropdown("q6", "Have you ever interviewed for a position at Vanguard or any of its subsidiaries?", YN),
+  W.dropdown("q7", "Do you have any post-employment obligations to any current or former employer (i.e., non-compete, non-solicitation, etc.) that may prohibit or restrict your employment for a position?", YN),
+  W.checkboxes("q8", "Have you ever taken a FINRA or any other self-regulatory organization licensing exam? (Select all that apply)", ["SIE", "S6", "S7", "S63", "S65", "S66", "S24", "No"]),
+  W.text("q9", "If you selected other OR have taken any of the license exams, please enter the name of the exam AND the month and date the exam was taken.", { required: false }),
+  W.checkboxes("q10", "Do you currently hold either one of the these certifications?", ["Chartered Financial Analyst (CFA)", "Certified Financial Planner (CFP)", "None"]),
+  W.dropdown("q11", "Do you have Central Registration Depository (CRD) number?", YN),
+  W.dropdown("q12", "Securities industry regulations require investment advisory firms to collect data on political contributions made within the last 2 years. This information is used to ensure we are following regulatory requirements. Have you made a political contribution(s) to any political official, candidate, party, or organization (e.g. Political Action Committee) within the last 2 years?", YN),
+  W.dropdown("q13", "Under the Employment policy of Vanguard or any of its subsidiaries, relatives may not work in the same area of responsibility. To help us ensure compliance with this policy, do you have any relatives employed at Vanguard or any of its subsidiaries?", YN),
+  W.dropdown("q14", "Are you a current or former Government Official?", YN),
+  W.dropdown("q15", "Are you related to, by birth, adoption or marriage, or a close associate of a current or former Government Official at an entity that interacts or may interact with Vanguard in a business or regulatory context?", YN),
+  W.dropdown("q16", "Are you related to, by birth, adoption or marriage, or a close associate of a current or former director, officer or senior employee of a Vanguard client who has authority to award or materially influence any decision to award Vanguard business?", YN),
+  W.dropdown("q17", "To the best of your knowledge, did either of the following refer or recommend you for this or any other position with Vanguard? A Government Official; a director, officer or senior employee of a Vanguard client.", YN),
+]);
+</script></body></html>

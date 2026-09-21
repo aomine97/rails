@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><title>My Information - Vanguard</title><link rel="stylesheet" href="style.css"></head>
+<body><script src="wd.js"></script><script>
+const W = window.WD;
+W.page("contactInformationPage", "My Information", [
+  W.prompt("sourceSection", "How Did You Hear About Us?", ["LinkedIn", "Indeed", "Job Board", "University Career Fair", "Employee Referral", "Company Website", "Other"]),
+  W.radioGroup("previousWorker", "Do you currently work, or have you ever worked for or with Vanguard in any of the following ways: - as a Crew Member - through a Staffing Agency - through any other type of third party vendor", ["Yes", "No"]),
+  W.dropdown("countryDropdown", "Country", ["Canada", "India", "Mexico", "United Kingdom", "United States of America"], { value: "United States of America" }),
+  W.text("legalNameSection_firstName", "First Name"),
+  W.text("legalNameSection_lastName", "Last Name"),
+  W.checkbox("preferredNameCheckbox", "I have a preferred name"),
+  W.text("addressSection_addressLine1", "Address Line 1"),
+  W.text("addressSection_city", "City"),
+  W.dropdown("addressSection_countryRegion", "State", ["Alabama","Alaska","Arizona","California","Colorado","Florida","Georgia","Illinois","Maryland","Massachusetts","New York","North Carolina","Ohio","Pennsylvania","Texas","Vermont","Virginia","Washington","West Virginia","Wisconsin"]),
+  W.text("addressSection_postalCode", "Postal Code"),
+  W.text("addressSection_county", "County", { required: false }),
+  W.text("email", "Email Address", { value: "navavinga@gmail.com" }),
+  W.dropdown("phone-device-type", "Phone Device Type", ["Home", "Mobile", "Pager", "Work"]),
+  W.prompt("countryPhoneCode", "Country Phone Code", ["United States of America (+1)", "Canada (+1)", "India (+91)"], { multi: false, selected: ["United States of America (+1)"] }),
+  W.text("phone-number", "Phone Number"),
+  W.text("phone-extension", "Phone Extension", { required: false }),
+]);
+</script></body></html>

@@ -1,3 +1,4 @@
 node_modules
 .output
 .wxt
+e2e/.bundle.js

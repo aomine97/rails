@@ -1,0 +1,21 @@
+body { font: 14px/1.5 system-ui, sans-serif; margin: 0; padding: 24px; max-width: 760px; }
+h2 { font-size: 22px; margin: 0 0 4px; }
+.formField { margin: 0 0 18px; }
+.labelRow label { display: block; font-weight: 600; margin-bottom: 6px; }
+.ctrlRow { }
+.ctrlInner { }
+input[type=text], input:not([type]) { height: 34px; padding: 0 8px; border: 1px solid #b7bcc2; border-radius: 4px; width: 320px; box-sizing: border-box; }
+button[aria-haspopup=listbox] { height: 34px; min-width: 320px; text-align: left; padding: 0 8px; border: 1px solid #b7bcc2; background: #fff; border-radius: 4px; cursor: pointer; }
+.wd-popup { background: #fff; border: 1px solid #b7bcc2; box-shadow: 0 6px 18px rgba(0,0,0,.2); border-radius: 4px; max-height: 260px; overflow: auto; min-width: 320px; }
+.wd-popup ul { list-style: none; margin: 0; padding: 4px 0; }
+.wd-popup li { padding: 7px 10px; cursor: pointer; }
+.wd-popup li:hover { background: #eef3fb; }
+.msContainer { border: 1px solid #b7bcc2; border-radius: 4px; padding: 4px; width: 320px; }
+.msContainer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+.msContainer li { background: #eef3fb; border-radius: 3px; padding: 2px 6px; font-size: 12px; }
+.msContainer input { border: 0; height: 26px; width: 100%; outline: none; }
+.count { font-size: 12px; color: #666; }
+.radio, .cb { display: block; margin: 4px 0; font-weight: 400; }
+.dateWrap input { width: 64px; }
+.nav { margin-top: 24px; }
+.nav button { height: 38px; padding: 0 18px; background: #0875e1; color: #fff; border: 0; border-radius: 4px; cursor: pointer; }

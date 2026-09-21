@@ -109,3 +109,32 @@ describe("workday, against a page shaped like the real thing", () => {
     expect(wdNextButton()?.textContent).toBe("Continue");
   });
 });
+
+/** Regressions caught by the real-browser suite (extension/e2e) and pinned here for fast feedback. */
+describe("labels on grouped and long questions", () => {
+  it("a radio group is labelled with its question, not its first option", () => {
+    document.body.innerHTML = `<div data-automation-id="formField-previousWorker"><div><label>Do you currently work, or have you ever worked for or with Vanguard?*</label></div>
+      <div><div data-automation-id="previousWorker" role="radiogroup"><label><input type="radio" name="pw" value="Yes">Yes</label><label><input type="radio" name="pw" value="No">No</label></div></div></div>`;
+    const f = scanFields(document)[0]!;
+    expect(f.kind).toBe("radio");
+    expect(f.label).toMatch(/worked for or with Vanguard/);
+  });
+
+  it("a checkbox group is labelled with its question, not its first option", () => {
+    document.body.innerHTML = `<div data-automation-id="formField-exams"><div><label>Have you ever taken a FINRA licensing exam? (Select all that apply)*</label></div>
+      <div><div data-automation-id="exams">${["SIE", "S7", "No"].map((o) => `<label><input type="checkbox" name="exams[]" value="${o}">${o}</label>`).join("")}</div></div></div>`;
+    const f = scanFields(document)[0]!;
+    expect(f.kind).toBe("checkboxes");
+    expect(f.label).toMatch(/FINRA/);
+    expect(f.options).toEqual(["SIE", "S7", "No"]);
+  });
+
+  it("a question longer than 220 characters is still scanned (Workday's compliance questions run long)", () => {
+    const long = "Securities industry regulations require investment advisory firms to collect data on political contributions made within the last 2 years. This information is used to ensure we are following regulatory requirements. Have you made a political contribution to any political official, candidate, party, or organization within the last 2 years?";
+    expect(long.length).toBeGreaterThan(220);
+    wdDropdown("q12", long, ["Yes", "No"]);
+    const f = scanFields(document).find((x) => x.kind === "listbox");
+    expect(f).toBeDefined();
+    expect(f!.label).toBe(long);
+  });
+});

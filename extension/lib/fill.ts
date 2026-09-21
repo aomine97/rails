@@ -76,7 +76,7 @@ export function atsOf(host: string): string {
 }
 
 export type El = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-const cssEscape = (s: string) => (typeof CSS !== "undefined" && CSS.escape ? CSS.escape(s) : s.replace(/([^a-zA-Z0-9_-])/g, "\\$1"));
+export const cssEscape = (s: string) => (typeof CSS !== "undefined" && CSS.escape ? CSS.escape(s) : s.replace(/([^a-zA-Z0-9_-])/g, "\\$1"));
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 export const clean = (s: string | null | undefined) => (s ?? "").replace(/\s+/g, " ").replace(/\*/g, "").trim();
 
@@ -101,7 +101,7 @@ export function labelTextFor(el: Element, root: Document | ShadowRoot): string {
     let node: Element | null = el.parentElement;
     for (let depth = 0; node && depth < 5 && parts.join("").trim() === ""; depth++, node = node.parentElement) {
       const lab = node.querySelector("label, legend, [class*='label' i]:not(input):not(select):not(textarea), [id$='-label'], [data-automation-id$='Label']");
-      if (lab && !lab.contains(el)) { const t = clean(lab.textContent); if (t && t.length < 300) parts.push(t); }
+      if (lab && !lab.contains(el)) { const t = clean(lab.textContent); if (t && t.length < 900) parts.push(t); } // Workday compliance questions run past 300 characters; a long label is still the label
       if (node.matches?.("[data-automation-id^='formField-'], fieldset, [role='group']")) break;
     }
   }
