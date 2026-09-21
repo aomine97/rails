@@ -75,7 +75,7 @@ function render() {
 
     ${job ? `<div class="card">
       <div class="job-head">${companyLogo(job, initials)}<div style="min-width:0"><div class="job-co">${esc(job.company)}</div><div class="job-sub">${[job.level ? levelLabel(job.level) : null, job.field ? esc(job.field.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())) : null].filter(Boolean).join(" · ")}</div></div>
-        <div class="fitpill">${ring(job.fit, 56, { label: "Fit", suffix: "", stroke: 5 })}<span class="grade" style="color:${BAND[bandOf(job.fit)]}">${job.fit == null ? "UNSCORED" : bandLabel(job.fit)}</span></div></div>
+        <div class="fitpill">${ring(job.fit, 56, { label: "Fit", suffix: "%", stroke: 5 })}<span class="grade" style="color:${BAND[bandOf(job.fit)]}">${job.fit == null ? "UNSCORED" : bandLabel(job.fit)}</span></div></div>
       <div class="job-title">${esc(job.title)}</div>
       <div class="job-meta">${[ago(job.postedAt), job.location ? esc(job.location) : job.remote ? "Remote" : null, job.pay ? `<b>${esc(job.pay)}</b>` : null, src ? `via ${esc(src)}` : null].filter(Boolean).join("<span>·</span>")}</div>
       <div class="meters">${job.sub ? [meter("Skills", job.sub.skills), meter("Experience", job.sub.experience), meter("Field", job.sub.field)].join("") : `<span class="note">Score arrives when the tagger finishes (a few minutes).</span>`}</div>
