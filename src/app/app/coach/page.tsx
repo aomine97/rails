@@ -48,7 +48,7 @@ export default async function CoachPage() {
   return (
     <AppShell active="/app/coach" name={profile.full_name} credits={credits?.balance ?? 3} wide>
       <div className="grid grid-cols-1 gap-5 pb-10 lg:grid-cols-[300px_1fr]">
-        <aside className="flex flex-col gap-4">
+        <aside className="order-2 flex flex-col gap-4 lg:order-1">
           <div className="rounded-2xl border border-line bg-surface p-5 shadow-[var(--shadow-sm)]">
             <div className="flex items-baseline justify-between">
               <h2 className="font-display text-[15px] font-extrabold tracking-tight text-ink">Your line</h2>
@@ -78,15 +78,15 @@ export default async function CoachPage() {
           </div>
         </aside>
 
-        <section className="flex min-h-[70vh] flex-col rounded-2xl border border-line bg-surface shadow-[var(--shadow-sm)]">
-          <header className="flex items-center justify-between border-b border-line px-6 py-4">
+        <section className="order-1 flex min-h-[70vh] flex-col rounded-2xl lg:order-2 border border-line bg-surface shadow-[var(--shadow-sm)]">
+          <header className="flex items-center justify-between border-b border-line px-4 py-4 sm:px-6">
             <div>
               <h1 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-ink">Coach</h1>
               <p className="text-[13px] text-muted">Answers from your {apps.length} application{apps.length === 1 ? "" : "s"} and your profile.{plan === "free" ? " 3 questions a day on Free." : ""}</p>
             </div>
             {thread.length > 0 && <form action={clearCoach}><button className="text-[13px] font-semibold text-muted hover:text-ink">Clear</button></form>}
           </header>
-          <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-6 py-6" aria-live="polite">
+          <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-4 py-6 sm:px-6" aria-live="polite">
             {thread.length === 0 && (
               <div className="m-auto max-w-md text-center">
                 <div className="font-display text-[18px] font-extrabold text-ink">Ask about your search, not search in general.</div>
@@ -102,7 +102,7 @@ export default async function CoachPage() {
               </div>
             ))}
           </div>
-          <div className="border-t border-line px-6 py-4"><Composer suggestions={COACH_SUGGESTIONS} /></div>
+          <div className="border-t border-line px-4 py-4 sm:px-6"><Composer suggestions={COACH_SUGGESTIONS} /></div>
         </section>
       </div>
     </AppShell>

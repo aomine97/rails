@@ -66,12 +66,12 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
             <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Jobs</h1>
             <p className="mt-1 text-[14px] text-muted"><span className="font-semibold text-ink">{items.length.toLocaleString()}</span> match your profile · <span className="font-semibold text-blue">{feed.newToday} new since yesterday</span> · every one verified live</p>
           </div>
-          <div className="flex items-center gap-2">
-            <form action="/app" className="relative"><svg className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-g6" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg><input name="q" defaultValue={sp.q} placeholder="Search title, company, city" className="h-10 w-72 rounded-xl border border-line bg-surface pl-9 pr-3 text-[14px] outline-none focus:border-blue" /></form>
-            <Link href="/app/paste" className="inline-flex h-10 items-center gap-2 rounded-xl border border-line bg-surface px-4 text-[14px] font-bold text-ink hover:border-ink">+ Paste a link</Link>
+          <div className="flex w-full items-center gap-2 sm:w-auto">
+            <form action="/app" className="relative min-w-0 flex-1 sm:flex-none"><svg className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-g6" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg><input name="q" defaultValue={sp.q} placeholder="Search title, company, city" className="h-10 w-full sm:w-72 rounded-xl border border-line bg-surface pl-9 pr-3 text-[14px] outline-none focus:border-blue" /></form>
+            <Link href="/app/paste" className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl border border-line bg-surface px-3 text-[14px] font-bold text-ink hover:border-ink sm:px-4">+ <span className="hidden sm:inline">Paste a link</span><span className="sm:hidden">Link</span></Link>
           </div>
         </div>
-        <div className="mt-4 flex items-center gap-1 border-b border-line text-[14px] font-semibold">
+        <div className="-mx-4 mt-4 flex items-center gap-1 overflow-x-auto whitespace-nowrap border-b border-line px-4 text-[14px] font-semibold [scrollbar-width:none] md:mx-0 md:px-0">
           {[["recommended", "Recommended"], ["liked", `Liked${liked.size ? ` ${liked.size}` : ""}`], ["applied", `Applied${appliedIds.size ? ` ${appliedIds.size}` : ""}`], ["external", "External"], ["hidden", `Hidden${hidden.size ? ` ${hidden.size}` : ""}`]].map(([k, l]) => (
             <Link key={k} href={href({ tab: k, page: "1" })} className={`-mb-px border-b-2 px-3 pb-2.5 pt-1 ${tab === k ? "border-ink text-ink" : "border-transparent text-muted hover:text-ink"}`}>{l}</Link>
           ))}

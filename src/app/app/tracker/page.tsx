@@ -33,11 +33,11 @@ export default async function TrackerPage() {
             <h1 className="font-display text-[26px] font-extrabold leading-tight tracking-tight text-ink">Tracker</h1>
             <p className="mt-1 text-[14px] text-muted">Every application in one place. Rails nudges you when one goes quiet.</p>
           </div>
-          <div className="grid grid-cols-5 divide-x divide-line overflow-hidden rounded-2xl border border-line bg-surface shadow-[var(--shadow-sm)]">
+          <div className="grid w-full grid-cols-5 divide-x divide-line overflow-hidden rounded-2xl border border-line bg-surface shadow-[var(--shadow-sm)] md:w-auto">
             {stats.map(([n, label, suffix]) => (
-              <div key={label} className="px-5 py-3 text-center">
-                <div className="font-display text-[22px] font-extrabold leading-none tracking-tight text-ink">{n == null ? "—" : `${n}${suffix ?? ""}`}</div>
-                <div className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-muted">{label}</div>
+              <div key={label} className="px-1.5 py-3 text-center sm:px-5">
+                <div className="font-display text-[18px] font-extrabold leading-none tracking-tight text-ink sm:text-[22px]">{n == null ? "—" : `${n}${suffix ?? ""}`}</div>
+                <div className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-muted sm:text-[11px]">{label}</div>
               </div>
             ))}
           </div>
@@ -85,9 +85,9 @@ export default async function TrackerPage() {
           </form>
         </section>
 
-        <section className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+        <section className="-mx-4 mt-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:snap-none md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0 xl:grid-cols-6" aria-label="Board">
           {COLUMNS.map((c) => (
-            <div key={c.key} className="flex min-h-[240px] flex-col gap-2 rounded-2xl bg-g2 p-2">
+            <div key={c.key} className="flex min-h-[240px] w-[82%] shrink-0 snap-start flex-col gap-2 rounded-2xl bg-g2 p-2 md:w-auto">
               <div className="flex items-center justify-between px-2 pt-1.5 pb-1">
                 <span className="text-[12px] font-bold text-ink">{c.label}</span>
                 <span className="rounded-md bg-surface px-1.5 font-mono text-[11px] font-bold text-muted">{cols[c.key].length}</span>

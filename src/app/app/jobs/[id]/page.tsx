@@ -71,8 +71,8 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
       <Link href="/app" className="inline-flex items-center gap-1 text-[13px] font-semibold text-muted hover:text-ink">← Back to jobs</Link>
       <div className="mt-3 grid grid-cols-1 gap-6 pb-10 lg:grid-cols-[1fr_340px]">
         <div className="flex min-w-0 flex-col gap-5">
-          <header className="rounded-2xl border border-line bg-surface p-6 shadow-[var(--shadow-sm)]">
-            <div className="flex items-start gap-4">
+          <header className="rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-sm)] sm:p-6">
+            <div className="flex items-start gap-3 sm:gap-4">
               <CompanyLogo name={company?.name ?? ""} domain={company?.domain} logo={company?.logo_url} size={64} />
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-1.5">
@@ -80,7 +80,7 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
                   {t && t.level !== "unknown" && <Chip tone="info">{levelLabel(t.level)}</Chip>}
                   {t?.hasOnlineAssessment && <Chip>OA first</Chip>}
                 </div>
-                <h1 className="mt-2 font-display text-[26px] font-extrabold leading-[1.15] tracking-tight text-ink">{job.title}</h1>
+                <h1 className="mt-2 font-display text-[22px] font-extrabold leading-[1.15] tracking-tight text-ink sm:text-[26px]">{job.title}</h1>
                 <div className="mt-1 text-[15px] text-text"><span className="font-semibold text-ink">{company?.name}</span>{company?.industry ? <span className="text-muted"> / {company.industry}</span> : null}{company?.size ? <span className="text-muted"> · {company.size} employees</span> : null}{company?.hq ? <span className="text-muted"> · HQ {company.hq}</span> : null}</div>
               </div>
             </div>
@@ -183,6 +183,12 @@ export default async function JobDetail({ params }: { params: Promise<{ id: stri
           )}
         </aside>
       </div>
+          <div className="fixed inset-x-0 bottom-[57px] z-30 md:bottom-0 flex items-center gap-2 border-t border-line bg-surface/95 px-4 py-2.5 backdrop-blur lg:hidden">
+        <div className="min-w-0 flex-1"><div className="truncate text-[13px] font-bold text-ink">{job.title}</div><div className="truncate text-[12px] text-muted">{company?.name}{score ? ` · fit ${score.fit}` : ""}</div></div>
+        <Link href={`/app/jobs/${job.id}/tailor`} className="inline-flex h-10 shrink-0 items-center rounded-xl border border-line px-3 text-[13px] font-bold text-ink">Tailor</Link>
+        <SplitApplyButton jobId={job.id} url={job.apply_url} applied={!!app && app.stage !== "saved" && app.stage !== "prepared"} />
+      </div>
+      <div className="h-16 lg:hidden" aria-hidden="true" />
     </AppShell>
   );
 }
