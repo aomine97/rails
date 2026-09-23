@@ -79,3 +79,10 @@ export async function deleteAccount(form: FormData) {
   const { redirect } = await import("next/navigation");
   redirect("/?deleted=1");
 }
+
+export async function saveCampusShare(form: FormData) {
+  const supabase = await supabaseServer();
+  const { data: { user } } = await supabase.auth.getUser(); if (!user) return;
+  await supabase.from("profiles").update({ campus_share: form.get("share") === "on" }).eq("id", user.id);
+  revalidatePath("/app/settings");
+}

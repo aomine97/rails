@@ -4,7 +4,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { AppShell } from "@/components/app-shell";
 import { planOf } from "@/lib/billing/entitlements";
 import { COUNTRY_CHIPS } from "@/lib/match/country";
-import { assignInbound, createAlias, deleteAccount, dismissInbound, saveAlertSettings, saveNudges } from "./actions";
+import { assignInbound, createAlias, deleteAccount, dismissInbound, saveAlertSettings, saveCampusShare, saveNudges } from "./actions";
 import { STAGES, STAGE_LABEL } from "@/lib/tracker/stages";
 import { CopyButton } from "@/components/copy-button";
 
@@ -15,7 +15,7 @@ export default async function SettingsPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=/app/settings");
   const [{ data: p }, plan, { data: sends }, { data: inbound }, { data: apps }] = await Promise.all([
-    supabase.from("profiles").select("full_name,email,alerts_enabled,alerts_min_fit,alerts_where,alerts_last_sent_at,onboarding_done,forwarding_alias,nudges_enabled").eq("id", user.id).single(),
+    supabase.from("profiles").select("full_name,email,alerts_enabled,alerts_min_fit,alerts_where,alerts_last_sent_at,onboarding_done,forwarding_alias,nudges_enabled,campus_id,campus_share").eq("id", user.id).single(),
     planOf(supabase, user.id),
     supabase.from("alert_sends").select("kind,sent_at,job_ids").eq("user_id", user.id).order("sent_at", { ascending: false }).limit(5),
     supabase.from("inbound_emails").select("id,from_addr,subject,snippet,kind,status,moved_to,created_at,applications(company_name,title)").eq("user_id", user.id).neq("status", "ignored").order("created_at", { ascending: false }).limit(12),
@@ -96,6 +96,14 @@ export default async function SettingsPage() {
           <div className="text-[11px] font-bold uppercase tracking-wide text-muted">Profile and billing</div>
           <p className="mt-1"><Link href="/onboarding/confirm" className="font-semibold text-ink underline">Edit profile</Link> · <Link href="/app/billing" className="font-semibold text-ink underline">Billing</Link> · <Link href="/privacy" className="font-semibold text-ink underline">Privacy</Link> · <Link href="/terms" className="font-semibold text-ink underline">Terms</Link></p>
         </div>
+        {p.campus_id && (
+          <form action={saveCampusShare} className="mt-4 rounded-2xl border border-line bg-surface p-6 text-[13px] text-text">
+            <div className="text-[11px] font-bold uppercase tracking-wide text-muted">Your career center</div>
+            <p className="mt-1">Your school pays for your Pro plan. Counselors see campus totals. If Rails flags that you could use help, they see your name, program, application and interview counts, and the reason. Never your resume, messages or emails.</p>
+            <label className="mt-3 flex items-center gap-2 font-semibold text-ink"><input type="checkbox" name="share" defaultChecked={p.campus_share ?? true} /> Let my counselors see my name when I&apos;m flagged</label>
+            <button className="mt-3 rounded-full border border-line px-3 py-1.5 text-[12px] font-bold text-ink hover:border-ink">Save</button>
+          </form>
+        )}
         <form id="delete" action={deleteAccount} className="mt-4 rounded-2xl border border-red/30 bg-surface p-6 text-[13px] text-text">
           <div className="text-[11px] font-bold uppercase tracking-wide text-red">Delete account</div>
           <p className="mt-1">Deletes your profile, resumes, tracker, Coach history and forwarded-email records right away, and cancels a monthly plan. This can&apos;t be undone. Data the extension keeps in your browser is removed when you uninstall it.</p>

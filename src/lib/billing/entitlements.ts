@@ -3,10 +3,16 @@ import type { Plan } from "./plans";
 
 export async function planOf(db: SupabaseClient, userId: string): Promise<Plan> {
   const { data } = await db.from("subscriptions").select("plan,current_period_end,paused_until").eq("user_id", userId).maybeSingle();
-  if (!data) return "free";
-  if (data.paused_until && new Date(data.paused_until) > new Date()) return "free";
-  if ((data.plan === "pro" || data.plan === "semester") && (!data.current_period_end || new Date(data.current_period_end) > new Date())) return data.plan;
-  return data.plan === "campus" ? "campus" : "free";
+  if (data && !(data.paused_until && new Date(data.paused_until) > new Date())) {
+    if ((data.plan === "pro" || data.plan === "semester") && (!data.current_period_end || new Date(data.current_period_end) > new Date())) return data.plan;
+    if (data.plan === "campus") return "campus";
+  }
+  // Campus plan: the student's school has a live pilot or paid term (profiles.campus_id is set by email domain).
+  try {
+    const { data: live } = await db.rpc("campus_active", { p_user: userId });
+    if (live === true) return "campus";
+  } catch { /* function missing before migration 0018: treat as free */ }
+  return "free";
 }
 
 export type CreditResult = { ok: true; balance: number | "unlimited" } | { ok: false; refillAt: string | null };
