@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { recordUsage } from "../ai/usage";
 import { bullet, title as titleCase, paragraph } from "../text/punctuate";
 import { z } from "zod";
 import type { CanonicalProfile } from "../schemas/profile";
@@ -51,6 +52,7 @@ export async function generateTailored(profile: CanonicalProfile, tags: JobTags,
     max_tokens: 4000, system: TAILOR_SYSTEM,
     messages: [{ role: "user", content: `PROFILE:\n${JSON.stringify(compact)}\n\nPOSTING: ${job.title} at ${job.company}\nRequired skills: ${tags.requiredSkills.join(", ")}\nPreferred: ${tags.preferredSkills.join(", ")}\nRequirements: ${tags.requirements.map((r) => r.text).join(" | ")}\n\n${job.description.slice(0, 8000)}\n\nReturn JSON: {headline, summary, skillsOrder, experience:[{id, bullets:[{text, from}]}], gapPlan:[{gap, kind, advice}]}` }],
   });
+  recordUsage("tailor", res.model, res.usage);
   const raw = res.content.find((c) => c.type === "text")?.text ?? "";
   return Out.parse(JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1)));
 }

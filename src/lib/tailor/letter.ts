@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { recordUsage } from "../ai/usage";
 import { z } from "zod";
 import type { CanonicalProfile } from "../schemas/profile";
 import type { JobTags } from "../jobs/tags";
@@ -24,6 +25,7 @@ export async function generateLetter(profile: CanonicalProfile, tags: JobTags, j
     model: process.env.TAILOR_MODEL ?? "claude-sonnet-4-5", max_tokens: 1200, system: LETTER_SYSTEM,
     messages: [{ role: "user", content: `PROFILE:\n${JSON.stringify(compact)}\n\nPOSTING: ${job.title} at ${job.company}\nWants: ${tags.requiredSkills.join(", ")}${tags.preferredSkills.length ? ` (preferred: ${tags.preferredSkills.join(", ")})` : ""}\nSummary: ${tags.summary}\n\n${job.description.slice(0, 6000)}` }],
   });
+  recordUsage("letter", res.model, res.usage);
   const raw = res.content.find((c) => c.type === "text")?.text ?? "";
   return Out.parse(JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1)));
 }

@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { recordUsage } from "../ai/usage";
 import { z } from "zod";
 import type { CanonicalProfile } from "../schemas/profile";
 import { fillFields } from "./fields";
@@ -46,6 +47,7 @@ export async function answerQuestions(profile: CanonicalProfile, questions: Ques
     model: process.env.ANSWERS_MODEL ?? process.env.TAGGER_MODEL ?? "claude-haiku-4-5", max_tokens: 2000, system: ANSWERS_SYSTEM,
     messages: [{ role: "user", content: `PROFILE:\n${JSON.stringify(compactProfile(profile))}\n\nRESUME (the user's own words; anything stated here counts as profile fact):\n${(context.resumeText ?? "").slice(0, 7000)}\n\nAPPLICATION: ${context.title ?? ""} at ${context.company ?? ""} (${context.url ?? ""})\n\nQUESTIONS:\n${JSON.stringify(ask)}` }],
   });
+  recordUsage("answers", res.model, res.usage);
   const raw = res.content.find((c) => c.type === "text")?.text ?? "";
   const parsed = Out.safeParse(JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1)));
   if (!parsed.success) return skipped;

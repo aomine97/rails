@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { recordUsage } from "../ai/usage";
 import { z } from "zod";
 import { bullet } from "../text/punctuate";
 import { CanonicalProfile, skillKey } from "../schemas/profile";
@@ -47,6 +48,7 @@ export async function parseResume(text: string, fallbackEmail: string, client = 
     system: PARSER_SYSTEM,
     messages: [{ role: "user", content: `Resume text:\n\n${text.slice(0, 30_000)}\n\nReturn JSON with keys: name, email, phone, links{linkedin,github,portfolio}, headline, targetRoles, skills[{name,level,evidence}], experience[{title,org,kind,start,end,bullets,skills}], education[{school,degree,field,gradYear,startYear,gpa,coursework}], certifications[{name,year}], workAuthorization, clearance, locations, address{street,city,state,zip}.` }],
   });
+  recordUsage("parse", res.model, res.usage);
   const raw = res.content.find((c) => c.type === "text")?.text ?? "";
   const json = raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1);
   const parsed = Parsed.parse(JSON.parse(json));

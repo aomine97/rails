@@ -11,7 +11,7 @@ describe("tagger shared pieces", () => {
     expect(content).toContain("Title: SWE Intern");
     expect(content.length).toBeLessThan(13_000);
     expect(content).toContain("requiredSkills");
-    expect(r.max_tokens).toBe(2500);
+    expect(r.max_tokens).toBe(1500);
   });
   it("parseTagText normalizes enums, dedupes skills, drops preferred that are required", () => {
     const t = parseTagText("Here you go:\n" + SAMPLE + "\nDone.");

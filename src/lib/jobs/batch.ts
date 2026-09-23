@@ -2,6 +2,10 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { parseTagText, tagRequest } from "./tagger";
 import { applyTags } from "./apply-tags";
+import { recordUsage, pipelineSpentToday, pipelineBudgetUsd } from "../ai/usage";
+
+/** Rough cost of one batched tag after trimming, used to size a batch to the remaining daily budget. */
+const EST_BATCH_TAG_USD = 0.0025;
 
 /**
  * Nightly bulk tagging through the Message Batches API: half the per-token price, results within hours.
@@ -9,9 +13,14 @@ import { applyTags } from "./apply-tags";
  * collect: for each open batch, if ended, stream results and apply. Safe to call repeatedly; already-tagged jobs are skipped.
  */
 export async function submitTagBatch(db: SupabaseClient, max: number, client = new Anthropic()) {
+  // Size the batch to what is left of today's pipeline budget, so a big backlog drains over days instead of in one bill.
+  const left = pipelineBudgetUsd() - await pipelineSpentToday(db as never);
+  const affordable = Math.floor(Math.max(0, left) / EST_BATCH_TAG_USD);
+  const limit = Math.min(Math.max(0, max), 10_000, affordable);
+  if (limit < 1) return { submitted: 0, batchId: null, reason: "daily budget reached" };
   const { data: jobs } = await db.from("jobs").select("id,title,location,description_text,companies(name)")
-    .is("tagged_at", null).is("closed_at", null).is("tag_batch_id", null).not("description_text", "is", null).neq("description_text", "")
-    .order("first_seen_at", { ascending: false }).limit(Math.min(Math.max(1, max), 10_000));
+    .is("tagged_at", null).is("closed_at", null).is("tag_batch_id", null).eq("triage", "yes").not("description_text", "is", null).neq("description_text", "")
+    .order("first_seen_at", { ascending: false }).limit(limit);
   if (!jobs || jobs.length === 0) return { submitted: 0, batchId: null };
   const requests = jobs.map((j) => ({
     custom_id: j.id,
@@ -44,6 +53,7 @@ export async function collectTagBatches(db: SupabaseClient, budgetMs: number, cl
         const work = (async () => {
           try {
             if (r.result.type !== "succeeded") throw new Error(r.result.type);
+            recordUsage("tag_batch", r.result.message.model, r.result.message.usage, true);
             const text = r.result.message.content.find((c) => c.type === "text")?.text ?? "";
             await applyTags(db, r.custom_id, parseTagText(text));
             tagged++;

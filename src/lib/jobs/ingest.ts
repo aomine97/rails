@@ -6,7 +6,7 @@ export interface CompanyRow { id: string; name: string; ats: CompanyRef["ats"]; 
 export function toJobRow(companyId: string, j: RawJob, now: string) {
   return {
     company_id: companyId, ats: j.ats, external_id: j.externalId, title: j.title, location: j.location, remote: j.remote,
-    employment_type: j.employmentType, department: j.department, description_html: j.descriptionHtml, description_text: j.descriptionText,
+    employment_type: j.employmentType, department: j.department, description_html: null, description_text: j.descriptionText, // html is never rendered; storing it doubled the table
     url: j.url, apply_url: j.applyUrl, posted_at: j.postedAt,
     pay_min: j.pay?.min ?? null, pay_max: j.pay?.max ?? null, pay_currency: j.pay?.currency ?? null, pay_period: j.pay?.period ?? null,
     last_seen_at: now, closed_at: null,

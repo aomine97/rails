@@ -31,7 +31,7 @@ export const JobTags = z.object({
 export type JobTags = z.infer<typeof JobTags>;
 
 export const TAGGER_SYSTEM = `You extract structured facts from a job posting. Output only JSON matching the schema. Rules:
-- requirements: copy each qualification line verbatim (max 40), required=true for "required/must/minimum", false for "preferred/nice to have/bonus".
+- requirements: the 12 qualification lines that matter most, copied verbatim (never more than 12), required=true for "required/must/minimum", false for "preferred/nice to have/bonus".
 - requiredSkills/preferredSkills: short lowercase technology or skill names ("python", "aws", "sql", "react", "security+"). No sentences.
 - level: internship if the title or text says intern/co-op; new_grad if "new grad"/"university"/"early career" with 0-1 years; entry for 0-2 years; else mid/senior.
 - field: the closest of software, data, cloud, it_support, cyber, product, electrical (EE/electronics/embedded/hardware), mechanical (ME/manufacturing/robotics/aerospace), civil (civil/structural/environmental/construction engineering), chemical (chemical/materials/process engineering), biotech (biology/biomedical/pharma lab/bioinformatics), science (physics/chemistry/geology/research scientist), math (statistics/actuarial/quant/operations research), nursing (RN/LPN/nursing students/CNA), healthcare (allied health: lab tech, radiology, pharmacy tech, PT/OT, EMT, medical assistant). Use "other" for sales, retail, hospitality, admin, finance, marketing, HR, legal, trades, drivers, education and anything not STEM or nursing.
