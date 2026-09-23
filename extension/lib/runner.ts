@@ -39,7 +39,7 @@ export async function prepare(): Promise<RunInput | { error: string }> {
   let job: JobInfo | null = null; try { job = (await api.job(location.href)).job; } catch { /* unknown page is fine */ }
   const files: RunFile[] = [];
   try { const r = await api.file("resume", job?.id); if (r) files.push({ kind: "resume", name: r.name, type: r.type, bytes: r.bytes }); } catch { /* none */ }
-  if (job?.coverLetter) { try { const l = await api.file("letter", job.id); if (l) files.push({ kind: "letter", name: l.name, type: l.type, bytes: l.bytes }); } catch { /* none */ } }
+  if (job?.coverLetter && me.prefs?.coverLetter !== "never") { try { const l = await api.file("letter", job.id); if (l) files.push({ kind: "letter", name: l.name, type: l.type, bytes: l.bytes }); } catch { /* none */ } }
   let learned: Record<string, string[]> = {}; try { learned = (await api.learned(location.hostname)).selectors; } catch { /* optional */ }
   return { me, job, files, learned };
 }
@@ -102,7 +102,7 @@ export async function run(input: RunInput, fs: FormState, onState: (fs: FormStat
 
   // 1. rules + files
   set("Filling your details…");
-  const ats = atsOf(location.hostname); const values = { ...(input.me.fields as Values), coverLetterText: input.job?.coverLetter ?? null };
+  const ats = atsOf(location.hostname); const values = { ...(input.me.fields as Values), coverLetterText: input.me.prefs?.coverLetter === "never" ? null : input.job?.coverLetter ?? null };
   let results: FillResult[] = []; let left: string[] = [];
   for (const r of allRoots()) { const rep = await fillForm(r, values, { ats, learned: input.learned }); results = results.concat(rep.results); left = left.concat(rep.leftForYou); }
   for (const f of input.files) { const file = new File([f.bytes], f.name, { type: f.type }); for (const r of allRoots()) { const a = attachFile(r, f.kind, file); if (a.success) { results.push({ key: (f.kind === "resume" ? "resumeFile" : "letterFile") as unknown as FillResult["key"], selector: a.selector, strategy: "file", success: true }); break; } } }

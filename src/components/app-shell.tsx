@@ -8,10 +8,14 @@ const NAV: { href: string; label: string; badge?: string; soon?: boolean; icon: 
   { href: "/app/autopilot", label: "Autopilot", icon: "M13 2L3 14h7l-1 8 10-12h-7l1-8z" },
   { href: "/app/resume", label: "Resume", icon: "M7 3h7l5 5v13H7zM14 3v5h5M9 13h6M9 17h6" },
   { href: "/app/coach", label: "Coach", icon: "M4 5h16v10H8l-4 4z" },
-  { href: "/app/interview", label: "Interview", soon: true, icon: "M12 3v10M8 7a4 4 0 008 0M6 21h12" },
-  { href: "/app/referrals", label: "Referrals", soon: true, icon: "M16 11a4 4 0 10-8 0M4 21a8 8 0 0116 0" },
+  { href: "/app/interview", label: "Interview", icon: "M12 3v10M8 7a4 4 0 008 0M6 21h12" },
+  { href: "/app/referrals", label: "Referrals", icon: "M16 11a4 4 0 10-8 0M4 21a8 8 0 0116 0" },
 ];
+/** Phone tab bar: four most-used screens + More (everything else). */
+const MOBILE = ["/app", "/app/tracker", "/app/coach", "/app/autopilot"];
+export const ALL_NAV = () => [...NAV, ...FOOT];
 const FOOT = [
+  { href: "/app/autofill", label: "Autofill", icon: "M4 6h16M4 12h10M4 18h7" },
   { href: "/app/billing", label: "Billing", icon: "M3 7h18v10H3zM3 11h18" },
   { href: "/app/settings", label: "Settings", icon: "M12 8a4 4 0 100 8 4 4 0 000-8zM3 12h2M19 12h2M12 3v2M12 19v2" },
 ];
@@ -57,10 +61,10 @@ export function AppShell({ children, active = "/app", name, credits, wide = fals
         <div className={`mx-auto w-full ${wide ? "max-w-[1440px]" : "max-w-[1180px]"} px-4 pt-6 md:px-8`}>{children}</div>
       </div>
       <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-line bg-surface md:hidden" aria-label="Primary">
-        {NAV.filter((n) => !n.soon).map((n) => (
+        {NAV.filter((n) => MOBILE.includes(n.href)).map((n) => (
           <Link key={n.href} href={n.href} className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-semibold ${active === n.href ? "text-ink" : "text-muted"}`}><Icon d={n.icon} />{n.label}</Link>
         ))}
-        <Link href="/app/settings" className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-semibold ${active === "/app/settings" ? "text-ink" : "text-muted"}`}><Icon d="M12 8a4 4 0 100 8 4 4 0 000-8zM3 12h2M19 12h2M12 3v2M12 19v2" />More</Link>
+        <Link href="/app/more" className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-semibold ${!MOBILE.includes(active) ? "text-ink" : "text-muted"}`}><Icon d="M12 8a4 4 0 100 8 4 4 0 000-8zM3 12h2M19 12h2M12 3v2M12 19v2" />More</Link>
       </nav>
     </div>
   );

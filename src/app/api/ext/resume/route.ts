@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { readPrefs } from "@/lib/ext/prefs";
 import { extUser, CORS, preflight } from "@/lib/ext/auth";
 import { textToPdf } from "@/lib/pdf/text-pdf";
 
@@ -18,16 +19,18 @@ export async function GET(req: Request) {
   if (!u) return NextResponse.json({ error: "unauthorized" }, { status: 401, headers: CORS });
   const url = new URL(req.url); const jobId = url.searchParams.get("jobId"); const kind = url.searchParams.get("kind") === "letter" ? "letter" : "resume";
   const db = supabaseAdmin();
-  const { data: prof } = await db.from("profiles").select("full_name").eq("id", u.id).single();
+  const { data: prof } = await db.from("profiles").select("full_name,autofill_prefs").eq("id", u.id).single();
+  const prefs = readPrefs(prof?.autofill_prefs);
   const name = safe(prof?.full_name ?? "Resume");
   if (kind === "letter") {
+    if (prefs.coverLetter === "never") return NextResponse.json({ error: "letters off in Autofill settings" }, { status: 404, headers: CORS });
     if (!jobId) return NextResponse.json({ error: "jobId required" }, { status: 400, headers: CORS });
     const { data: app } = await db.from("applications").select("cover_letter,company_name").eq("user_id", u.id).eq("job_id", jobId).maybeSingle();
     if (!app?.cover_letter) return NextResponse.json({ error: "no letter" }, { status: 404, headers: CORS });
     const pdf = await textToPdf(app.cover_letter, { title: `Cover letter - ${app.company_name}` });
     return new NextResponse(Buffer.from(pdf), { headers: { ...CORS, "content-type": "application/pdf", "x-rails-filename": `${name}_Cover_Letter_${safe(app.company_name)}.pdf`, "access-control-expose-headers": "x-rails-filename, x-rails-kind" , "x-rails-kind": "letter" } });
   }
-  if (jobId) {
+  if (jobId && prefs.resume !== "base") {
     const { data: t } = await db.from("resumes").select("text_content,score").eq("user_id", u.id).eq("job_id", jobId).eq("kind", "tailored").order("created_at", { ascending: false }).limit(1).maybeSingle();
     if (t?.text_content) {
       const { data: job } = await db.from("jobs").select("companies(name)").eq("id", jobId).single();
