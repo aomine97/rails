@@ -4,7 +4,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { AppShell } from "@/components/app-shell";
 import { planOf } from "@/lib/billing/entitlements";
 import { COUNTRY_CHIPS } from "@/lib/match/country";
-import { assignInbound, createAlias, dismissInbound, saveAlertSettings, saveNudges } from "./actions";
+import { assignInbound, createAlias, deleteAccount, dismissInbound, saveAlertSettings, saveNudges } from "./actions";
 import { STAGES, STAGE_LABEL } from "@/lib/tracker/stages";
 import { CopyButton } from "@/components/copy-button";
 
@@ -94,8 +94,14 @@ export default async function SettingsPage() {
         </section>
         <div className="mt-4 rounded-2xl border border-line bg-surface p-6 text-[13px] text-text">
           <div className="text-[11px] font-bold uppercase tracking-wide text-muted">Profile and billing</div>
-          <p className="mt-1"><Link href="/onboarding/confirm" className="font-semibold text-ink underline">Edit profile</Link> · <Link href="/app/billing" className="font-semibold text-ink underline">Billing</Link></p>
+          <p className="mt-1"><Link href="/onboarding/confirm" className="font-semibold text-ink underline">Edit profile</Link> · <Link href="/app/billing" className="font-semibold text-ink underline">Billing</Link> · <Link href="/privacy" className="font-semibold text-ink underline">Privacy</Link> · <Link href="/terms" className="font-semibold text-ink underline">Terms</Link></p>
         </div>
+        <form id="delete" action={deleteAccount} className="mt-4 rounded-2xl border border-red/30 bg-surface p-6 text-[13px] text-text">
+          <div className="text-[11px] font-bold uppercase tracking-wide text-red">Delete account</div>
+          <p className="mt-1">Deletes your profile, resumes, tracker, Coach history and forwarded-email records right away, and cancels a monthly plan. This can&apos;t be undone. Data the extension keeps in your browser is removed when you uninstall it.</p>
+          <label className="mt-3 flex flex-wrap items-center gap-2"><span>Type DELETE to confirm</span><input name="confirm" autoComplete="off" pattern="DELETE" required className="w-32 rounded-lg border border-line bg-light px-3 py-1.5 font-mono" /></label>
+          <button className="mt-3 rounded-full bg-red px-4 py-2 text-[13px] font-bold text-white">Delete my account</button>
+        </form>
       </div>
     </AppShell>
   );

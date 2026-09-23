@@ -59,3 +59,23 @@ export async function dismissInbound(form: FormData) {
   await supabase.from("inbound_emails").update({ status: "ignored" }).eq("id", Number(form.get("id"))).eq("user_id", user.id);
   revalidatePath("/app/settings");
 }
+
+/** Deletes the account for good: cancels a live subscription, removes stored resume files, then the auth user
+ *  (profiles and everything under it cascade). The user must type DELETE. */
+export async function deleteAccount(form: FormData) {
+  if (String(form.get("confirm") ?? "").trim() !== "DELETE") return;
+  const supabase = await supabaseServer();
+  const { data: { user } } = await supabase.auth.getUser(); if (!user) return;
+  const { supabaseAdmin } = await import("@/lib/supabase/admin");
+  const admin = supabaseAdmin();
+  const { data: sub } = await admin.from("subscriptions").select("stripe_subscription_id,status").eq("user_id", user.id).maybeSingle();
+  if (sub?.stripe_subscription_id && sub.status !== "canceled") {
+    try { const { stripe } = await import("@/lib/billing/stripe"); await stripe().subscriptions.cancel(sub.stripe_subscription_id); } catch { /* Stripe unreachable: the webhook-less row goes with the account */ }
+  }
+  const { data: files } = await admin.storage.from("resumes").list(user.id, { limit: 1000 });
+  if (files?.length) await admin.storage.from("resumes").remove(files.map((f) => `${user.id}/${f.name}`));
+  await admin.auth.admin.deleteUser(user.id);
+  await supabase.auth.signOut();
+  const { redirect } = await import("next/navigation");
+  redirect("/?deleted=1");
+}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wordmark } from "@/components/ui";
+import { MarketingFooter, MarketingHeader } from "@/components/marketing";
 import { PRICES } from "@/lib/billing/plans";
 import { billingConfigured } from "@/lib/billing/stripe";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -45,6 +45,9 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
     if (sub && sub.status === "active" && (sub.plan === "pro" || sub.plan === "semester")) current = sub.plan;
   }
   const configured = billingConfigured();
+  // A real date, set once at launch (launch + 14 days). Never a resetting timer.
+  const endsRaw = process.env.LAUNCH_PRICE_ENDS;
+  const launchEnds = endsRaw && !Number.isNaN(Date.parse(endsRaw)) && Date.parse(endsRaw) > new Date().getTime() ? new Date(endsRaw).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : null;
   const pro = student ? PRICES.proMonthlyStudent : PRICES.proMonthly;
   const sem = student ? PRICES.semesterStudent : PRICES.semester;
   const reason = sp.reason ?? "";
@@ -53,9 +56,10 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
 
   return (
     <main className="flex flex-1 flex-col bg-marketing">
-      <header className="flex items-center justify-between px-6 py-4"><Wordmark /><Link href={user ? "/app" : "/login"} className="text-sm font-semibold text-ink">{user ? "Back to app" : "Log in"}</Link></header>
+      <MarketingHeader signedIn={!!user} />
       <section className="mx-auto w-full max-w-5xl px-6 py-10">
         <h1 className="font-display text-4xl font-extrabold tracking-tight">Launch pricing. Students pay less.</h1>
+        {launchEnds && <p className="mt-2 inline-flex rounded-full bg-orange/15 px-3 py-1 text-[13px] font-bold text-ink">Launch prices hold until {launchEnds}. After that the anchor price is the price.</p>}
         <p className="mt-2 max-w-2xl text-text">The feed, fit scores, autofill and tracker are free forever. Paid plans remove the credit limit and turn on Autopilot and Coach. 7-day refund on every plan, no questions.</p>
         {note && <div className={`mt-4 rounded-xl border px-4 py-2 text-[13px] ${sp.err ? "border-red-chip-text/30 bg-red-chip text-red-chip-text" : "border-green-chip-text/30 bg-green-chip text-green-chip-text"}`}>{note}</div>}
         {!configured && <div className="mt-4 rounded-xl border border-amber-chip-text/30 bg-amber-chip px-4 py-2 text-[13px] text-amber-chip-text">Checkout opens as soon as Stripe is connected. Prices below are final.</div>}
@@ -98,8 +102,14 @@ export default async function Pricing({ searchParams }: { searchParams: Promise<
             <tbody>{ROWS.map((r) => <tr key={r[0]} className="border-b border-line last:border-0"><td className="px-4 py-2.5 text-ink">{r[0]}</td><td className="px-4 py-2.5 text-text">{r[1]}</td><td className="px-4 py-2.5 font-semibold text-ink">{r[2]}</td><td className="px-4 py-2.5 font-semibold text-ink">{r[3]}</td></tr>)}</tbody>
           </table>
         </div>
-        <p className="mt-6 text-[12px] text-muted">Refunds: email within 7 days of your first payment and it is returned in full. Referral: a friend who signs up with your link gives you both a free week of Pro (live with the referral screen). Prices in USD; tax added where required. Rails never submits an application for you.</p>
+        <p className="mt-6 text-[12px] text-muted">Refunds: email within 7 days of your first payment and it is returned in full. Referral: a classmate who joins with your link pays $5 for their first month of Pro, and you get a month free after their second payment. Prices in USD; tax added where required. Rails never submits an application for you. See the <Link href="/terms" className="underline">terms</Link> and <Link href="/privacy" className="underline">privacy policy</Link>.</p>
+        <div id="campus" className="mt-10 rounded-2xl border border-line bg-surface p-6">
+          <div className="font-display text-[20px] font-extrabold text-ink">Career Center plan</div>
+          <p className="mt-1 text-[14px] text-text">Every student on your campus gets Pro; counselors get a dashboard with program-level numbers and the students who need a hand. Priced per campus. The first semester is free for our first three pilot campuses.</p>
+          <Link href="/career-centers" className="mt-3 inline-flex rounded-full bg-ink px-4 py-2 text-[13px] font-bold text-white">How it works</Link>
+        </div>
       </section>
+      <MarketingFooter />
     </main>
   );
 }

@@ -89,3 +89,8 @@ body {
 .band-strong { color: var(--green); }
 .band-good { color: var(--amber); }
 .band-stretch { color: var(--red); }
+
+/* Legal and long-form pages */
+.prose-rails h2 { font-family: var(--font-inter-tight), system-ui, sans-serif; font-size: 19px; font-weight: 800; color: var(--ink); margin-top: 16px; letter-spacing: -0.01em; }
+.prose-rails ul { list-style: disc; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.prose-rails a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }

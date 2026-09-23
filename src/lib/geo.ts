@@ -4,4 +4,4 @@
  */
 export const GATED_STATES = new Set(["CA", "NY"]);
 export const isGated = (state: string | null | undefined) => !!state && GATED_STATES.has(state.toUpperCase());
-export const GATE_COPY = "Rails isn't available in California or New York yet. Leave your email and we'll tell you the day it is.";
+export const GATE_COPY = "Rails isn't open in California or New York yet. Both states have their own rules for paid job-listing services, and we want to meet them properly before we launch there. Leave your email and we'll tell you the day it opens.";
