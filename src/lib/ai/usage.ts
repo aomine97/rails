@@ -6,7 +6,7 @@ export const PRICES: Record<string, { in: number; out: number }> = {
   "claude-sonnet-4-5": { in: 3, out: 15 },
   "claude-opus-4-5": { in: 5, out: 25 },
 };
-export type Feature = "tag" | "tag_batch" | "triage" | "tailor" | "letter" | "answers" | "parse";
+export type Feature = "tag" | "tag_batch" | "triage" | "tailor" | "letter" | "answers" | "parse" | "coach" | "interview" | "referral" | "inbound";
 export type Usage = { input_tokens?: number | null; output_tokens?: number | null; cache_read_input_tokens?: number | null } | null | undefined;
 
 export function costUsd(model: string, usage: Usage, batch = false): number {

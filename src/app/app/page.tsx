@@ -11,6 +11,7 @@ import { CompanyLogo } from "@/components/company-logo";
 import { COUNTRY_CHIPS } from "@/lib/match/country";
 import { FeedFilters } from "./filters";
 import { upNext, type TrackedApp } from "@/lib/tracker/stages";
+import { momentum } from "@/lib/coach/context";
 
 const PAGE = 25;
 const FIELDS = [["software", "Software"], ["data", "Data"], ["cloud", "Cloud"], ["it_support", "IT support"], ["cyber", "Cyber"], ["product", "Product"], ["electrical", "Electrical"], ["mechanical", "Mechanical"], ["civil", "Civil"], ["chemical", "Chemical"], ["biotech", "Biotech"], ["science", "Science"], ["math", "Math & stats"], ["nursing", "Nursing"], ["healthcare", "Healthcare"]] as const;
@@ -33,12 +34,15 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
   if (!parsed.success) redirect("/onboarding");
   const me = parsed.data;
 
-  const [{ data: rows }, { data: marks }, { data: apps }] = await Promise.all([
+  const [{ data: rows }, { data: marks }, { data: apps }, { data: tailoredRows }] = await Promise.all([
     supabase.from("jobs").select("id,title,location,remote,url,apply_url,posted_at,first_seen_at,tags,pay_min,pay_max,pay_period,description_text,source,companies(name,ats,domain,logo_url,tier,industry,size)")
       .is("closed_at", null).not("tagged_at", "is", null).order("first_seen_at", { ascending: false }).limit(3000),
     supabase.from("matches").select("job_id,liked,hidden").eq("user_id", user.id),
     supabase.from("applications").select("id,job_id,title,company_name,url,stage,applied_at,last_activity_at,next_action,next_action_at,notes,created_at").eq("user_id", user.id).order("last_activity_at", { ascending: false }),
+    supabase.from("resumes").select("job_id").eq("user_id", user.id).eq("kind", "tailored"),
   ]);
+  const tailoredJobs = new Set((tailoredRows ?? []).map((r) => r.job_id));
+  const mo = momentum(((apps ?? []) as TrackedApp[]).map((a) => ({ ...a, tailored: !!a.job_id && tailoredJobs.has(a.job_id) })), new Date().getTime());
   const due = upNext((apps ?? []) as TrackedApp[], new Date().getTime()).filter((x) => x.f.kind !== "suggested");
   const appliedIds = new Set((apps ?? []).filter((a) => a.stage !== "saved").map((a) => a.job_id));
   const liked = new Set((marks ?? []).filter((m) => m.liked).map((m) => m.job_id));
@@ -77,6 +81,14 @@ export default async function Feed({ searchParams }: { searchParams: Promise<SP>
             <span className="font-bold">{due.length} follow-up{due.length === 1 ? "" : "s"} due</span>
             <span className="truncate">{due.slice(0, 3).map((x) => `${x.app.company_name}: ${x.f.text}`).join(" · ")}</span>
             <span className="ml-auto font-semibold">Open tracker →</span>
+          </Link>
+        )}
+
+        {mo && mo.withRate > mo.withoutRate && (
+          <Link href="/app/coach" className="mt-3 flex items-center gap-2 rounded-xl bg-blue-chip px-4 py-2.5 text-[13px] text-blue-chip-text">
+            <span className="font-bold">Your tailored applications: {mo.withRate}% interview rate. Untailored: {mo.withoutRate}%.</span>
+            <span className="hidden truncate sm:inline">From your own tracker ({mo.withN} vs {mo.withoutN} applications).</span>
+            <span className="ml-auto font-semibold">Ask Coach →</span>
           </Link>
         )}
 
